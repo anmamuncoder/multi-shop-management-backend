@@ -1,0 +1,11 @@
+###
+POST  http://127.0.0.1:8020/api/auth/register/
+Content-Type: application/json 
+
+{
+    "email":"anmamun0@gmail.com",
+    "password": "123",
+    "confirm_password": "123",
+    "role":"customer"
+}
+
