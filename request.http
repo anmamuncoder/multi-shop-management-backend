@@ -14,7 +14,7 @@ POST  http://127.0.0.1:8020/api/auth/login/
 Content-Type: application/json 
 
 {
-    "email":"anmamun0@gmail.com",
+    "email":"anmamun2@gmail.com",
     "password": "123" 
 }
 
@@ -23,6 +23,16 @@ POST  http://127.0.0.1:8020/api/auth/login/refresh/
 Content-Type: application/json 
 
 {
-    "refresh":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2NzM3OTY4MCwiaWF0IjoxNzY0Nzg3NjgwLCJqdGkiOiJmN2EzZTU0NjRlMzc0NDdiOTUzMDEwNTdlNDJlMGJlNSIsInVzZXJuYW1lIjoiYW5tYW11bjAiLCJlbWFpbCI6ImFubWFtdW4wQGdtYWlsLmNvbSIsInJvbGUiOiJjdXN0b21lciIsInVzZXJfaWQiOiJhOWRhODE4Ni0wNDRkLTQ4ZTYtOTQ0NC1kMmMyOWU4MTRmNDAifQ._Ica9FW94F4D0YveQYyO4kFuSbe2BV0l4J8zwAInHHU"
+    "refresh":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2NzQxNjYzNCwiaWF0IjoxNzY0ODI0NjM0LCJqdGkiOiJlZWZjODIwYjQ2MmU0ZWQwYmVmOTMyZGFmZGVjMmZmOCIsInVzZXJuYW1lIjoiYW5tYW11bjIiLCJlbWFpbCI6ImFubWFtdW4yQGdtYWlsLmNvbSIsInJvbGUiOiJzaG9wX293bmVyIiwidXNlcl9pZCI6ImE5ZGE4MTg2LTA0NGQtNDhlNi05NDQ0LWQyYzI5ZTgxNGY0MCIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlfQ.6G06kprymphHyloJLsT4A38ASafUw7sfGhzHJ660ZnY"
 }
 
+###
+GET   http://127.0.0.1:8020/api/auth/profile/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NDI5NTQ5LCJpYXQiOjE3NjQ4MjQ3NDksImp0aSI6ImUzODMxZTIxYmZkNzQ0YzNhZTI1ZjZiZDE5YzU5OWViIiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9.AhmEyPLESq5PepdR1JQGOPl4f5HSRbZpRA4v64UpRRY
+Content-Type: application/json 
+
+{
+  "username": "anmamun2" ,
+  "email":"anmamun2@gmail.com" 
+
+}

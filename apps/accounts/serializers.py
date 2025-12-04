@@ -37,15 +37,10 @@ class UserRegisterSerializer(ModelSerializer):
 # -------------------------- 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer): 
     def validate(self, attrs):
-        data = super().validate(attrs)
-        data['user_id'] = self.user.id
-        data['email'] = self.user.email
-        data['role'] = self.user.role 
-
+        data = super().validate(attrs) 
         if not self.user.email_verified:
             task_send_email_otp(self.user.id)
-            return {'otp':"Otp send you mail! Please verify you mail with in 5 minutes"}
-        
+            raise serializers.ValidationError({"otp": "Otp sent to your email! Please verify your email within 5 minutes."} )
         return data
 
     @classmethod
@@ -54,6 +49,16 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['email'] = user.email
         token['role'] = user.role
         token['user_id'] = user.id
+        token['email_verified'] = user.email_verified
         return token
 
- 
+
+# -------------------------- 
+# User Profile
+# -------------------------- 
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id','username','email','role','created_at','updated_at')
+        read_only_fields  = ('role','created_at','updated_at')
+
