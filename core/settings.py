@@ -28,6 +28,9 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 DEFAULT_FROM_EMAIL = "no-reply@example.com"
 
+# OTP Expired Time 
+OTP_EXPIRE_MINUTES=5
+
 # Application definition
 CUSTOM_APPS = [
     'apps.accounts',

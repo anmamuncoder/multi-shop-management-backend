@@ -34,7 +34,7 @@ class User(BaseModel,AbstractUser):
     role = models.CharField(choices=USER_ROLE,default='customer')
     email_verified = models.BooleanField(default=False)
     email_otp = models.IntegerField(blank=True,null=True)
-    email_otp_created_at = models.DateField(blank=True,null=True)
+    email_otp_created_at = models.DateTimeField(blank=True,null=True)
 
     USERNAME_FIELD = 'email'                
     REQUIRED_FIELDS = [] 

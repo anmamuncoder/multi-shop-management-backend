@@ -5,8 +5,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny   
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import IsAuthenticated
+from django.conf import settings
 # Internal
-from .serializers import UserRegisterSerializer,CustomTokenObtainPairSerializer, UserSerializer
+from .serializers import UserRegisterSerializer,CustomTokenObtainPairSerializer, UserSerializer,ResendOTPSerializer,OTPVerifySerializer
 from .tasks import task_send_email_otp
 from .models import User
 # External 
@@ -49,7 +50,9 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
 
-
+# --------------------------
+# User Profile View
+# --------------------------
 class UserView(APIView): 
     permission_classes = [IsAuthenticated]
 
@@ -86,3 +89,50 @@ class UserView(APIView):
             msg = "Your email is not verified! Login again and verify it."
 
         return Response({"user": serializer.data, "message": msg},status=status.HTTP_200_OK)
+    
+# --------------------------
+# User Resend OTP
+# --------------------------
+class SendOTPView(APIView):
+    serializer_class = ResendOTPSerializer  
+    
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data,context={'request':request})
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data['email']
+
+        try:
+            user = User.objects.get(id=request.user.id)
+        except User.DoesNotExist:
+            return Response({"detail": "User not found!"}, status=status.HTTP_404_NOT_FOUND)
+ 
+        # Email OTP Send
+        task_send_email_otp(user.id)
+        expire_minutes = getattr(settings, "OTP_EXPIRE_MINUTES", 5)
+
+        return Response({"detail": f"OTP sent successfully! Validation within {expire_minutes} minute"}, status=status.HTTP_200_OK)
+
+
+class VerifyOTPView(APIView):
+    serializer_class = OTPVerifySerializer 
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data,context={'request':request})
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data['email']
+        otp = serializer.validated_data['otp']
+
+        try:
+            user = User.objects.get(id=request.user.id)
+        except User.DoesNotExist:
+            return Response({"detail": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        user.email_verified = True
+        user.email_otp = None
+        user.email_otp_created_at = None
+
+        user.save(update_fields=['email_verified','email_otp','email_otp_created_at'])
+        
+        access_token, refresh_token = make_token_key(user,['id','email','email_verified']) 
+
+        return Response({"access": str(access_token), "refresh": str(refresh_token)}, status=status.HTTP_200_OK)

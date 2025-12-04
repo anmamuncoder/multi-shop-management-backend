@@ -14,7 +14,7 @@ POST  http://127.0.0.1:8020/api/auth/login/
 Content-Type: application/json 
 
 {
-    "email":"anmamun2@gmail.com",
+    "email":"anmamun0@gmail.com",
     "password": "123" 
 }
 
@@ -34,5 +34,27 @@ Content-Type: application/json
 {
   "username": "anmamun2" ,
   "email":"anmamun2@gmail.com" 
+
+}
+
+
+###
+POST  http://127.0.0.1:8020/api/auth/email/resend/otp/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NDMzMzk3LCJpYXQiOjE3NjQ4Mjg1OTcsImp0aSI6IjlhNGJmZWY5ZTMzZDRlOGZiZDQxNjdlMjg5N2Y3YWMyIiwidXNlcm5hbWUiOiJhbm1hbXVuMCIsImVtYWlsIjoiYW5tYW11bjBAZ21haWwuY29tIiwicm9sZSI6ImN1c3RvbWVyIiwidXNlcl9pZCI6IjM1Njg3ZGFhLTU5YzctNDA2NC04MmU5LTNiZWI0N2U4MzNiYSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZX0.8PqLySz5TQ3b5r3SPDEJ9xoU-BfWn3lnS-7NjVduzP8
+Content-Type: application/json 
+
+{ 
+  "email":"anmamun0@gmail.com" 
+
+}
+ 
+###
+POST  http://127.0.0.1:8020/api/auth/email/verify/otp/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NDMzMzk3LCJpYXQiOjE3NjQ4Mjg1OTcsImp0aSI6IjlhNGJmZWY5ZTMzZDRlOGZiZDQxNjdlMjg5N2Y3YWMyIiwidXNlcm5hbWUiOiJhbm1hbXVuMCIsImVtYWlsIjoiYW5tYW11bjBAZ21haWwuY29tIiwicm9sZSI6ImN1c3RvbWVyIiwidXNlcl9pZCI6IjM1Njg3ZGFhLTU5YzctNDA2NC04MmU5LTNiZWI0N2U4MzNiYSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZX0.8PqLySz5TQ3b5r3SPDEJ9xoU-BfWn3lnS-7NjVduzP8
+Content-Type: application/json 
+
+{ 
+  "email":"anmamun0@gmail.com" ,
+  "otp":"441138" 
 
 }

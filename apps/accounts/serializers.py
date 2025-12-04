@@ -2,6 +2,9 @@
 from rest_framework import serializers
 from rest_framework.serializers import Serializer,ModelSerializer 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.utils import timezone
+from datetime import timedelta
+from django.conf import settings
 # Internal 
 from .models import User
 from .tasks import task_send_email_otp
@@ -40,7 +43,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data = super().validate(attrs) 
         if not self.user.email_verified:
             task_send_email_otp(self.user.id)
-            raise serializers.ValidationError({"otp": "Otp sent to your email! Please verify your email within 5 minutes."} )
+            expire_minutes = getattr(settings, "OTP_EXPIRE_MINUTES", 5)
+            data['otp'] = f"Otp sent to your email! Please verify your email within {expire_minutes} minutes." 
         return data
 
     @classmethod
@@ -62,3 +66,54 @@ class UserSerializer(ModelSerializer):
         fields = ('id','username','email','role','created_at','updated_at')
         read_only_fields  = ('role','created_at','updated_at')
 
+# -------------------------- 
+# Re-Send OTP Request
+# -------------------------- 
+class ResendOTPSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    
+    def validate(self, attrs):
+        request = self.context['request']
+        user = request.user
+         
+        if not user or not user.is_authenticated:
+            raise serializers.ValidationError("Authentication required.")
+ 
+        if attrs['email'] != user.email:
+            raise serializers.ValidationError("Email does not match the authenticated user.")
+
+        return attrs
+    
+# ---------------------------------
+# OTP Verification 
+# ---------------------------------
+class OTPVerifySerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    otp = serializers.CharField(max_length=6)
+
+    def validate(self, attrs):
+        request = self.context['request']
+        user = request.user
+         
+        if not user or not user.is_authenticated:
+            raise serializers.ValidationError("Authentication required.")
+ 
+        if attrs['email'] != user.email:
+            raise serializers.ValidationError("Email does not match the authenticated user.")
+        
+        if attrs['otp'] != str(user.email_otp):
+            raise serializers.ValidationError("Invalid Otp.")
+     
+        if not user.email_otp_created_at:
+            raise serializers.ValidationError("OTP timestamp missing. Request a new OTP.")
+         
+        expire_minutes = getattr(settings, "OTP_EXPIRE_MINUTES", 5)
+
+        now = timezone.now()
+        otp_age = now - user.email_otp_created_at
+
+        if otp_age > timedelta(minutes=expire_minutes):
+            raise serializers.ValidationError("OTP expired. Please request a new one.")
+
+        return attrs
+    
