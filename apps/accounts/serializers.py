@@ -1,9 +1,10 @@
 # Library
 from rest_framework import serializers
 from rest_framework.serializers import Serializer,ModelSerializer 
-
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 # Internal 
 from .models import User
+from .tasks import task_send_email_otp
 
 class UserRegisterSerializer(ModelSerializer):
     confirm_password = serializers.CharField(write_only=True)
@@ -13,7 +14,10 @@ class UserRegisterSerializer(ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True}
         }
-         
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user 
+    
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("This email is already taken.")
@@ -28,3 +32,28 @@ class UserRegisterSerializer(ModelSerializer):
 
         return attrs
     
+# --------------------------
+# User Login Serializer
+# -------------------------- 
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer): 
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data['user_id'] = self.user.id
+        data['email'] = self.user.email
+        data['role'] = self.user.role 
+
+        if not self.user.email_verified:
+            task_send_email_otp(self.user.id)
+            return {'otp':"Otp send you mail! Please verify you mail with in 5 minutes"}
+        
+        return data
+
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['email'] = user.email
+        token['role'] = user.role
+        token['user_id'] = user.id
+        return token
+
+ 

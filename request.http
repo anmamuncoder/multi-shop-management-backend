@@ -9,3 +9,20 @@ Content-Type: application/json
     "role":"customer"
 }
 
+###
+POST  http://127.0.0.1:8020/api/auth/login/
+Content-Type: application/json 
+
+{
+    "email":"anmamun0@gmail.com",
+    "password": "123" 
+}
+
+###
+POST  http://127.0.0.1:8020/api/auth/login/refresh/
+Content-Type: application/json 
+
+{
+    "refresh":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2NzM3OTY4MCwiaWF0IjoxNzY0Nzg3NjgwLCJqdGkiOiJmN2EzZTU0NjRlMzc0NDdiOTUzMDEwNTdlNDJlMGJlNSIsInVzZXJuYW1lIjoiYW5tYW11bjAiLCJlbWFpbCI6ImFubWFtdW4wQGdtYWlsLmNvbSIsInJvbGUiOiJjdXN0b21lciIsInVzZXJfaWQiOiJhOWRhODE4Ni0wNDRkLTQ4ZTYtOTQ0NC1kMmMyOWU4MTRmNDAifQ._Ica9FW94F4D0YveQYyO4kFuSbe2BV0l4J8zwAInHHU"
+}
+

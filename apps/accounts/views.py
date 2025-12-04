@@ -3,8 +3,9 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny   
+from rest_framework_simplejwt.views import TokenObtainPairView
 # Internal
-from .serializers import UserRegisterSerializer
+from .serializers import UserRegisterSerializer,CustomTokenObtainPairSerializer
 from .tasks import task_send_email_otp
 # External 
 from apps.base.utils import make_token_key
@@ -39,3 +40,8 @@ class RegisterView(APIView):
         response_data['otp'] = "Otp send you mail! Please verify you mail with in 5 minutes"
         return Response(response_data, status=status.HTTP_201_CREATED) 
     
+# --------------------------
+# User Login View
+# --------------------------
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer

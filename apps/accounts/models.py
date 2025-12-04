@@ -30,12 +30,14 @@ class UserManager(BaseUserManager):
 
 class User(BaseModel,AbstractUser):
     username = models.CharField(max_length=150, unique=True, blank=True, null=True)  # optional
+    email = models.EmailField(unique=True)   
     role = models.CharField(choices=USER_ROLE,default='customer')
     email_verified = models.BooleanField(default=False)
     email_otp = models.IntegerField(blank=True,null=True)
     email_otp_created_at = models.DateField(blank=True,null=True)
 
-    REQUIRED_FIELDS = ['email'] 
+    USERNAME_FIELD = 'email'                
+    REQUIRED_FIELDS = [] 
     objects = UserManager()
 
     def __str__(self):
