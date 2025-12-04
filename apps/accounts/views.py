@@ -71,6 +71,9 @@ class UserView(APIView):
         old_email = user.email
         new_email = request.data.get("email")
 
+        if not user.email_verified:
+            return Response({"email":"Login Again and Verify your email!"},status=status.HTTP_401_UNAUTHORIZED)
+
         # Email Unique Check
         if new_email and new_email != old_email:
             if User.objects.filter(email=new_email).exclude(id=user.id).exists():

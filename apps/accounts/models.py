@@ -44,8 +44,12 @@ class User(BaseModel,AbstractUser):
         return f"{self.email}"
     
     def save(self,*args,**kwargs):
+        if self.pk is None:
+            return super().save(*args, **kwargs)
+        
         if self.email and not self.username:
             email_name, domain_part = self.email.strip().rsplit("@", 1)
             self.username = email_name
+            
         super().save(*args, **kwargs) 
      
