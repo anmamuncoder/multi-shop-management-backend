@@ -44,3 +44,19 @@ class ProductSerializer(ModelSerializer):
         
         if value.shop.owner != user:
             raise ValidationError("Parent category must belong to your shop! Not Found Parent Category!")
+
+# ---------------------------
+# Product Image Serializer
+# ---------------------------
+class ProductImageSerializer(ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = "__all__" 
+
+    def validate_product(self,value):
+        user = self.context['request'].user
+        if value is None:
+            return value
+        
+        if value.shop.owner != user:
+            raise ValidationError("Product must belong to your shop! Not Found Product!")

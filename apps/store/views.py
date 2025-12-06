@@ -1,7 +1,7 @@
 from django.shortcuts import render,get_object_or_404
 # Internal
 from .models import Shop,Category,Product,ProductImage,ProductVariant
-from .serializers import ShopOwnerSerializer,ShopCustomerSerializer,CategorySerializer,ProductSerializer
+from .serializers import ShopOwnerSerializer,ShopCustomerSerializer,CategorySerializer,ProductSerializer,ProductImageSerializer
 from .permissions import Get_AllowAny_Other_IsAuthenticated
 # Create your views here.
 from rest_framework.views import APIView
@@ -63,9 +63,11 @@ class CategoryView(ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_authenticated and hasattr(user, 'shop'):
-            # Shop owner sees all if include Header Token
-            return Category.objects.filter(shop=user.shop)
+        if user.is_authenticated:
+            if hasattr(user, 'shop'):
+                # Shop owner sees all if include Header Token
+                return Category.objects.filter(shop=user.shop)
+            return Category.objects.none()
         
         # Public users see only active categories
         return Category.objects.filter(is_active=True)
@@ -78,10 +80,29 @@ class ProductView(ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_authenticated and hasattr(user, 'shop'):
-            # Shop owner sees all if include Header Token
-            return Product.objects.filter(shop=user.shop)
+        if user.is_authenticated:
+            if hasattr(user, 'shop'):
+                # Shop owner sees all if include Header Token
+                return Product.objects.filter(shop=user.shop)
+            return Product.objects.none()
         
         # Public users see only active categories
         return Product.objects.all()
+    
+
+class ProductImageView(ModelViewSet):
+    queryset = ProductImage.objects.all()
+    serializer_class = ProductImageSerializer
+    permission_classes = [Get_AllowAny_Other_IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated:
+            if hasattr(user, 'shop'):
+                # Shop owner sees all if include Header Token
+                return ProductImage.objects.filter(product__shop=user.shop)
+            return ProductImage.objects.none()
+        
+        # Public users see only active categories
+        return ProductImage.objects.all()
     
