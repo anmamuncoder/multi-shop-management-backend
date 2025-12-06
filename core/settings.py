@@ -34,6 +34,7 @@ OTP_EXPIRE_MINUTES=5
 # Application definition
 CUSTOM_APPS = [
     'apps.accounts',
+    'apps.store',
     
 ]
 
