@@ -15,3 +15,9 @@ class ShopCustomerSerializer(ModelSerializer):
         # fields = "__all__"
 
         exclude = ('owner','is_verified','total_sales','is_active')
+
+class CategorySerializer(ModelSerializer):
+    class Meta:
+        model = Category
+        fields = "__all__"
+        read_only_fields = ('shop','slug')

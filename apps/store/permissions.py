@@ -1,22 +1,25 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
-class CustomShopPermission(BasePermission):
+class Get_AllowAny_Other_IsAuthenticated(BasePermission):
     """
-    GET: Allow For AllowAny
-    is_authenticated: POST,PUT,PATCH,HEAD ALL
-    is_anonymous: All Method Block except GET
-    """
-    def has_permission(self, request, view):
-        # Allow GET for anyone
-        user = request.user
+    GET/HEAD/OPTIONS : allowed for everyone
+    PUT/PATCH/DELETE : only for shop owner who owns the object
 
-        # Any user allow GET
-        if request.method == "GET":
+    Public: 
+        GET : list all data
+    Authenticated: 
+        GET : list only own data
+        PUT/PATCH/DELETE : Allow
+    """
+    
+    def has_permission(self, request, view):
+        # Public 
+        if request.method in SAFE_METHODS:
             return True
-        
-        # For Anonymous user cant access POST,PUT,PACTH,DELETE,HEAD
-        if user.is_anonymous:
-            return False
-        
+
         # Other methods require authentication
+        # For Anonymous user cant access POST,PUT,PACTH,DELETE,HEAD
         return request.user and request.user.is_authenticated
+    
+    # def has_object_permission(self, request, view, obj):
+        # pass

@@ -1,8 +1,8 @@
 from django.shortcuts import render,get_object_or_404
 # Internal
 from .models import Shop,Category,Product,ProductImage,ProductVariant
-from .serializers import ShopOwnerSerializer,ShopCustomerSerializer
-from .permissions import CustomShopPermission
+from .serializers import ShopOwnerSerializer,ShopCustomerSerializer,CategorySerializer
+from .permissions import Get_AllowAny_Other_IsAuthenticated
 # Create your views here.
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 class ShopView(APIView):  
-    permission_classes = [CustomShopPermission] 
+    permission_classes = [Get_AllowAny_Other_IsAuthenticated] 
 
     def get(self,request):
         # Public Data
@@ -25,7 +25,7 @@ class ShopView(APIView):
             serializer = ShopOwnerSerializer(queryset,many=True)
 
         return Response(serializer.data, status=200)
-
+    
     def post(self,request):
         user = request.user
 
@@ -54,4 +54,19 @@ class ShopView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data,status=status.HTTP_200_OK)
+ 
 
+class CategoryView(ModelViewSet):
+    queryset = Category.objects.filter(is_active=True)
+    serializer_class = CategorySerializer
+    permission_classes = [Get_AllowAny_Other_IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated and hasattr(user, 'shop'):
+            # Shop owner sees all if include Header Token
+            return Category.objects.filter(shop=user.shop)
+        
+        # Public users see only active categories
+        return Category.objects.filter(is_active=True)
+    
