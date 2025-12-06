@@ -1,7 +1,7 @@
 from django.shortcuts import render,get_object_or_404
 # Internal
 from .models import Shop,Category,Product,ProductImage,ProductVariant
-from .serializers import ShopOwnerSerializer,ShopCustomerSerializer,CategorySerializer
+from .serializers import ShopOwnerSerializer,ShopCustomerSerializer,CategorySerializer,ProductSerializer
 from .permissions import Get_AllowAny_Other_IsAuthenticated
 # Create your views here.
 from rest_framework.views import APIView
@@ -69,4 +69,19 @@ class CategoryView(ModelViewSet):
         
         # Public users see only active categories
         return Category.objects.filter(is_active=True)
+
+
+class ProductView(ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    permission_classes = [Get_AllowAny_Other_IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated and hasattr(user, 'shop'):
+            # Shop owner sees all if include Header Token
+            return Product.objects.filter(shop=user.shop)
+        
+        # Public users see only active categories
+        return Product.objects.all()
     

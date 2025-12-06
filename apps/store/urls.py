@@ -1,12 +1,13 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import ShopView,CategoryView
+from .views import ShopView,CategoryView,ProductView
 
 routers = DefaultRouter()
-routers.register('category',CategoryView)
+routers.register('categories',CategoryView)
+routers.register('products',ProductView)
 
 urls_shop_owner = [
-    path('shop/',ShopView.as_view(),name='shop')
+    path('shops/',ShopView.as_view(),name='shop')
 ]
 
 urls_shop_customer = [

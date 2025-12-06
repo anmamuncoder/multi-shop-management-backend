@@ -1,6 +1,7 @@
 from rest_framework.serializers import Serializer,ModelSerializer
 # Internal
 from .models import Shop,Category,Product,ProductImage,ProductVariant
+from rest_framework.exceptions import ValidationError
 
 class ShopOwnerSerializer(ModelSerializer):
     class Meta:
@@ -21,3 +22,25 @@ class CategorySerializer(ModelSerializer):
         model = Category
         fields = "__all__"
         read_only_fields = ('shop','slug')
+
+    def validate_parent(self,value):
+        user = self.context['request'].user
+        if value is None:
+            return value
+        
+        if value.shop.owner != user:
+            raise ValidationError("Parent category must belong to your shop! Not Found Parent Category!")
+
+class ProductSerializer(ModelSerializer):
+    class Meta:
+        model = Product
+        fields = "__all__"
+        read_only_fields = ('shop','slug')
+
+    def validate_category(self,value):
+        user = self.context['request'].user
+        if value is None:
+            return value
+        
+        if value.shop.owner != user:
+            raise ValidationError("Parent category must belong to your shop! Not Found Parent Category!")
