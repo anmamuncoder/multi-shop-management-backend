@@ -1,7 +1,7 @@
 from django.shortcuts import render,get_object_or_404
 # Internal
 from .models import Shop,Category,Product,ProductImage,ProductVariant
-from .serializers import ShopOwnerSerializer,ShopCustomerSerializer,CategorySerializer,ProductSerializer,ProductImageSerializer
+from .serializers import ShopOwnerSerializer,ShopCustomerSerializer,CategorySerializer,ProductSerializer,ProductImageSerializer,ProductVariantSerializer
 from .permissions import Get_AllowAny_Other_IsAuthenticated
 # Create your views here.
 from rest_framework.views import APIView
@@ -55,7 +55,9 @@ class ShopView(APIView):
         serializer.save()
         return Response(serializer.data,status=status.HTTP_200_OK)
  
-
+# ---------------------------
+# Category View
+# ---------------------------
 class CategoryView(ModelViewSet):
     queryset = Category.objects.filter(is_active=True)
     serializer_class = CategorySerializer
@@ -72,7 +74,9 @@ class CategoryView(ModelViewSet):
         # Public users see only active categories
         return Category.objects.filter(is_active=True)
 
-
+# ---------------------------
+# Product View
+# ---------------------------
 class ProductView(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -89,7 +93,9 @@ class ProductView(ModelViewSet):
         # Public users see only active categories
         return Product.objects.all()
     
-
+# ---------------------------
+# Product Image View
+# ---------------------------
 class ProductImageView(ModelViewSet):
     queryset = ProductImage.objects.all()
     serializer_class = ProductImageSerializer
@@ -106,3 +112,22 @@ class ProductImageView(ModelViewSet):
         # Public users see only active categories
         return ProductImage.objects.all()
     
+# ---------------------------
+# Product Variant View
+# ---------------------------
+class ProductVariantView(ModelViewSet):
+    queryset = ProductVariant.objects.all()
+    serializer_class = ProductVariantSerializer
+    permission_classes = [Get_AllowAny_Other_IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated:
+            if hasattr(user, 'shop'):
+                # Shop owner sees all if include Header Token
+                return ProductVariant.objects.filter(product__shop=user.shop)
+            return ProductVariant.objects.none()
+        
+        # Public users see only active categories
+        return ProductVariant.objects.all()
+

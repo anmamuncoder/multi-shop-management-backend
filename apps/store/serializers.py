@@ -17,6 +17,9 @@ class ShopCustomerSerializer(ModelSerializer):
 
         exclude = ('owner','is_verified','total_sales','is_active')
 
+# ---------------------------
+# Category Serializer
+# ---------------------------
 class CategorySerializer(ModelSerializer):
     class Meta:
         model = Category
@@ -30,7 +33,10 @@ class CategorySerializer(ModelSerializer):
         
         if value.shop.owner != user:
             raise ValidationError("Parent category must belong to your shop! Not Found Parent Category!")
-
+        
+# ---------------------------
+# Product Serializer
+# ---------------------------
 class ProductSerializer(ModelSerializer):
     class Meta:
         model = Product
@@ -51,6 +57,23 @@ class ProductSerializer(ModelSerializer):
 class ProductImageSerializer(ModelSerializer):
     class Meta:
         model = ProductImage
+        fields = "__all__" 
+
+    def validate_product(self,value):
+        user = self.context['request'].user
+        if value is None:
+            return value
+        
+        if value.shop.owner != user:
+            raise ValidationError("Product must belong to your shop! Not Found Product!")
+
+
+# ---------------------------
+# Product Image Serializer
+# ---------------------------
+class ProductVariantSerializer(ModelSerializer):
+    class Meta:
+        model = ProductVariant
         fields = "__all__" 
 
     def validate_product(self,value):
