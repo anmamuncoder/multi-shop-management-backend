@@ -1,4 +1,4 @@
-from rest_framework.serializers import Serializer,ModelSerializer
+from rest_framework.serializers import Serializer,ModelSerializer,SlugRelatedField
 # Internal
 from .models import Shop,Category,Product,ProductImage,ProductVariant
 from rest_framework.exceptions import ValidationError
@@ -21,6 +21,9 @@ class ShopCustomerSerializer(ModelSerializer):
 # Category Serializer
 # ---------------------------
 class CategorySerializer(ModelSerializer):
+    shop = SlugRelatedField(slug_field='slug',queryset=Shop.objects.all())
+    parent = SlugRelatedField(slug_field='slug',queryset=Category.objects.all())
+
     class Meta:
         model = Category
         fields = "__all__"
@@ -38,6 +41,9 @@ class CategorySerializer(ModelSerializer):
 # Product Serializer
 # ---------------------------
 class ProductSerializer(ModelSerializer):
+    shop = SlugRelatedField(slug_field='slug',queryset=Shop.objects.all())
+    category = SlugRelatedField(slug_field='slug',queryset=Category.objects.all())
+
     class Meta:
         model = Product
         fields = "__all__"
@@ -55,6 +61,8 @@ class ProductSerializer(ModelSerializer):
 # Product Image Serializer
 # ---------------------------
 class ProductImageSerializer(ModelSerializer):
+    product = SlugRelatedField(slug_field='slug',queryset=Product.objects.all())
+
     class Meta:
         model = ProductImage
         fields = "__all__" 
@@ -72,6 +80,8 @@ class ProductImageSerializer(ModelSerializer):
 # Product Image Serializer
 # ---------------------------
 class ProductVariantSerializer(ModelSerializer):
+    product = SlugRelatedField(slug_field='slug',queryset=Product.objects.all())
+
     class Meta:
         model = ProductVariant
         fields = "__all__" 
