@@ -3,6 +3,7 @@ from django.shortcuts import render,get_object_or_404
 from .models import Shop,Category,Product,ProductImage,ProductVariant
 from .serializers import ShopOwnerSerializer,ShopCustomerSerializer,CategorySerializer,ProductSerializer,ProductImageSerializer,ProductVariantSerializer
 from .permissions import Get_AllowAny_Other_IsAuthenticated
+from .filters import ProductFilter
 # Create your views here.
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -10,6 +11,8 @@ from rest_framework.exceptions import ValidationError,PermissionDenied
 from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 class ShopView(ModelViewSet):
     permission_classes = [Get_AllowAny_Other_IsAuthenticated] 
@@ -74,7 +77,14 @@ class ProductView(ModelViewSet):
     serializer_class = ProductSerializer
     permission_classes = [Get_AllowAny_Other_IsAuthenticated]
     lookup_field = 'slug'
-
+    
+    filter_backends = [DjangoFilterBackend,SearchFilter, OrderingFilter]
+    filterset_class = ProductFilter  
+    
+    search_fields = ['name', 'slug','tags'] # SEARCHABLE: like search box (?search=three) 
+    # filterset_fields = ['category','is_available'] # FILTER:  exict match (?search=three) 
+    ordering_fields = ['price','name', 'created_at'] # ORDERING: (?ordering=name or ?ordering=-created_at)
+    
     def get_queryset(self):
         user = self.request.user
         if user.is_authenticated:

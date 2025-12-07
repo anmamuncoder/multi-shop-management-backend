@@ -43,7 +43,7 @@ class CategorySerializer(ModelSerializer):
 class ProductSerializer(ModelSerializer):
     shop = SlugRelatedField(slug_field='slug',queryset=Shop.objects.all())
     category = SlugRelatedField(slug_field='slug',queryset=Category.objects.all())
-
+    
     class Meta:
         model = Product
         fields = "__all__"
