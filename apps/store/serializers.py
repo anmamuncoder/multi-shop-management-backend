@@ -36,27 +36,7 @@ class CategorySerializer(ModelSerializer):
         
         if value.shop.owner != user:
             raise ValidationError("Parent category must belong to your shop! Not Found Parent Category!")
-        
-# ---------------------------
-# Product Serializer
-# ---------------------------
-class ProductSerializer(ModelSerializer):
-    shop = SlugRelatedField(slug_field='slug',queryset=Shop.objects.all())
-    category = SlugRelatedField(slug_field='slug',queryset=Category.objects.all())
-    
-    class Meta:
-        model = Product
-        fields = "__all__"
-        read_only_fields = ('shop','slug')
-
-    def validate_category(self,value):
-        user = self.context['request'].user
-        if value is None:
-            return value
-        
-        if value.shop.owner != user:
-            raise ValidationError("Parent category must belong to your shop! Not Found Parent Category!")
-
+         
 # ---------------------------
 # Product Image Serializer
 # ---------------------------
@@ -93,3 +73,27 @@ class ProductVariantSerializer(ModelSerializer):
         
         if value.shop.owner != user:
             raise ValidationError("Product must belong to your shop! Not Found Product!")
+
+# ---------------------------
+# Product Serializer
+# ---------------------------
+class ProductSerializer(ModelSerializer):
+    shop = SlugRelatedField(slug_field='slug',queryset=Shop.objects.all())
+    category = SlugRelatedField(slug_field='slug',queryset=Category.objects.all())
+    
+    #  Nested Data just read only
+    images = ProductImageSerializer(many=True,read_only=True)
+    variants = ProductVariantSerializer(many=True,read_only=True)
+
+    class Meta:
+        model = Product
+        fields = "__all__"
+        read_only_fields = ('shop','slug')
+
+    def validate_category(self,value):
+        user = self.context['request'].user
+        if value is None:
+            return value
+        
+        if value.shop.owner != user:
+            raise ValidationError("Parent category must belong to your shop! Not Found Parent Category!")
