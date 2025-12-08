@@ -35,6 +35,7 @@ OTP_EXPIRE_MINUTES=5
 CUSTOM_APPS = [
     'apps.accounts',
     'apps.store',
+    'apps.order',
     
 ]
 
