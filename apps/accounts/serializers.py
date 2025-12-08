@@ -63,8 +63,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ('id','username','email','role','created_at','updated_at')
-        read_only_fields  = ('role','created_at','updated_at')
+        fields = ('id','username','email','email_verified','role','created_at','updated_at')
+        read_only_fields  = ('role','email_verified','created_at','updated_at')
 
 # -------------------------- 
 # Re-Send OTP Request
