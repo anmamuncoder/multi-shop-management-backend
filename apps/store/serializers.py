@@ -16,13 +16,13 @@ class ShopCustomerSerializer(ModelSerializer):
         # fields = "__all__"
 
         exclude = ('owner','is_verified','total_sales','is_active')
-
+        
 # ---------------------------
 # Category Serializer
 # ---------------------------
 class CategorySerializer(ModelSerializer):
-    shop = SlugRelatedField(slug_field='slug',queryset=Shop.objects.all())
-    parent = SlugRelatedField(slug_field='slug',queryset=Category.objects.all())
+    shop = SlugRelatedField(slug_field='slug',required=False,queryset=Shop.objects.all())
+    parent = SlugRelatedField(slug_field='slug',required=False,allow_null=True,queryset=Category.objects.all())
 
     class Meta:
         model = Category
@@ -31,12 +31,11 @@ class CategorySerializer(ModelSerializer):
 
     def validate_parent(self,value):
         user = self.context['request'].user
-        if value is None:
-            return value
-        
+     
         if value.shop.owner != user:
             raise ValidationError("Parent category must belong to your shop! Not Found Parent Category!")
-         
+        
+        return value
 # ---------------------------
 # Product Image Serializer
 # ---------------------------
@@ -49,12 +48,11 @@ class ProductImageSerializer(ModelSerializer):
 
     def validate_product(self,value):
         user = self.context['request'].user
-        if value is None:
-            return value
-        
+         
         if value.shop.owner != user:
             raise ValidationError("Product must belong to your shop! Not Found Product!")
-
+        
+        return value
 
 # ---------------------------
 # Product Image Serializer
@@ -67,18 +65,17 @@ class ProductVariantSerializer(ModelSerializer):
         fields = "__all__" 
 
     def validate_product(self,value):
-        user = self.context['request'].user
-        if value is None:
-            return value
-        
+        user = self.context['request'].user 
+
         if value.shop.owner != user:
             raise ValidationError("Product must belong to your shop! Not Found Product!")
-
+        
+        return value
 # ---------------------------
 # Product Serializer
 # ---------------------------
 class ProductSerializer(ModelSerializer):
-    shop = SlugRelatedField(slug_field='slug',queryset=Shop.objects.all())
+    shop = SlugRelatedField(slug_field='slug',required=False,queryset=Shop.objects.all())
     category = SlugRelatedField(slug_field='slug',queryset=Category.objects.all())
     
     #  Nested Data just read only
@@ -92,8 +89,7 @@ class ProductSerializer(ModelSerializer):
 
     def validate_category(self,value):
         user = self.context['request'].user
-        if value is None:
-            return value
-        
+
         if value.shop.owner != user:
             raise ValidationError("Parent category must belong to your shop! Not Found Parent Category!")
+        return value

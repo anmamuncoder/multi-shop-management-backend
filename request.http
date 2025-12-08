@@ -78,7 +78,13 @@ Content-Type: application/json
 }
 
 ###
-GET  http://127.0.0.1:8020/api/store/categories/
+POST  http://127.0.0.1:8020/api/store/categories/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NjQwNjI5LCJpYXQiOjE3NjUwMzU4MjksImp0aSI6IjA4MGU1MTM3MTMwMTQyNjQ5OTk1YmE0MzQ1ZjA3YmNmIiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.pFghqthHgZznhzhAU8xfiDO4U6S7fwHCIoHySfk2mbg
+Content-Type: application/json  
+
+{ 
+ "name": "Category1" 
+}
 
 ###
 GET  http://127.0.0.1:8020/api/store/categories/electronic/
@@ -109,8 +115,18 @@ GET  http://127.0.0.1:8020/api/store/products/?price_min=200&price_max=400
 GET  http://127.0.0.1:8020/api/store/products/
 
 ###
-GET  http://127.0.0.1:8020/api/store/products/
+POST  http://127.0.0.1:8020/api/store/products/
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NjQwNjI5LCJpYXQiOjE3NjUwMzU4MjksImp0aSI6IjA4MGU1MTM3MTMwMTQyNjQ5OTk1YmE0MzQ1ZjA3YmNmIiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.pFghqthHgZznhzhAU8xfiDO4U6S7fwHCIoHySfk2mbg
+Content-Type: application/json 
+
+{
+  "name": "test_product_create_owner",
+  "category":"electronic",
+  "name":"short_intro",
+  "short_description":"short_description",
+  "full_description":"full_description",
+  "sku":"SKUU"
+} 
 
 
 ###

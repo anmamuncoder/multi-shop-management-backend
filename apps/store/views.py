@@ -2,7 +2,7 @@ from django.shortcuts import render,get_object_or_404
 # Internal
 from .models import Shop,Category,Product,ProductImage,ProductVariant
 from .serializers import ShopOwnerSerializer,ShopCustomerSerializer,CategorySerializer,ProductSerializer,ProductImageSerializer,ProductVariantSerializer
-from .permissions import Get_AllowAny_Other_IsAuthenticated
+from .permissions import Get_AllowAny_Other_IsAuthenticated 
 from .filters import ProductFilter
 # Create your views here.
 from rest_framework.views import APIView
@@ -28,7 +28,7 @@ class ShopView(ModelViewSet):
     
     def get_queryset(self):
         user = self.request.user
-        if user.is_authenticated:
+        if user.is_authenticated and user.role == 'shop_owner':
             # Shop owner sees all if include Header Token
             return Shop.objects.filter(owner=user) 
         # Public users see only active categories
@@ -68,6 +68,13 @@ class CategoryView(ModelViewSet):
         
         # Public users see only active categories
         return Category.objects.filter(is_active=True)
+    
+    def perform_create(self, serializer):
+        user = self.request.user   
+        shop = Shop.objects.filter(owner=user).first()
+        if not shop:
+            raise PermissionDenied("You have no shop available!")
+        serializer.save(shop=shop)
 
 # ---------------------------
 # Product View
@@ -96,6 +103,13 @@ class ProductView(ModelViewSet):
         # Public users see only active categories
         return Product.objects.all()
     
+    def perform_create(self, serializer):
+        user = self.request.user   
+        shop = Shop.objects.filter(owner=user).first()
+        if not shop:
+            raise PermissionDenied("You have no shop available!")
+        serializer.save(shop=shop)
+
 # ---------------------------
 # Product Image View
 # ---------------------------

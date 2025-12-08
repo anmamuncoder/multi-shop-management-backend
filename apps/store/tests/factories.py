@@ -1,6 +1,6 @@
 import factory
 # Internal
-from ..models import Shop,Category,Product,ProductImage,ProductVariant
+from apps.store.models import Shop,Category,Product,ProductImage,ProductVariant
 # Enternal
 from apps.accounts.models import User
 from apps.accounts.tests.factories import UserFactory
