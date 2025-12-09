@@ -88,10 +88,31 @@ docker compose -f docker-compose-dev.yml exec web python manage.py createsuperus
 - **API/Web:** http://localhost:8020
 - **Admin Panel:** http://localhost:8020/admin
 
-<br>
+
 <br>
 
- 
+### 5.  Location of API Docs
+
+```
+├── docs/
+│   ├── openapi.yml     # OpenAPI 3.0 specification for all API endpoints
+```
+
+#### **How to View the API Documentation**
+
+You can load the file directly in Swagger Editor: <br>
+🔗 **Swagger Online Editor** [editor.swagger.io](https://editor.swagger.io/)
+
+Steps:
+- Open the Swagger Editor link
+- Navigate to File → Import File
+- Select and upload docs/openapi.yml
+- The interactive API UI will load automatically
+
+<br>
+
+
+<br> 
 
 ## 📁 Project Structure
 
@@ -105,11 +126,14 @@ team-setu-be/
 ├── core/
 │   ├── settings.py     # Django configuration
 │   └── asgi.py         # ASGI config
+├── docs/
+│   ├── openapi.yml     # API Documentation
 ├── docker-compose-dev.yml
 ├── Dockerfile
 ├── requirements.txt
 └── manage.py
 ```
+
 
 ## 🔧 Development
 
