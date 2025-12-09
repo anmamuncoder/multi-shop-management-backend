@@ -1,4 +1,4 @@
-from rest_framework.serializers import Serializer,ModelSerializer,SlugRelatedField
+from rest_framework.serializers import Serializer,ModelSerializer,SlugRelatedField,SerializerMethodField
 # Internal
 from .models import Shop,Category,Product,ProductImage,ProductVariant
 from rest_framework.exceptions import ValidationError
@@ -74,22 +74,45 @@ class ProductVariantSerializer(ModelSerializer):
 # ---------------------------
 # Product Serializer
 # ---------------------------
-class ProductSerializer(ModelSerializer):
+class ProductDetailSerializer(ModelSerializer):
     shop = SlugRelatedField(slug_field='slug',required=False,queryset=Shop.objects.all())
     category = SlugRelatedField(slug_field='slug',queryset=Category.objects.all())
     
     #  Nested Data just read only
     images = ProductImageSerializer(many=True,read_only=True)
     variants = ProductVariantSerializer(many=True,read_only=True)
+    primary_image = SerializerMethodField()
 
     class Meta:
         model = Product
         fields = "__all__"
-        read_only_fields = ('shop','slug')
-
+        read_only_fields = ('shop','slug') 
+        
+    def get_primary_image(self, obj):
+        """Return only the primary image URL"""
+        primary = obj.images.filter(is_primary=True).first()
+        if primary:
+            return primary.image.url
+        return None
+    
     def validate_category(self,value):
         user = self.context['request'].user
 
         if value.shop.owner != user:
             raise ValidationError("Parent category must belong to your shop! Not Found Parent Category!")
         return value
+
+class ProductListSerializer(ModelSerializer):  
+    primary_image = SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = ('id','slug','name','price','primary_image')
+        ordering = ['-created_at']
+
+    def get_primary_image(self, obj):
+        """Return only the primary image URL"""
+        primary = obj.images.filter(is_primary=True).first()
+        if primary:
+            return primary.image.url
+        return None 

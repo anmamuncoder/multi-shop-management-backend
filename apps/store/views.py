@@ -1,7 +1,7 @@
 from django.shortcuts import render,get_object_or_404
 # Internal
 from .models import Shop,Category,Product,ProductImage,ProductVariant
-from .serializers import ShopOwnerSerializer,ShopCustomerSerializer,CategorySerializer,ProductSerializer,ProductImageSerializer,ProductVariantSerializer
+from .serializers import ShopOwnerSerializer,ShopCustomerSerializer,CategorySerializer,ProductListSerializer,ProductDetailSerializer,ProductImageSerializer,ProductVariantSerializer
 from .permissions import Get_AllowAny_Other_IsAuthenticated 
 from .filters import ProductFilter
 # Create your views here.
@@ -79,18 +79,26 @@ class CategoryView(ModelViewSet):
 # ---------------------------
 # Product View
 # ---------------------------
+from apps.base.paginations import ProductPagination
+
 class ProductView(ModelViewSet):
     queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+    serializer_class = ProductListSerializer
     permission_classes = [Get_AllowAny_Other_IsAuthenticated]
+    pagination_class = ProductPagination
     lookup_field = 'slug'
-    
+
     filter_backends = [DjangoFilterBackend,SearchFilter, OrderingFilter]
     filterset_class = ProductFilter  
     
     search_fields = ['name', 'slug','tags'] # SEARCHABLE: like search box (?search=three) 
     # filterset_fields = ['category','is_available'] # FILTER:  exict match (?search=three) 
     ordering_fields = ['price','name', 'created_at'] # ORDERING: (?ordering=name or ?ordering=-created_at)
+    
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ProductListSerializer
+        return ProductDetailSerializer
     
     def get_queryset(self):
         user = self.request.user
