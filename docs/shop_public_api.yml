@@ -1,0 +1,563 @@
+openapi: 3.0.3
+info:
+  title: Shop Management API - PUBLIC / CUSTOMER
+  description: API documentation for Django Shop Management System with comprehensive authentication flow
+  version: 1.0.0
+  contact:
+    email: support@shopmanagement.com
+
+servers:
+  - url: http://127.0.0.1:8020
+    description: Local development server
+
+tags:
+  - name: Store - Public
+    description: Public endpoints for customers to browse shops, categories, and products
+  - name: Category
+    description: Public endpoints for browsing categories
+  - name: Product
+    description: Public endpoints for browsing products
+  - name: ProductImage
+    description: Public endpoints for browsing product images
+  - name: ProductVariant
+    description: Public endpoints for browsing product variants
+
+paths:
+
+  # ------------------------------------------------------
+  # SHOP OWNER / PUBLIC BROWSE ENDPOINTS
+  # ------------------------------------------------------
+
+  /api/store/shops/:
+    get:
+      tags:
+        - Store - Public
+      summary: Browse all shops (Customer)
+      description: Get all shops with public information. No authentication required.
+      responses:
+        '200':
+          description: Shops retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ShopPublic'
+              examples:
+                customer_shops:
+                  summary: Public shop list
+                  value:
+                    - id: "47e96d9d-d634-4e04-aa42-b7774c2adb3f"
+                      created_at: "2025-12-06"
+                      updated_at: "2025-12-06"
+                      name: "ADMIN 3 SHOP"
+                      slug: "admin-3-shop"
+                      description: "A"
+                      short_intro: "A"
+                      logo: null
+                      banner: null
+                      cover_photo: null
+                      primary_color: "#434asdff"
+                      policies: "A"
+                      currency: "USD"
+                      tax_rate: 0.17
+
+  /api/store/shops/{slug}/:
+    get:
+      tags:
+        - Store - Public
+      summary: Get shop details by slug (Customer)
+      description: Retrieve public information about a specific shop
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+          example: "admin-3-shop"
+          description: Shop slug
+      responses:
+        '200':
+          description: Shop retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopPublic'
+        '404':
+          description: Shop not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                not_found:
+                  value:
+                    detail: "Shop not found"
+
+  /api/store/categories/:
+    get:
+      tags:
+        - Category
+      summary: Browse all categories (Customer)
+      description: Get all categories. No authentication required.
+      responses:
+        '200':
+          description: Categories retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+              examples:
+                categories:
+                  value:
+                    - id: "46852ef6-8b94-4cd4-bec2-029f8816cafb"
+                      shop: "admin-3-shop"
+                      parent: null
+                      created_at: "2025-12-06"
+                      updated_at: "2025-12-06"
+                      name: "Laptop"
+                      slug: "laptop"
+                      image: null
+                      sort_order: 0
+                      is_active: true
+
+  /api/store/categories/{slug}/:
+    get:
+      tags:
+        - Category
+      summary: Get category by slug (Customer)
+      description: Retrieve a specific category by its slug
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+          example: "laptop"
+      responses:
+        '200':
+          description: Category retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '404':
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/store/products/:
+    get:
+      tags:
+        - Product
+      summary: Browse all products (Customer)
+      description: Get all products with public information. No authentication required.
+      responses:
+        '200':
+          description: Products retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductPublic'
+              examples:
+                customer_products:
+                  value:
+                    - id: "c2fae334-e6cf-4901-af29-6d494d0aad4c"
+                      shop: "admin-3-shop"
+                      category: "laptop"
+                      images:
+                        - id: "cd590949-09d8-4ef5-b65f-0ee77e7404c1"
+                          product: "c2fae334-e6cf-4901-af29-6d494d0aad4c"
+                          created_at: "2025-12-06"
+                          updated_at: "2025-12-06"
+                          image: "http://127.0.0.1:8020/media/product/asus-laptop/sdfasd_asdf_a.JPG"
+                          alt_text: "asdfasdfasdf"
+                          sort_order: 0
+                          is_primary: false
+                      variants: []
+                      created_at: "2025-12-06"
+                      updated_at: "2025-12-07"
+                      name: "eeeeee"
+                      slug: "eeeeee"
+                      short_description: "aa"
+                      full_description: "eeee"
+                      sku: "ABC124"
+                      price: 250.00
+                      cost_price: 0.00
+                      stock_quantity: 0
+                      low_stock_threshold: 5
+                      is_available: true
+                      is_featured: false
+                      weight: null
+                      tags: "three, four, five"
+
+  /api/store/products/{slug}/:
+    get:
+      tags:
+        - Product
+      summary: Get product by slug (Customer)
+      description: Retrieve public information about a specific product
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+          example: "eeeeee"
+      responses:
+        '200':
+          description: Product retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductPublic'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/store/images/:
+    get:
+      tags:
+        - ProductImage
+      summary: Browse all product images (Customer)
+      description: Get all product images. No authentication required.
+      responses:
+        '200':
+          description: Images retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductImage'
+              examples:
+                images:
+                  value:
+                    - id: "cd590949-09d8-4ef5-b65f-0ee77e7404c1"
+                      product: "c2fae334-e6cf-4901-af29-6d494d0aad4c"
+                      created_at: "2025-12-06"
+                      updated_at: "2025-12-06"
+                      image: "http://127.0.0.1:8020/media/product/asus-laptop/sdfasd_asdf_a.JPG"
+                      alt_text: "asdfasdfasdf"
+                      sort_order: 0
+                      is_primary: false
+
+  /api/store/images/{id}/:
+    get:
+      tags:
+        - ProductImage
+      summary: Get product image by ID (Customer)
+      description: Retrieve a specific product image by UUID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: "cd590949-09d8-4ef5-b65f-0ee77e7404c1"
+      responses:
+        '200':
+          description: Image retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductImage'
+        '404':
+          description: Image not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/store/variants/:
+    get:
+      tags:
+        - ProductVariant
+      summary: Browse all product variants (Customer)
+      description: Get all product variants. No authentication required.
+      responses:
+        '200':
+          description: Variants retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductVariant'
+              examples:
+                variants:
+                  value:
+                    - id: "ffaa9015-360f-47a8-b954-14ec48eee6a5"
+                      product: "c2fae334-e6cf-4901-af29-6d494d0aad4c"
+                      created_at: "2025-12-09"
+                      updated_at: "2025-12-09"
+                      title: "Product variant"
+                      value: "abcd"
+                      extra_price: 0.00
+                      stock_quantity: 0
+                      sku: "ABC124"
+
+  /api/store/variants/{id}/:
+    get:
+      tags:
+        - ProductVariant
+      summary: Get product variant by ID (Customer)
+      description: Retrieve a specific product variant by UUID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: "ffaa9015-360f-47a8-b954-14ec48eee6a5"
+      responses:
+        '200':
+          description: Variant retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductVariant'
+        '404':
+          description: Variant not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from login or refresh endpoint
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Error message
+          example: "No active account found with the given credentials"
+
+    ValidationError:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Validation error message
+          example: "This email is already taken."
+
+    ShopPublic:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: a9da8186-044d-48e6-9444-d2c29e814f40
+        name:
+          type: string
+          example: ADMIN 3 SHOP
+        slug:
+          type: string
+          example: admin-3-shop
+        description:
+          type: string
+        short_intro:
+          type: string
+        logo:
+          type: string
+          format: uri
+          nullable: true
+        banner:
+          type: string
+          format: uri
+          nullable: true
+        cover_photo:
+          type: string
+          format: uri
+          nullable: true
+        primary_color:
+          type: string
+          example: "#fff000"
+        policies:
+          type: string
+        currency:
+          type: string
+          enum: [BDT, USD]
+        tax_rate:
+          type: number
+          format: float
+          description: Tax rate as decimal (e.g., 0.17 for 17%)
+        created_at:
+          type: string
+          format: date
+          example: "2025-12-03"
+        updated_at:
+          type: string
+          format: date
+          example: "2025-12-06"
+
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        shop:
+          type: string
+          description: Shop slug or identifier
+          example: "admin-3-shop"
+        parent:
+          type: string
+          nullable: true
+          description: Parent category slug or id
+        name:
+          type: string
+        slug:
+          type: string
+        image:
+          type: string
+          format: uri
+          nullable: true
+        sort_order:
+          type: integer
+          format: int32
+          default: 0
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    ProductImage:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        product:
+          type: string
+          description: Product id (UUID)
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        image:
+          type: string
+          format: uri
+        alt_text:
+          type: string
+        sort_order:
+          type: integer
+          format: int32
+        is_primary:
+          type: boolean
+
+    ProductVariant:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        product:
+          type: string
+          description: Product id (UUID)
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        title:
+          type: string
+        value:
+          type: string
+        extra_price:
+          type: number
+          format: float
+        stock_quantity:
+          type: integer
+          format: int32
+        sku:
+          type: string
+
+    ProductPublic:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        shop:
+          type: string
+          description: Shop slug or id
+        category:
+          type: string
+          description: Category slug or id
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductImage'
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductVariant'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        name:
+          type: string
+        slug:
+          type: string
+        short_description:
+          type: string
+          nullable: true
+        full_description:
+          type: string
+          nullable: true
+        sku:
+          type: string
+          nullable: true
+        price:
+          type: number
+          format: float
+        cost_price:
+          type: number
+          format: float
+        stock_quantity:
+          type: integer
+          format: int32
+        low_stock_threshold:
+          type: integer
+          format: int32
+        is_available:
+          type: boolean
+        is_featured:
+          type: boolean
+        weight:
+          type: number
+          format: float
+          nullable: true
+        tags:
+          type: string
+          description: Comma-separated tag list

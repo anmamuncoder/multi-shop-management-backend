@@ -17,6 +17,8 @@ tags:
     description: User authentication and authorization endpoints
   - name: User
     description: User Profile Data Access endpoints
+  - name: Store
+    description: Shop and product management endpoints
 
 paths:
   /api/auth/login/:
@@ -572,6 +574,8 @@ paths:
                   value:
                     detail: "Authentication credentials were not provided."
 
+
+ 
 components:
   securitySchemes:
     bearerAuth:
@@ -653,4 +657,3 @@ components:
           description: Validation error message
           example: "This email is already taken."
 
-          
