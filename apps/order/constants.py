@@ -8,3 +8,9 @@ ORDER_STATUS = [
     ('delivered','Delivered'),
     ('cancelled','Cancelled')
 ]
+
+ORDER_ITEM_STATUS = [
+ ('pending','Pending'),
+ ('shipped','Shipped'),
+ ('delivered','Delivered'),
+] 

@@ -1,6 +1,6 @@
 from django.db import models
 # Internal
-from .constants import ORDER_STATUS
+from .constants import ORDER_STATUS,ORDER_ITEM_STATUS
 # External
 from apps.base.models import BaseModel
 from apps.accounts.models import User
@@ -33,7 +33,7 @@ class OrderItem(BaseModel):
     product_price = models.DecimalField(max_digits=10, decimal_places=2)
     product_image = models.URLField(null=True, blank=True)
 
-    status = models.CharField(choices=ORDER_STATUS, max_length=20, default="pending")
+    status = models.CharField(choices=ORDER_ITEM_STATUS, max_length=20, default="pending")
 
     def save(self, *args, **kwargs):
         self.subtotal_amount = self.product_price * self.quantity
