@@ -18,6 +18,14 @@ DEBUG = config('DEBUG',default=False,cast=bool)
 
 ALLOWED_HOSTS = []
 
+# Allow all domains (development purposes)
+CORS_ALLOW_ALL_ORIGINS = True
+# OR restrict to specific domains (recommended for production)
+# CORS_ALLOWED_ORIGINS = [
+#     "https://example.com",
+#     "https://sub.example.com",
+# ]
+
 # Email Settings
 EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
 EMAIL_HOST = config('EMAIL_HOST', default='localhost')
