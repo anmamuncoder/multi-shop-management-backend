@@ -99,7 +99,7 @@ docker compose -f docker-compose-dev.yml exec web python manage.py createsuperus
 │   ├── shop_owner.yml     # OpenAPI 3.0 specification for all Shop Owner endpoints
 │   ├── shop_public.yml     # OpenAPI 3.0 specification for all Shop Public endpoints
 │   ├── order_owner.yml     # OpenAPI 3.0 specification for all Order Owner endpoints
-│   ├── order_public.yml     # OpenAPI 3.0 specification for all Order Public endpoints
+│   ├── order_customer.yml     # OpenAPI 3.0 specification for all Order Public endpoints
 ```
 
 #### **How to View the API Documentation**

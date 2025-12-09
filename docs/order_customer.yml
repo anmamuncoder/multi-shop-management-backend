@@ -1,0 +1,410 @@
+openapi: 3.0.3
+info:
+  title: Django Shop Management API - Customer Orders
+  description: API documentation for customer order management in Django Shop Management System
+  version: 1.0.0
+  contact:
+    email: support@shopmanagement.com
+
+servers:
+  - url: http://127.0.0.1:8020
+    description: Local development server
+
+tags:
+  - name: Order
+    description: Endpoints for managing customer orders (authenticated)
+  - name: OrderItem
+    description: Endpoints for managing order items (authenticated)
+
+paths:
+
+  # ------------------------------------------
+  # CUSTOMER ORDER ENDPOINTS
+  # ------------------------------------------
+  /api/order/orders/:
+    get:
+      tags:
+        - Order
+      summary: Get all my orders
+      description: Retrieve all orders of the authenticated customer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Orders retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      tags:
+        - Order
+      summary: Create an order
+      description: Create a new order (POST body is handled internally by cart or front-end)
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Order created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags:
+        - Order
+      summary: Update order status (full update)
+      description: Update the order status (e.g., cancel order)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "completed"
+      responses:
+        '200':
+          description: Order updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    patch:
+      tags:
+        - Order
+      summary: Update order status (partial update)
+      description: Partially update order status
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "completed"
+      responses:
+        '200':
+          description: Order updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ------------------------------------------
+  # CUSTOMER ORDER ITEM ENDPOINTS
+  # ------------------------------------------
+  /api/order/items/:
+    get:
+      tags:
+        - OrderItem
+      summary: Get all my order items
+      description: Retrieve all order items of the authenticated customer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Order items retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderItem'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      tags:
+        - OrderItem
+      summary: Create an order item
+      description: Add a product to a new order
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderItemCreate'
+      responses:
+        '201':
+          description: Order item created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/order/items/{id}/:
+    get:
+      tags:
+        - OrderItem
+      summary: Get order item by ID
+      description: Retrieve a specific order item by UUID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: "c9223e94-5f6c-4bff-9376-8156fea248f4"
+      responses:
+        '200':
+          description: Order item retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+        '404':
+          description: Order item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags:
+        - OrderItem
+      summary: Update order item (full update)
+      description: Update quantity or status of an order item
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  example: 2
+                status:
+                  type: string
+                  example: "pending"
+      responses:
+        '200':
+          description: Order item updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+        '404':
+          description: Order item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    patch:
+      tags:
+        - OrderItem
+      summary: Update order item (partial update)
+      description: Partially update quantity or status of an order item
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  example: 2
+                status:
+                  type: string
+                  example: "pending"
+      responses:
+        '200':
+          description: Order item updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+        '404':
+          description: Order item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from login or refresh endpoint
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          example: "No active account found with the given credentials"
+          
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        created_at:
+          type: string
+          format: date
+        updated_at:
+          type: string
+          format: date
+        total_amount:
+          type: string
+          example: "1600.00"
+        status:
+          type: string
+          description: Status of the order
+          enum:
+            - pending
+            - confirmed
+            - processing
+            - shipped
+            - delivered
+            - cancelled
+          example: "pending"
+        customer:
+          type: string
+          format: uuid
+
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        product:
+          type: string
+        created_at:
+          type: string
+          format: date
+        updated_at:
+          type: string
+          format: date
+        quantity:
+          type: integer
+        subtotal_amount:
+          type: string
+          example: "1600.00"
+        product_name:
+          type: string
+        product_price:
+          type: string
+          example: "400.00"
+        product_image:
+          type: string
+          nullable: true
+        status:
+          type: string
+          description: Status of the order item
+          enum:
+            - pending
+            - shipped
+            - delivered
+          example: "pending"
+        order:
+          type: string
+          format: uuid
+
+    OrderItemCreate:
+      type: object
+      required:
+        - product
+        - quantity
+      properties:
+        product:
+          type: string
+          description: Product slug
+          example: "asus-leptop"
+        quantity:
+          type: integer
+          example: 4

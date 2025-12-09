@@ -1,0 +1,278 @@
+openapi: 3.0.3
+info:
+  title: Django Shop Management API - Shop Owner Orders
+  description: API documentation for shop owner order management (view only for their shop products)
+  version: 1.0.0
+  contact:
+    email: support@shopmanagement.com
+
+servers:
+  - url: http://127.0.0.1:8020
+    description: Local development server
+
+tags:
+  - name: ShopOwnerOrder
+    description: Endpoints for shop owners to view orders (read-only)
+  - name: ShopOwnerOrderItem
+    description: Endpoints for shop owners to view order items related to their shop products (read-only)
+
+paths:
+
+  # ------------------------------------------
+  # SHOP OWNER ORDER ENDPOINTS
+  # ------------------------------------------
+  /api/order/orders/:
+    get:
+      tags:
+        - ShopOwnerOrder
+      summary: Get all orders (Shop Owner)
+      description: Retrieve all orders for your shop products. Returns blank list if no orders exist.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Orders retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+              examples:
+                blank_orders:
+                  value: []
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      tags:
+        - ShopOwnerOrder
+      summary: Create order (Not allowed)
+      description: Shop owners cannot create orders
+      responses:
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                forbidden:
+                  value:
+                    detail: "Shop owners cannot create orders"
+
+    put:
+      tags:
+        - ShopOwnerOrder
+      summary: Update order (Not allowed)
+      description: Shop owners cannot update orders
+      responses:
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    patch:
+      tags:
+        - ShopOwnerOrder
+      summary: Partial update order (Not allowed)
+      description: Shop owners cannot update orders partially
+      responses:
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - ShopOwnerOrder
+      summary: Delete order (Not allowed)
+      description: Shop owners cannot delete orders
+      responses:
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ------------------------------------------
+  # SHOP OWNER ORDER ITEM ENDPOINTS
+  # ------------------------------------------
+  /api/order/items/:
+    get:
+      tags:
+        - ShopOwnerOrderItem
+      summary: Get order items for my shop products
+      description: Retrieve all order items that belong to your shop products only
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Order items retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderItem'
+              examples:
+                blank_items:
+                  value: []
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      tags:
+        - ShopOwnerOrderItem
+      summary: Create order item (Not allowed)
+      description: Shop owners cannot create order items
+      responses:
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags:
+        - ShopOwnerOrderItem
+      summary: Update order item (Not allowed)
+      description: Shop owners cannot update order items
+      responses:
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    patch:
+      tags:
+        - ShopOwnerOrderItem
+      summary: Partial update order item (Not allowed)
+      description: Shop owners cannot partially update order items
+      responses:
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - ShopOwnerOrderItem
+      summary: Delete order item (Not allowed)
+      description: Shop owners cannot delete order items
+      responses:
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from login or refresh endpoint
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          example: "You are not allowed to perform this action."
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        created_at:
+          type: string
+          format: date
+        updated_at:
+          type: string
+          format: date
+        total_amount:
+          type: string
+          example: "1600.00"
+        status:
+          type: string
+          description: Status of the order
+          enum:
+            - pending
+            - confirmed
+            - processing
+            - shipped
+            - delivered
+            - cancelled
+          example: "pending"
+        customer:
+          type: string
+          format: uuid
+          description: UUID of the customer who placed the order
+
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        product:
+          type: string
+          description: Slug or identifier of the product
+        created_at:
+          type: string
+          format: date
+        updated_at:
+          type: string
+          format: date
+        quantity:
+          type: integer
+        subtotal_amount:
+          type: string
+          example: "1600.00"
+        product_name:
+          type: string
+        product_price:
+          type: string
+          example: "400.00"
+        product_image:
+          type: string
+          nullable: true
+        status:
+          type: string
+          description: Status of the order item
+          enum:
+            - pending
+            - shipped
+            - delivered
+          example: "pending"
+        order:
+          type: string
+          format: uuid
+          description: UUID of the parent order
