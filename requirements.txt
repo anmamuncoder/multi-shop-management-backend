@@ -34,4 +34,9 @@ sqlparse==0.5.4
 typing_extensions==4.15.0
 tzdata==2025.2
 uritemplate==4.2.0
+
+# websocket - Django Channels
+channels==4.3.1
+channels_redis==4.3.0
+daphne==4.2.1
 whitenoise==6.11.0

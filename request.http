@@ -95,12 +95,15 @@ GET  http://127.0.0.1:8020/api/store/categories/
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NjQwNjI5LCJpYXQiOjE3NjUwMzU4MjksImp0aSI6IjA4MGU1MTM3MTMwMTQyNjQ5OTk1YmE0MzQ1ZjA3YmNmIiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.pFghqthHgZznhzhAU8xfiDO4U6S7fwHCIoHySfk2mbg
 
 ###
-PATCH  http://127.0.0.1:8020/api/store/categories/electronic/
+POST  http://127.0.0.1:8020/api/store/categories/
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NjQwNjI5LCJpYXQiOjE3NjUwMzU4MjksImp0aSI6IjA4MGU1MTM3MTMwMTQyNjQ5OTk1YmE0MzQ1ZjA3YmNmIiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.pFghqthHgZznhzhAU8xfiDO4U6S7fwHCIoHySfk2mbg
 Content-Type: application/json 
 
-{ 
- "parent": "leptop" 
+{  
+    "parent": "electronic",
+    "name": "Test 1",  
+    "sort_order": 2,
+    "is_active": false
 }
 
 

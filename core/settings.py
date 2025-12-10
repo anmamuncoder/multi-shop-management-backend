@@ -44,6 +44,7 @@ CUSTOM_APPS = [
     'apps.accounts',
     'apps.store',
     'apps.order',
+    'apps.chat',
     
 ]
 
@@ -105,7 +106,8 @@ TEMPLATES = [
 AUTH_USER_MODEL = 'accounts.User'
 
 WSGI_APPLICATION = "core.wsgi.application"
-
+# Channels ASGI application
+ASGI_APPLICATION = 'core.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -189,8 +191,8 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 
     # Pagination
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 10, # default: eatch page 10 data
+    # "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    # "PAGE_SIZE": 10, # default: eatch page 10 data
 }
 
 SIMPLE_JWT = {
@@ -211,3 +213,12 @@ CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://redis:6379/0')
 CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'redis://redis:6379/1')
  
 
+# Channels layer using Redis (reuse your Celery Redis)
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.getenv("CELERY_BROKER_URL", "redis://redis:6379/0")],
+        },
+    },
+}

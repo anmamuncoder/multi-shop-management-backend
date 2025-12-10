@@ -2,8 +2,8 @@ services:
   web:
     build:
       context: .
-    command: bash -c "python manage.py runserver 0.0.0.0:${WEB_PORT}"
-    # command: daphne -b 0.0.0.0 -p ${WEB_PORT} core.asgi:application
+    # command: bash -c "python manage.py runserver 0.0.0.0:${WEB_PORT}"
+    command: daphne -b 0.0.0.0 -p ${WEB_PORT} core.asgi:application
     ports:
       - "${WEB_PORT}:${WEB_PORT}"
     volumes:
