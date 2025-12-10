@@ -21,5 +21,5 @@ class Message(BaseModel):
     message = models.TextField()
 
     def __str__(self):
-        return f"{self.sender.email} - {self.room.id} - {self.created_at}"
+        return f"{self.sender.email} - {self.channel.id} - {self.created_at}"
     

@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.filters import SearchFilter, OrderingFilter
+from apps.base.paginations import BasePagination
 from django_filters.rest_framework import DjangoFilterBackend
 
 class ShopView(ModelViewSet):
@@ -79,13 +80,12 @@ class CategoryView(ModelViewSet):
 # ---------------------------
 # Product View
 # ---------------------------
-from apps.base.paginations import ProductPagination
 
 class ProductView(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductListSerializer
     permission_classes = [Get_AllowAny_Other_IsAuthenticated]
-    pagination_class = ProductPagination
+    pagination_class = BasePagination
     lookup_field = 'slug'
 
     filter_backends = [DjangoFilterBackend,SearchFilter, OrderingFilter]
