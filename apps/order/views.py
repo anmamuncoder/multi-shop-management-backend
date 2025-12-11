@@ -8,6 +8,7 @@ from .permissions import GETOwnerAllCustomer
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class OrderView(ModelViewSet):
@@ -26,11 +27,12 @@ class OrderView(ModelViewSet):
         serializer.save(customer=user)
         serializer.save()   
 
-
 class OrderItemView(ModelViewSet):
     queryset = OrderItem.objects.none()
     serializer_class = OrderItemSerializer
     permission_classes = [GETOwnerAllCustomer]
+    filter_backends = [DjangoFilterBackend]
+    filter_classes = ['product','status']
 
     def get_queryset(self):
         user = self.request.user

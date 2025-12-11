@@ -1,0 +1,708 @@
+openapi: 3.0.3
+info:
+  title:  Shop Management ~ Real-time Chat API (HTTP & WebSocket)
+  description: |
+    Complete API documentation for the real-time chat system supporting both HTTP REST endpoints and WebSocket connections.
+    
+    ## Authentication
+    All endpoints require JWT authentication via Bearer token in the Authorization header.
+    WebSocket connections require JWT token as a query parameter.
+    
+    ## User Roles
+    - **customer**: Can access channels where they are the customer
+    - **shop_owner**: Can access channels associated with their shop
+    
+    ## Order Summary Visibility
+    - **Customers**: `order_summary` field is always `null` (order details are hidden from customers)
+    - **Shop Owners**: `order_summary` field contains complete order information including items, amounts, and product details
+    
+    ## WebSocket Message Examples
+    
+    ### Connection Success Message (Server → Client)
+    ```json
+    {
+      "status": "connected",
+      "message": {
+        "sender": "admin1@gmail.com",
+        "user_role": "customer"
+      }
+    }
+    ```
+    
+    ### Send Message (Client → Server)
+    ```json
+    {
+      "message": "Finaly i'm not able to try"
+    }
+    ```
+    
+    ### Broadcast Message (Server → Client)
+    ```json
+    {
+      "status": "ongoing",
+      "message": {
+        "id": "788b080a-cdf8-44e2-bca4-7242528e9811",
+        "sender": "admin1@gmail.com",
+        "sender_role": "customer",
+        "message": "Finaly i'm not able to try",
+        "created_at": "2025-12-11 14:46:14.617953+00:00"
+      }
+    }
+    ```
+    
+    ## WebSocket Message Flow
+    
+    **Send Message:**
+    1. Client sends message via WebSocket
+    2. Server receives and validates message
+    3. Server saves message to database
+    4. Server broadcasts message to all connected clients in the channel group
+    5. All clients receive the message (including sender)
+    
+    **Receive Message:**
+    1. Another user sends a message
+    2. Server broadcasts to channel group
+    3. Client receives message event
+    4. Client updates UI with new message
+    
+    ## Error Handling
+    
+    **WebSocket Connection Errors:**
+    - Missing or invalid token → Connection closes immediately
+    - Invalid channel_id → Connection closes immediately
+    - User doesn't have access to channel → Connection closes immediately
+    - Channel is inactive (is_active=False) → Connection closes immediately
+    
+    **Authentication Errors:**
+    - Expired JWT token → Connection refused
+    - Invalid JWT signature → Connection refused
+    - User not found → Connection refused
+    
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+
+servers:
+  - url: http://127.0.0.1:8020
+    description: Local development server
+  - url: https://api.example.com
+    description: Production server
+
+paths:
+  /api/chat/channel/:
+    get:
+      tags:
+        - Chat Channels
+      summary: Get all chat channels
+      description: |
+        Retrieve all chat channels accessible to the authenticated user.
+        
+        **For customers:** Returns channels where they are the customer. The `order_summary` field will always be `null`.
+        **For shop owners:** Returns channels for their shops. The `order_summary` field contains complete order information.
+        
+        Supports filtering by order and shop slug.
+      
+      parameters:
+        - name: order
+          in: query
+          required: false
+          description: Filter by order UUID
+          schema:
+            type: string
+            format: uuid
+          example: "0223611c-33cf-4803-b6da-c037c5f0cb0d"
+        
+        - name: shop
+          in: query
+          required: false
+          description: Filter by shop slug
+          schema:
+            type: string
+          example: "admin-3-shop"
+      
+      security:
+        - BearerAuth: []
+      
+      responses:
+        '200':
+          description: List of chat channels
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      description: Channel ID
+                    order:
+                      type: string
+                      format: uuid
+                      description: Associated order ID
+                    shop:
+                      type: object
+                      properties:
+                        slug:
+                          type: string
+                        name:
+                          type: string
+                        owner:
+                          type: string
+                          format: email
+                        short_intro:
+                          type: string
+                        logo:
+                          type: string
+                          nullable: true
+                    customer:
+                      type: object
+                      properties:
+                        username:
+                          type: string
+                        email:
+                          type: string
+                          format: email
+                        role:
+                          type: string
+                          enum: [customer]
+                    last_message:
+                      type: object
+                      nullable: true
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        sender:
+                          type: string
+                          format: email
+                        sender_role:
+                          type: string
+                          enum: [customer, shop_owner]
+                        message:
+                          type: string
+                        created_at:
+                          type: string
+                          format: date-time
+                    is_active:
+                      type: boolean
+                    order_summary:
+                      type: object
+                      nullable: true
+                      description: |
+                        Order summary information. This field is role-dependent:
+                        - For **customers**: Always `null` (order details are hidden)
+                        - For **shop_owners**: Contains complete order information
+                      properties:
+                        total_item_count:
+                          type: integer
+                          description: Total number of items in the entire order
+                        total_order_amount:
+                          type: number
+                          format: float
+                          description: Total amount for the entire order
+                        overall_status:
+                          type: string
+                          description: Overall status of the order
+                          enum: [pending, processing, shipped, delivered, cancelled]
+                        sub_item_count:
+                          type: integer
+                          description: Number of items in this shop's sub-order
+                        sub_order_amount:
+                          type: number
+                          format: float
+                          description: Total amount for this shop's sub-order
+                        products:
+                          type: array
+                          description: List of products in this shop's sub-order
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                                format: uuid
+                              slug:
+                                type: string
+                              name:
+                                type: string
+                              price:
+                                type: string
+                                description: Product price as a decimal string
+                              primary_image:
+                                type: string
+                                nullable: true
+                                description: URL to the product's primary image
+              examples:
+                customer_response:
+                  summary: Customer view (order_summary is null)
+                  value:
+                    - id: "a30ea17e-b62b-4055-a16e-ed1ce9fd9717"
+                      order: "0223611c-33cf-4803-b6da-c037c5f0cb0d"
+                      shop:
+                        slug: "admin-3-shop"
+                        name: "ADMIN 3 SHOP"
+                        owner: "admin3@gmail.com"
+                        short_intro: "A"
+                        logo: null
+                      customer:
+                        username: "admin1"
+                        email: "admin1@gmail.com"
+                        role: "customer"
+                      last_message:
+                        id: "788b080a-cdf8-44e2-bca4-7242528e9811"
+                        sender: "admin1@gmail.com"
+                        sender_role: "customer"
+                        message: "Finaly i'm not able to try"
+                        created_at: "2025-12-11T14:46:14.617953Z"
+                      is_active: true
+                      order_summary: null
+                
+                shop_owner_response:
+                  summary: Shop owner view (order_summary with full details)
+                  value:
+                    - id: "a30ea17e-b62b-4055-a16e-ed1ce9fd9717"
+                      order: "0223611c-33cf-4803-b6da-c037c5f0cb0d"
+                      shop:
+                        slug: "admin-3-shop"
+                        name: "ADMIN 3 SHOP"
+                        owner: "admin3@gmail.com"
+                        short_intro: "A"
+                        logo: null
+                      customer:
+                        username: "admin1"
+                        email: "admin1@gmail.com"
+                        role: "customer"
+                      last_message:
+                        id: "788b080a-cdf8-44e2-bca4-7242528e9811"
+                        sender: "admin1@gmail.com"
+                        sender_role: "customer"
+                        message: "Finaly i'm not able to try"
+                        created_at: "2025-12-11T14:46:14.617953Z"
+                      is_active: true
+                      order_summary:
+                        total_item_count: 3
+                        total_order_amount: 1600.0
+                        overall_status: "pending"
+                        sub_item_count: 2
+                        sub_order_amount: 0.0
+                        products:
+                          - id: "2dfc130a-cdcc-4a91-822d-2c626d266776"
+                            slug: "short_intro"
+                            name: "short_intro"
+                            price: "0.00"
+                            primary_image: null
+                          - id: "2dfc130a-cdcc-4a91-822d-2c626d266776"
+                            slug: "short_intro"
+                            name: "short_intro"
+                            price: "0.00"
+                            primary_image: null
+        
+        '401':
+          description: Unauthorized - Invalid or missing token
+        
+        '403':
+          description: Forbidden - User does not have access
+
+  /api/chat/{channel_id}/messages/:
+    get:
+      tags:
+        - Chat Messages
+      summary: Get all messages in a channel
+      description: |
+        Retrieve all messages for a specific channel.
+        Returns paginated list of messages ordered by creation time.
+      
+      parameters:
+        - name: channel_id
+          in: path
+          required: true
+          description: UUID of the chat channel
+          schema:
+            type: string
+            format: uuid
+          example: "a30ea17e-b62b-4055-a16e-ed1ce9fd9717"
+      
+      security:
+        - BearerAuth: []
+      
+      responses:
+        '200':
+          description: Paginated list of messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: Total number of messages
+                  next:
+                    type: string
+                    nullable: true
+                    description: URL for next page
+                  previous:
+                    type: string
+                    nullable: true
+                    description: URL for previous page
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        sender:
+                          type: string
+                          format: email
+                        sender_role:
+                          type: string
+                          enum: [customer, shop_owner]
+                        message:
+                          type: string
+                        created_at:
+                          type: string
+                          format: date-time
+              example:
+                count: 12
+                next: null
+                previous: null
+                data:
+                  - id: "8382b649-bd3d-48f6-8208-d6fb2511cc9c"
+                    sender: "admin1@gmail.com"
+                    sender_role: "customer"
+                    message: "Hay"
+                    created_at: "2025-12-10T19:56:19.470628Z"
+                  - id: "e850c9b6-65a8-44ad-ba6f-eeab2b07c623"
+                    sender: "admin3@gmail.com"
+                    sender_role: "shop_owner"
+                    message: "How can i helo you sir?"
+                    created_at: "2025-12-11T12:45:43.647297Z"
+                  - id: "788b080a-cdf8-44e2-bca4-7242528e9811"
+                    sender: "admin1@gmail.com"
+                    sender_role: "customer"
+                    message: "Finaly i'm not able to try"
+                    created_at: "2025-12-11T14:46:14.617953Z"
+        
+        '401':
+          description: Unauthorized - Invalid or missing token
+        
+        '403':
+          description: Forbidden - User does not have access to this channel
+        
+        '404':
+          description: Channel not found
+
+  /ws/chat/channel/{channel_id}/connect/:
+    get:
+      tags:
+        - WebSocket
+      summary: Connect to chat channel via WebSocket
+      description: |
+        Establishes a WebSocket connection for real-time chat communication.
+        
+        **Connection Requirements:**
+        - Valid JWT access token
+        - User must have access to the specified channel
+        - Channel must be active (is_active=True)
+        
+        **Access Control:**
+        - Customers can only access channels where they are the customer
+        - Shop owners can only access channels for their shops
+        
+      parameters:
+        - name: channel_id
+          in: path
+          required: true
+          description: UUID of the chat channel
+          schema:
+            type: string
+            format: uuid
+          example: "a30ea17e-b62b-4055-a16e-ed1ce9fd9717"
+        
+        - name: token
+          in: query
+          required: true
+          description: JWT access token for authentication
+          schema:
+            type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      
+      responses:
+        '101':
+          description: Switching Protocols - WebSocket connection established
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [connected]
+                    description: Connection status
+                  message:
+                    type: object
+                    properties:
+                      sender:
+                        type: string
+                        format: email
+                        description: Email of the connected user
+                      user_role:
+                        type: string
+                        enum: [customer, shop_owner]
+                        description: Role of the connected user
+              example:
+                status: "connected"
+                message:
+                  sender: "admin1@gmail.com"
+                  user_role: "customer"
+        
+        '403':
+          description: Connection closed - Authentication failed or unauthorized access
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT access token obtained from authentication endpoint
+
+  schemas:
+    Channel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        order:
+          type: string
+          format: uuid
+        shop:
+          type: object
+          properties:
+            slug:
+              type: string
+            name:
+              type: string
+            owner:
+              type: string
+              format: email
+            short_intro:
+              type: string
+            logo:
+              type: string
+              nullable: true
+        customer:
+          type: object
+          properties:
+            username:
+              type: string
+            email:
+              type: string
+              format: email
+            role:
+              type: string
+              enum: [customer]
+        last_message:
+          type: object
+          nullable: true
+          properties:
+            id:
+              type: string
+              format: uuid
+            sender:
+              type: string
+              format: email
+            sender_role:
+              type: string
+              enum: [customer, shop_owner]
+            message:
+              type: string
+            created_at:
+              type: string
+              format: date-time
+        is_active:
+          type: boolean
+        order_summary:
+          type: object
+          nullable: true
+          description: |
+            Order summary - role-dependent field:
+            - Customers: Always null
+            - Shop owners: Contains full order details
+    
+    OrderSummary:
+      type: object
+      description: Detailed order summary (only visible to shop owners)
+      properties:
+        total_item_count:
+          type: integer
+          description: Total number of items in the entire order
+        total_order_amount:
+          type: number
+          format: float
+          description: Total amount for the entire order
+        overall_status:
+          type: string
+          description: Overall status of the order
+          enum: [pending, processing, shipped, delivered, cancelled]
+        sub_item_count:
+          type: integer
+          description: Number of items in this shop's sub-order
+        sub_order_amount:
+          type: number
+          format: float
+          description: Total amount for this shop's sub-order
+        products:
+          type: array
+          description: List of products in this shop's sub-order
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              slug:
+                type: string
+              name:
+                type: string
+              price:
+                type: string
+                description: Product price as a decimal string
+              primary_image:
+                type: string
+                nullable: true
+                description: URL to the product's primary image
+      example:
+        total_item_count: 3
+        total_order_amount: 1600.0
+        overall_status: "pending"
+        sub_item_count: 2
+        sub_order_amount: 0.0
+        products:
+          - id: "2dfc130a-cdcc-4a91-822d-2c626d266776"
+            slug: "short_intro"
+            name: "short_intro"
+            price: "0.00"
+            primary_image: null
+          - id: "2dfc130a-cdcc-4a91-822d-2c626d266776"
+            slug: "short_intro"
+            name: "short_intro"
+            price: "0.00"
+            primary_image: null
+    
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        sender:
+          type: string
+          format: email
+        sender_role:
+          type: string
+          enum: [customer, shop_owner]
+        message:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    
+    ConnectionSuccessMessage:
+      type: object
+      description: Message sent when WebSocket connection is successfully established
+      properties:
+        status:
+          type: string
+          enum: [connected]
+          description: Connection status
+        message:
+          type: object
+          properties:
+            sender:
+              type: string
+              format: email
+              description: Email of the connected user
+            user_role:
+              type: string
+              enum: [customer, shop_owner]
+              description: Role of the connected user
+      required:
+        - status
+        - message
+      example:
+        status: "connected"
+        message:
+          sender: "admin1@gmail.com"
+          user_role: "customer"
+    
+    ClientMessage:
+      type: object
+      description: Message format sent from client to server
+      properties:
+        message:
+          type: string
+          description: The text content of the message
+          minLength: 1
+          maxLength: 5000
+      required:
+        - message
+      example:
+        message: "Finaly i'm not able to try"
+    
+    BroadcastMessage:
+      type: object
+      description: Message format broadcast to all clients in the channel
+      properties:
+        status:
+          type: string
+          enum: [ongoing]
+          description: Message status
+        message:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: Unique identifier of the message
+            sender:
+              type: string
+              format: email
+              description: Email of the message sender
+            sender_role:
+              type: string
+              enum: [customer, shop_owner]
+              description: Role of the message sender
+            message:
+              type: string
+              description: The text content of the message
+            created_at:
+              type: string
+              description: Timestamp when the message was created
+      required:
+        - status
+        - message
+      example:
+        status: "ongoing"
+        message:
+          id: "788b080a-cdf8-44e2-bca4-7242528e9811"
+          sender: "admin1@gmail.com"
+          sender_role: "customer"
+          message: "Finaly i'm not able to try"
+          created_at: "2025-12-11 14:46:14.617953+00:00"
+
+security:
+  - BearerAuth: []
+
+tags:
+  - name: Chat Channels
+    description: HTTP endpoints for managing chat channels
+  - name: Chat Messages
+    description: HTTP endpoints for retrieving messages
+  - name: WebSocket
+    description: Real-time WebSocket communication endpoints
+  
