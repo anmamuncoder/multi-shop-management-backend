@@ -14,7 +14,7 @@ POST  http://127.0.0.1:8020/api/auth/login/
 Content-Type: application/json 
 
 {
-    "email":"anmamun2@gmail.com",
+    "email":"admin3@gmail.com",
     "password": "123" 
 }
 
@@ -236,4 +236,22 @@ Content-Type: application/json
  "name": "ASUS Leptop 42" 
 }
 
+
+### Customer Admin1
+GET  http://127.0.0.1:8020/api/chat/channel/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NzkyMzQwLCJpYXQiOjE3NjUxODc1NDAsImp0aSI6ImM5ZDFiMjEzYjY4MDQ2NzBhMjkzNDA5ZTJiY2U1OGI4IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.a-jl6FQWwb-75TR0nS82muEIakSmobvxpGp6fiailKY
+
+###
+### Customer Admin1
+GET  http://127.0.0.1:8020/api/chat/channel/?order=0223611c-33cf-4803-b6da-c037c5f0cb0d&shop=admin-3-shop
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NzkyMzQwLCJpYXQiOjE3NjUxODc1NDAsImp0aSI6ImM5ZDFiMjEzYjY4MDQ2NzBhMjkzNDA5ZTJiY2U1OGI4IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.a-jl6FQWwb-75TR0nS82muEIakSmobvxpGp6fiailKY
+
+###
+GET  http://127.0.0.1:8020/api/chat/a30ea17e-b62b-4055-a16e-ed1ce9fd9717/messages/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NzkyMzQwLCJpYXQiOjE3NjUxODc1NDAsImp0aSI6ImM5ZDFiMjEzYjY4MDQ2NzBhMjkzNDA5ZTJiY2U1OGI4IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.a-jl6FQWwb-75TR0nS82muEIakSmobvxpGp6fiailKY
+
+
+### Shop Owner
+GET  http://127.0.0.1:8020/api/chat/channel/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1OTk5MjMxLCJpYXQiOjE3NjUzOTQ0MzEsImp0aSI6IjFiOWVkODhiYThhYjRiYzY5NmZiZWNmZWJmOTgyNjk4IiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.CwWF-0EWBS54ASibJNM3oyrBoxCI9QP-bl39YB0mULQ
 
