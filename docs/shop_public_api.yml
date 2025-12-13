@@ -155,47 +155,51 @@ paths:
       tags:
         - Product
       summary: Browse all products (Customer)
-      description: Get all products with public information. No authentication required.
+      description: Get paginated product list with minimal public fields. No authentication required.
+
+      parameters:
+        - name: page
+          in: query
+          required: false
+          description: Page number
+          schema:
+            type: integer
+            example: 1
+
+        - name: size
+          in: query
+          required: false
+          description: Number of items per page
+          schema:
+            type: integer
+            example: 10
+
       responses:
         '200':
           description: Products retrieved successfully
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ProductPublic'
+                $ref: '#/components/schemas/PaginatedProductList'
               examples:
-                customer_products:
+                product_list:
                   value:
-                    - id: "c2fae334-e6cf-4901-af29-6d494d0aad4c"
-                      shop: "admin-3-shop"
-                      category: "laptop"
-                      images:
-                        - id: "cd590949-09d8-4ef5-b65f-0ee77e7404c1"
-                          product: "c2fae334-e6cf-4901-af29-6d494d0aad4c"
-                          created_at: "2025-12-06"
-                          updated_at: "2025-12-06"
-                          image: "http://127.0.0.1:8020/media/product/asus-laptop/sdfasd_asdf_a.JPG"
-                          alt_text: "asdfasdfasdf"
-                          sort_order: 0
-                          is_primary: false
-                      variants: []
-                      created_at: "2025-12-06"
-                      updated_at: "2025-12-07"
-                      name: "eeeeee"
-                      slug: "eeeeee"
-                      short_description: "aa"
-                      full_description: "eeee"
-                      sku: "ABC124"
-                      price: 250.00
-                      cost_price: 0.00
-                      stock_quantity: 0
-                      low_stock_threshold: 5
-                      is_available: true
-                      is_featured: false
-                      weight: null
-                      tags: "three, four, five"
+                    count: 10
+                    total_pages: 1
+                    current_page: 1
+                    next: null
+                    previous: null
+                    data:
+                      - id: "e27eb7c3-4615-41b7-9f0f-50eea6f07ad3"
+                        slug: "asus-leptop"
+                        name: "ASUS Leptop 42"
+                        price: "400.00"
+                        primary_image: null
+                      - id: "c2fae334-e6cf-4901-af29-6d494d0aad4c"
+                        slug: "eeeeee"
+                        name: "eeeeee"
+                        price: "250.00"
+                        primary_image: "/media/product/asus-leptop/sdfasd_asdf_a.JPG"
 
   /api/store/products/{slug}/:
     get:
@@ -561,3 +565,53 @@ components:
         tags:
           type: string
           description: Comma-separated tag list
+
+
+    # -----------------------------
+    # PRODUCT LIST ITEM (MINIMAL)
+    # -----------------------------
+    ProductListItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        slug:
+          type: string
+        name:
+          type: string
+        price:
+          type: string
+          example: "400.00"
+        primary_image:
+          type: string
+          format: uri
+          nullable: true
+
+    # -----------------------------
+    # PAGINATED PRODUCT LIST
+    # -----------------------------
+    PaginatedProductList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 3
+        total_pages:
+          type: integer
+          example: 1
+        current_page:
+          type: integer
+          example: 1
+        next:
+          type: string
+          nullable: true
+          example: null
+        previous:
+          type: string
+          nullable: true
+          example: null
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductListItem'

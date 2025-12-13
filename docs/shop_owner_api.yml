@@ -594,39 +594,49 @@ paths:
           name: Authorization
           required: true
           schema:
-            type: string
+            type: string 
+            
+        - name: page
+          in: query
+          required: false
+          description: Page number
+          schema:
+            type: integer
+            example: 1
+
+        - name: size
+          in: query
+          required: false
+          description: Number of items per page
+          schema:
+            type: integer
+            example: 10
       responses:
         '200':
           description: Products retrieved successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                  next:
-                    type: string
-                    nullable: true
-                  previous:
-                    type: string
-                    nullable: true
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/ProductListItem'
+                $ref: '#/components/schemas/PaginatedProductList'
               examples:
-                my_products:
+                product_list:
                   value:
-                    count: 3
+                    count: 10
+                    total_pages: 1
+                    current_page: 1
                     next: null
                     previous: null
                     data:
                       - id: "e27eb7c3-4615-41b7-9f0f-50eea6f07ad3"
-                        slug: "asus-laptop"
-                        name: "ASUS Laptop 42"
+                        slug: "asus-leptop"
+                        name: "ASUS Leptop 42"
                         price: "400.00"
-                        primary_image: "/media/product/asus-laptop/image.jpg"
+                        primary_image: null
+                      - id: "c2fae334-e6cf-4901-af29-6d494d0aad4c"
+                        slug: "eeeeee"
+                        name: "eeeeee"
+                        price: "250.00"
+                        primary_image: "/media/product/asus-leptop/sdfasd_asdf_a.JPG"
         '401':
           description: Unauthorized
           content:
@@ -2009,3 +2019,33 @@ components:
         sku:
           type: string
           description: Must be unique
+
+
+
+    # -----------------------------
+    # PAGINATED PRODUCT LIST
+    # -----------------------------
+    PaginatedProductList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 3
+        total_pages:
+          type: integer
+          example: 1
+        current_page:
+          type: integer
+          example: 1
+        next:
+          type: string
+          nullable: true
+          example: null
+        previous:
+          type: string
+          nullable: true
+          example: null
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductListItem'

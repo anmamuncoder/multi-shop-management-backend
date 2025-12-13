@@ -86,6 +86,8 @@ class ProductView(ModelViewSet):
     serializer_class = ProductListSerializer
     permission_classes = [Get_AllowAny_Other_IsAuthenticated]
     pagination_class = BasePagination
+    pagination_class.page_size = 2
+    pagination_class.max_page_size = 2
     lookup_field = 'slug'
 
     filter_backends = [DjangoFilterBackend,SearchFilter, OrderingFilter]

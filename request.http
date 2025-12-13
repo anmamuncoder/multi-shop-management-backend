@@ -27,8 +27,9 @@ Content-Type: application/json
 }
 
 ###
-DELETE   http://127.0.0.1:8020/api/auth/profile/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NDI5NTQ5LCJpYXQiOjE3NjQ4MjQ3NDksImp0aSI6ImUzODMxZTIxYmZkNzQ0YzNhZTI1ZjZiZDE5YzU5OWViIiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9.AhmEyPLESq5PepdR1JQGOPl4f5HSRbZpRA4v64UpRRY
+GET   http://127.0.0.1:8020/api/auth/profile/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2MjA3MzkwLCJpYXQiOjE3NjU2MDI1OTAsImp0aSI6Ijk0MDFkYzFiZmUzNDRlZDliZDJkMGY0YTk1ZmJkNTM3IiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.yesVZHCcvD6-x30x2aREczWM640VLhIUb0lYeCcbwr8
+
 Content-Type: application/json 
 
 {
@@ -108,7 +109,10 @@ Content-Type: application/json
 
 
 ###
-GET  http://127.0.0.1:8020/api/store/products/ 
+GET  http://127.0.0.1:8020/api/store/products/?page=1&size=10
+
+###
+GET   http://127.0.0.1:8020/api/store/products/?page=1&page_size=2
 
 ###
 GET  http://127.0.0.1:8020/api/store/products/eeeeee 

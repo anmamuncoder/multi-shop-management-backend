@@ -31,7 +31,7 @@ class MessageView(generics.ListAPIView):
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated] 
     pagination_class = BasePagination
-    pagination_class.page_size = 100
+    pagination_class.max_page_size = 100
 
     def get_queryset(self):
         channel_id = self.kwargs.get("channel_id")
