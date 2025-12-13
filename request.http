@@ -109,7 +109,7 @@ Content-Type: application/json
 
 
 ###
-GET  http://127.0.0.1:8020/api/store/products/?page=1&size=10
+GET  http://127.0.0.1:8020/api/store/products/?size=2
 
 ###
 GET   http://127.0.0.1:8020/api/store/products/?page=1&page_size=2
