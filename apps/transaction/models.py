@@ -5,7 +5,7 @@ import uuid
 from apps.base.models import BaseModel 
 from apps.accounts.models import User
 # Internal
-from .constrants import TRANSACTION_TYPE, TRANSACTION_STATUS
+from .constrants import TRANSACTION_TYPE,TRANSACTION_STATUS,ACCOUNT_TYPE,CURRENCY_CHOICES
 
 def generate_txn_id():
     today = timezone.now().strftime("%Y%m%d")
@@ -38,3 +38,46 @@ class Transaction(BaseModel):
 
     def __str__(self):
         return f"{self.txn_id} | {self.user.email} | {self.amount}"
+
+# --------------------------------
+# Admin Bank Account
+# --------------------------------
+class AdminBankAccount(BaseModel):
+    bank_name = models.CharField(max_length=100)
+    account_holder_name = models.CharField(max_length=50)
+    account_holder_type = models.CharField(max_length=15)
+
+    account_number = models.CharField(max_length=20)
+    routing_number = models.CharField(max_length=15)
+    country = models.CharField(max_length=15)
+
+    account_type  = models.CharField(max_length=10,choices=ACCOUNT_TYPE)
+    currency = models.CharField(max_length=10,choices=CURRENCY_CHOICES)
+
+    def __str__(self):
+        return f"{self.account_number} - {self.bank_name}"
+
+# --------------------------------
+# Top Up for shop owner
+# --------------------------------
+class TopUp(BaseModel): 
+    # Shop Owner information
+    bank_name = models.CharField(max_length=100)
+    amount = models.DecimalField(max_digits=12,decimal_places=2)
+    account_holder_name = models.CharField(max_length=50)
+
+    account_number = models.CharField(max_length=20)
+    routing_number = models.CharField(max_length=15)
+    country = models.CharField(max_length=15)
+
+    account_type  = models.CharField(max_length=10,choices=ACCOUNT_TYPE)
+    currency = models.CharField(max_length=10,choices=CURRENCY_CHOICES)
+    description = models.CharField(max_length=255)
+
+    receipt = models.ImageField(upload_to="topups/")
+    
+    status = models.CharField(max_length=10,choices=TRANSACTION_STATUS,default='pending')
+
+    def __str__(self):
+        return f"ACC - {self.account_number} - {self.status}"
+
