@@ -10,13 +10,17 @@ servers:
   - url: http://127.0.0.1:8020
     description: Local development server
 
-security:
-  - BearerAuth: []
 
 tags:
   - name: Transactions
     description: Operations related to transaction management
+  - name: Bank Accounts
+    description: Bank account operations (Admin only - shop_owner role)
+  - name: Top-Ups
+    description: Top-up request operations (shop_owner role required)
 
+security:
+  - BearerAuth: []
 
 paths:
   /api/transaction/transactions/:
@@ -139,6 +143,235 @@ paths:
       security:
         - BearerAuth: []
 
+  /api/transaction/meta/bank/:
+    get:
+      summary: List all bank accounts
+      description: Retrieve a list of all bank accounts (Admin only - shop_owner role required)
+      operationId: listBankAccounts
+      tags:
+        - Bank Accounts
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer token for authentication (shop_owner role required)
+          required: true
+          schema:
+            type: string
+          example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      responses:
+        '200':
+          description: Successful response with list of bank accounts
+          headers:
+            Allow:
+              schema:
+                type: string
+                example: "GET, HEAD, OPTIONS"
+              description: Allowed HTTP methods
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BankAccount'
+              example:
+                - id: "4419dbeb-190b-4edf-9a9d-6e4df7a81c62"
+                  created_at: "2025-12-14T13:44:03.860884Z"
+                  updated_at: "2025-12-14T13:44:03.860952Z"
+                  bank_name: "Islami Bank"
+                  account_holder_name: "Nur Mohummod Al Mamun"
+                  account_holder_type: "Owner"
+                  account_number: "7072021782059949"
+                  routing_number: "707202"
+                  country: "Bangladesh"
+                  account_type: "savings"
+                  currency: "USD"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+      security:
+        - BearerAuth: []
+
+  /api/transaction/meta/bank/{id}/:
+    get:
+      summary: Get bank account details
+      description: Retrieve details of a specific bank account by ID (Admin only - shop_owner role required)
+      operationId: getBankAccount
+      tags:
+        - Bank Accounts
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer token for authentication (shop_owner role required)
+          required: true
+          schema:
+            type: string
+          example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        - name: id
+          in: path
+          description: Bank account UUID
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: "4419dbeb-190b-4edf-9a9d-6e4df7a81c62"
+      responses:
+        '200':
+          description: Successful response with bank account details
+          headers:
+            Allow:
+              schema:
+                type: string
+                example: "GET, HEAD, OPTIONS"
+              description: Allowed HTTP methods
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccount'
+              example:
+                id: "4419dbeb-190b-4edf-9a9d-6e4df7a81c62"
+                created_at: "2025-12-14T13:44:03.860884Z"
+                updated_at: "2025-12-14T13:44:03.860952Z"
+                bank_name: "Islami Bank"
+                account_holder_name: "Nur Mohummod Al Mamun"
+                account_holder_type: "Owner"
+                account_number: "7072021782059949"
+                routing_number: "707202"
+                country: "Bangladesh"
+                account_type: "savings"
+                currency: "USD"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - BearerAuth: []
+
+  /api/transaction/topups/:
+    get:
+      summary: List all top-up requests
+      description: Retrieve a list of all top-up requests for the authenticated shop owner
+      operationId: listTopUps
+      tags:
+        - Top-Ups
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer token for authentication (shop_owner role required)
+          required: true
+          schema:
+            type: string
+          example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      responses:
+        '200':
+          description: Successful response with list of top-up requests
+          headers:
+            Allow:
+              schema:
+                type: string
+                example: "GET, POST, HEAD, OPTIONS"
+              description: Allowed HTTP methods
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TopUp'
+              example:
+                - id: "7a7ff19d-dc30-4f2e-9078-19a4f6c9808e"
+                  created_at: "2025-12-14T14:27:13.536955Z"
+                  updated_at: "2025-12-14T14:27:13.536977Z"
+                  bank_name: "Datch Bangla Bank"
+                  amount: "20000.00"
+                  account_holder_name: "An Mamun"
+                  account_number: "7017070312341234"
+                  routing_number: "701707"
+                  country: "Bangladesh"
+                  account_type: "current"
+                  currency: "USD"
+                  description: "As part of Metrocem's broad array of responsibilities to the society, financing underprivileged people's schools falls into a crucial success point for the economic future of the country. The creation of well-educated and skilled workforce is indispensabl"
+                  receipt: "/media/topups/sdasdfawe_asdfa_afsd.JPG"
+                  status: "pending"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+      security:
+        - BearerAuth: []
+
+    post:
+      summary: Create a new top-up request
+      description: Submit a new top-up request for the authenticated shop owner
+      operationId: createTopUp
+      tags:
+        - Top-Ups
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer token for authentication (shop_owner role required)
+          required: true
+          schema:
+            type: string
+          example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TopUpRequest'
+            example:
+              bank_name: "Datch Bangla Bank"
+              amount: "20000.00"
+              account_holder_name: "An Mamun"
+              account_number: "7017070312341234"
+              routing_number: "701707"
+              country: "Bangladesh"
+              account_type: "current"
+              currency: "USD"
+              description: "Top-up request for account balance"
+              receipt: "/media/topups/sdasdfawe_asdfa_afsd.JPG"
+      responses:
+        '201':
+          description: Top-up request created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopUp'
+              example:
+                id: "7a7ff19d-dc30-4f2e-9078-19a4f6c9808e"
+                created_at: "2025-12-14T14:27:13.536955Z"
+                updated_at: "2025-12-14T14:27:13.536977Z"
+                bank_name: "Datch Bangla Bank"
+                amount: "20000.00"
+                account_holder_name: "An Mamun"
+                account_number: "7017070312341234"
+                routing_number: "701707"
+                country: "Bangladesh"
+                account_type: "current"
+                currency: "USD"
+                description: "Top-up request for account balance"
+                receipt: "/media/topups/sdasdfawe_asdfa_afsd.JPG"
+                status: "pending"
+        '400':
+          description: Bad request - Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+      security:
+        - BearerAuth: []
+ 
+
+
+
+
+
 
 
 components:
@@ -239,6 +472,195 @@ components:
           description: Error message
           example: "Authentication credentials were not provided."
 
+    BankAccount:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the bank account
+          example: "4419dbeb-190b-4edf-9a9d-6e4df7a81c62"
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the bank account was created
+          example: "2025-12-14T13:44:03.860884Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the bank account was last updated
+          example: "2025-12-14T13:44:03.860952Z"
+        bank_name:
+          type: string
+          description: Name of the bank
+          example: "Islami Bank"
+        account_holder_name:
+          type: string
+          description: Name of the account holder
+          example: "Nur Mohummod Al Mamun"
+        account_holder_type:
+          type: string
+          description: Type of account holder
+          example: "Owner"
+        account_number:
+          type: string
+          description: Bank account number
+          example: "7072021782059949"
+        routing_number:
+          type: string
+          description: Bank routing number
+          example: "707202"
+        country:
+          type: string
+          description: Country where the bank account is located
+          example: "Bangladesh"
+        account_type:
+          type: string
+          description: Type of bank account
+          enum:
+            - savings
+            - current
+            - merchant
+          example: "savings"
+        currency:
+          type: string
+          description: Currency of the account
+          example: "USD"
+
+    TopUp:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the top-up request
+          example: "7a7ff19d-dc30-4f2e-9078-19a4f6c9808e"
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the top-up was created
+          example: "2025-12-14T14:27:13.536955Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the top-up was last updated
+          example: "2025-12-14T14:27:13.536977Z"
+        bank_name:
+          type: string
+          description: Name of the bank used for top-up
+          example: "Datch Bangla Bank"
+        amount:
+          type: string
+          description: Top-up amount in decimal format
+          example: "20000.00"
+        account_holder_name:
+          type: string
+          description: Name of the account holder
+          example: "An Mamun"
+        account_number:
+          type: string
+          description: Bank account number
+          example: "7017070312341234"
+        routing_number:
+          type: string
+          description: Bank routing number
+          example: "701707"
+        country:
+          type: string
+          description: Country where the bank account is located
+          example: "Bangladesh"
+        account_type:
+          type: string
+          description: Type of bank account
+          enum:
+            - savings
+            - current
+            - merchant
+          example: "current"
+        currency:
+          type: string
+          description: Currency of the transaction
+          example: "USD"
+        description:
+          type: string
+          description: Description or notes for the top-up
+          example: "Top-up request for account balance"
+        receipt:
+          type: string
+          description: Path to the receipt file
+          example: "/media/topups/sdasdfawe_asdfa_afsd.JPG"
+        status:
+          type: string
+          description: Status of the top-up request
+          enum:
+            - pending
+            - success
+            - failed
+          example: "pending"
+
+    TopUpRequest:
+      type: object
+      required:
+        - bank_name
+        - amount
+        - account_holder_name
+        - account_number
+        - routing_number
+        - country
+        - account_type
+        - currency
+        - receipt
+      properties:
+        bank_name:
+          type: string
+          description: Name of the bank used for top-up
+          example: "Datch Bangla Bank"
+        amount:
+          type: string
+          description: Top-up amount in decimal format
+          example: "20000.00"
+        account_holder_name:
+          type: string
+          description: Name of the account holder
+          example: "An Mamun"
+        account_number:
+          type: string
+          description: Bank account number
+          example: "7017070312341234"
+        routing_number:
+          type: string
+          description: Bank routing number
+          example: "701707"
+        country:
+          type: string
+          description: Country where the bank account is located
+          example: "Bangladesh"
+        account_type:
+          type: string
+          description: Type of bank account
+          enum:
+            - savings
+            - current
+            - merchant
+          example: "current"
+        currency:
+          type: string
+          description: Currency of the transaction
+          enum:
+            - BDT
+            - USD
+            - INR
+            - EUR
+          example: "USD"
+        description:
+          type: string
+          description: Description or notes for the top-up
+          example: "Top-up request for account balance"
+        receipt:
+          type: string
+          description: Path to the receipt file
+          example: "/media/topups/sdasdfawe_asdfa_afsd.JPG"
+
   responses:
     UnauthorizedError:
       description: Authentication token is missing or invalid
@@ -246,6 +668,15 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    
+    ForbiddenError:
+      description: User does not have permission to access this resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            detail: "You do not have permission to perform this action."
     
     NotFoundError:
       description: The requested resource was not found

@@ -4,6 +4,7 @@ import uuid
 # External
 from apps.base.models import BaseModel 
 from apps.accounts.models import User
+from apps.order.models import Order
 # Internal
 from .constrants import TRANSACTION_TYPE,TRANSACTION_STATUS,ACCOUNT_TYPE,CURRENCY_CHOICES
 
@@ -21,7 +22,10 @@ def generate_txn_id():
 # Create your models here.
 class Transaction(BaseModel):
     txn_id = models.CharField(max_length=30, unique=True, editable=False )
+    
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='transactions')
+    order = models.ForeignKey(Order,on_delete=models.CASCADE,blank=True,null=True,related_name='transaction')
+
     amount = models.DecimalField(max_digits=12,decimal_places=2)
 
     transaction_type = models.CharField(max_length=20,choices=TRANSACTION_TYPE)
@@ -62,6 +66,8 @@ class AdminBankAccount(BaseModel):
 # --------------------------------
 class TopUp(BaseModel): 
     # Shop Owner information
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,related_name='topups')
+
     bank_name = models.CharField(max_length=100)
     amount = models.DecimalField(max_digits=12,decimal_places=2)
     account_holder_name = models.CharField(max_length=50)
