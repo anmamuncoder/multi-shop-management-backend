@@ -1,0 +1,2051 @@
+openapi: 3.0.3
+info:
+  title: Shop Management API - SHOP OWNER
+  description: API documentation for Django Shop Management System with comprehensive authentication flow
+  version: 1.0.0
+  contact:
+    email: support@shopmanagement.com
+
+servers:
+  - url: http://127.0.0.1:8020
+    description: Local development server
+
+tags:
+  - name: Store - Management
+    description: Shop owner endpoints for managing shops (requires authentication)
+  - name: Category
+    description: Shop owner endpoints for managing categories (requires authentication)
+  - name: Product
+    description: Shop owner endpoints for managing products (requires authentication)
+  - name: ProductImage
+    description: Shop owner endpoints for managing product images (requires authentication)
+  - name: ProductVariant
+    description: Shop owner endpoints for managing product variants (requires authentication)
+
+paths:
+  # ------------------------------------------------------
+  # SHOP OWNER MANAGEMENT ENDPOINTS
+  # ------------------------------------------------------
+  /api/store/shop/:
+    get:
+      tags:
+        - Store - Management
+      summary: Get my shop details (Shop Owner)
+      description: Retrieve full details of authenticated shop owner's shop including management fields
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      responses:
+        '200':
+          description: Shop retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopOwner'
+              examples:
+                my_shop:
+                  value:
+                    id: "31d07395-ddc5-4206-9804-be535a7ad664"
+                    created_at: "2025-12-06"
+                    updated_at: "2025-12-07"
+                    name: "AN Coder SHOP 3"
+                    slug: "an-coder-shop545"
+                    description: "a sample shop"
+                    short_intro: "a"
+                    logo: null
+                    banner: null
+                    cover_photo: null
+                    primary_color: "#4343dd"
+                    policies: "standard policies"
+                    currency: "BDT"
+                    tax_rate: 0.15
+                    is_active: true
+                    is_verified: false
+                    total_sales: 0
+                    owner: "a9da8186-044d-48e6-9444-d2c29e814f40"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Shop not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                no_shop:
+                  value:
+                    detail: "You don't have a shop yet"
+
+    post:
+      tags:
+        - Store - Management
+      summary: Create my shop (Shop Owner)
+      description: |
+        Create a shop (shop_owner only).
+        - Only one shop can be created per shop owner
+        - Shop must be verified before it can be updated
+        - **Required fields**: name, description, short_intro, policies, currency, tax_rate
+        - **Read-only fields**: slug (auto-generated from name), is_verified (set by admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShopCreate'
+            examples:
+              create_shop:
+                value:
+                  name: "AN Coder SHOP 3"
+                  description: "a sample shop"
+                  short_intro: "a"
+                  logo: null
+                  banner: null
+                  cover_photo: null
+                  primary_color: "#4343dd"
+                  policies: "standard policies"
+                  currency: "BDT"
+                  tax_rate: 0.15
+      responses:
+        '201':
+          description: Shop created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopOwner'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+              examples:
+                shop_exists:
+                  value:
+                    detail: "You already have a shop"
+                required_fields:
+                  value:
+                    name: ["This field is required."]
+                    description: ["This field is required."]
+                    short_intro: ["This field is required."]
+                    policies: ["This field is required."]
+                    currency: ["This field is required."]
+                    tax_rate: ["This field is required."]
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - Not a shop owner
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                not_shop_owner:
+                  value:
+                    detail: "Only shop owners can create shops"
+
+    put:
+      tags:
+        - Store - Management
+      summary: Update my shop - full update (Shop Owner)
+      description: |
+        Fully update your shop.
+        - Shop must be verified before updates are allowed
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShopUpdate'
+      responses:
+        '200':
+          description: Shop updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopOwner'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+              examples:
+                not_verified:
+                  value:
+                    detail: "Shop must be verified before updating"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Shop not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    patch:
+      tags:
+        - Store - Management
+      summary: Update my shop - partial update (Shop Owner)
+      description: |
+        Partially update your shop.
+        - Shop must be verified before updates are allowed
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShopUpdate'
+      responses:
+        '200':
+          description: Shop updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopOwner'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Shop not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - Store - Management
+      summary: Delete my shop (Shop Owner)
+      description: Delete your shop
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Shop deleted successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Shop not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/store/categories/:
+    get:
+      tags:
+        - Category
+      summary: Get my categories (Shop Owner)
+      description: Retrieve all categories created by authenticated shop owner
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Categories retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+              examples:
+                categories:
+                  value:
+                    - id: "ace17e98-3ba2-4b8c-a943-559ea3d2071c"
+                      shop: "an-coder-shop545"
+                      parent: null
+                      created_at: "2025-12-06T00:00:00Z"
+                      updated_at: "2025-12-07T00:00:00Z"
+                      name: "Electronic ee"
+                      slug: "electronic"
+                      image: null
+                      sort_order: 0
+                      is_active: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      tags:
+        - Category
+      summary: Create category (Shop Owner)
+      description: |
+        Create a new category for your shop.
+        - **Required field**: name
+        - **Read-only field**: slug (auto-generated from name)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryCreate'
+            examples:
+              create_category:
+                value:
+                  name: "Electronic ee"
+                  parent: "laptop"
+                  image: null
+                  sort_order: 0
+                  is_active: true
+      responses:
+        '201':
+          description: Category created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+              examples:
+                required_field:
+                  value:
+                    name: ["This field is required."]
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/store/categories/{slug}/:
+    get:
+      tags:
+        - Category
+      summary: Get my category by slug (Shop Owner)
+      description: Retrieve a specific category owned by authenticated shop owner
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+          example: "electronic"
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Category retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags:
+        - Category
+      summary: Update category - full update (Shop Owner)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryUpdate'
+      responses:
+        '200':
+          description: Category updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    patch:
+      tags:
+        - Category
+      summary: Update category - partial update (Shop Owner)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryUpdate'
+      responses:
+        '200':
+          description: Category updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - Category
+      summary: Delete category (Shop Owner)
+      description: Delete your category
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Category deleted successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/store/products/:
+    get:
+      tags:
+        - Product
+      summary: Get my products (Shop Owner)
+      description: |
+        Retrieve all products owned by authenticated shop owner.
+        Returns paginated results with 10 items per page.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string 
+            
+        - name: page
+          in: query
+          required: false
+          description: Page number
+          schema:
+            type: integer
+            example: 1
+
+        - name: size
+          in: query
+          required: false
+          description: Number of items per page
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: Products retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductList'
+              examples:
+                product_list:
+                  value:
+                    count: 10
+                    total_pages: 1
+                    current_page: 1
+                    next: null
+                    previous: null
+                    data:
+                      - id: "e27eb7c3-4615-41b7-9f0f-50eea6f07ad3"
+                        slug: "asus-leptop"
+                        name: "ASUS Leptop 42"
+                        price: "400.00"
+                        primary_image: null
+                      - id: "c2fae334-e6cf-4901-af29-6d494d0aad4c"
+                        slug: "eeeeee"
+                        name: "eeeeee"
+                        price: "250.00"
+                        primary_image: "/media/product/asus-leptop/sdfasd_asdf_a.JPG"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      tags:
+        - Product
+      summary: Create product (Shop Owner)
+      description: |
+        Create a new product for your shop.
+        - **Required fields**: category, name, short_description, full_description, sku
+        - **Optional fields**: All other product fields
+        - **Note**: SKU must be unique across all products
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCreate'
+            examples:
+              create_product:
+                value:
+                  name: "Test 3"
+                  slug: "yoyo"
+                  category: "laptop"
+                  short_description: "asdf"
+                  full_description: "1"
+                  sku: "2ABSKU"
+                  price: "250.00"
+                  cost_price: 100
+                  stock_quantity: 100
+                  low_stock_threshold: 100
+                  is_available: false
+                  is_featured: false
+                  weight: 100
+                  tags: "one, two, three"
+      responses:
+        '201':
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductOwner'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+              examples:
+                required_fields:
+                  value:
+                    category: ["This field is required."]
+                    name: ["This field is required."]
+                    short_description: ["This field is required."]
+                    full_description: ["This field is required."]
+                    sku: ["This field is required."]
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/store/products/{slug}/:
+    get:
+      tags:
+        - Product
+      summary: Get my product by slug (Shop Owner)
+      description: Retrieve a specific product owned by authenticated shop owner with full details including images and variants
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+          example: "eeeeee"
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductOwner'
+              examples:
+                product_detail:
+                  value:
+                    id: "c2fae334-e6cf-4901-af29-6d494d0aad4c"
+                    shop: "an-coder-shop545"
+                    category: "laptop"
+                    images:
+                      - id: "cd590949-09d8-4ef5-b65f-0ee77e7404c1"
+                        product: "eeeeee"
+                        created_at: "2025-12-06T00:00:00Z"
+                        updated_at: "2025-12-09T00:00:00Z"
+                        image: "http://127.0.0.1:8020/media/product/asus-laptop/sdfasd_asdf_a.JPG"
+                        alt_text: "asdfasdfasdf"
+                        sort_order: 0
+                        is_primary: true
+                    variants: []
+                    primary_image: "/media/product/asus-laptop/sdfasd_asdf_a.JPG"
+                    created_at: "2025-12-06T00:00:00Z"
+                    updated_at: "2025-12-10T19:19:52.035647Z"
+                    name: "eeeeee"
+                    slug: "eeeeee"
+                    short_description: "aa"
+                    full_description: "eeee"
+                    sku: "ABC124"
+                    price: "250.00"
+                    cost_price: "0.00"
+                    stock_quantity: 0
+                    low_stock_threshold: 5
+                    is_available: true
+                    is_featured: false
+                    weight: null
+                    tags: "three, four, five"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags:
+        - Product
+      summary: Update product - full update (Shop Owner)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductUpdate'
+      responses:
+        '200':
+          description: Product updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductOwner'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    patch:
+      tags:
+        - Product
+      summary: Update product - partial update (Shop Owner)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductUpdate'
+      responses:
+        '200':
+          description: Product updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductOwner'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - Product
+      summary: Delete product (Shop Owner)
+      description: Delete your product
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Product deleted successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/store/images/:
+    get:
+      tags:
+        - ProductImage
+      summary: Get my product images (Shop Owner)
+      description: Retrieve all product images owned by authenticated shop owner
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Images retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductImage'
+              examples:
+                images:
+                  value:
+                    - id: "cd590949-09d8-4ef5-b65f-0ee77e7404c1"
+                      product: "eeeeee"
+                      created_at: "2025-12-06T00:00:00Z"
+                      updated_at: "2025-12-09T00:00:00Z"
+                      image: "http://127.0.0.1:8020/media/product/asus-laptop/sdfasd_asdf_a.JPG"
+                      alt_text: "asdfasdfasdf"
+                      sort_order: 0
+                      is_primary: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      tags:
+        - ProductImage
+      summary: Upload product image (Shop Owner)
+      description: |
+        Upload a new product image for your products.
+        - **Required fields**: product (product slug), image (file)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductImageCreate'
+ 
+      responses:
+        '201':
+          description: Image uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductImage'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+              examples:
+                required_fields:
+                  value:
+                    product: ["This field is required."]
+                    image: ["No file was submitted."]
+
+  /api/store/images/{id}/:
+    get:
+      tags:
+        - ProductImage
+      summary: Get product image by ID (Shop Owner)
+      description: Retrieve a specific product image by UUID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: "cd590949-09d8-4ef5-b65f-0ee77e7404c1"
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Image retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductImage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Image not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags:
+        - ProductImage
+      summary: Update product image - full update (Shop Owner)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductImageUpdate'
+      responses:
+        '200':
+          description: Image updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductImage'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Image not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    patch:
+      tags:
+        - ProductImage
+      summary: Update product image - partial update (Shop Owner)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductImageUpdate'
+      responses:
+        '200':
+          description: Image updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductImage'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Image not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - ProductImage
+      summary: Delete product image (Shop Owner)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Image deleted successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Image not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/store/variants/:
+    get:
+      tags:
+        - ProductVariant
+      summary: Get my product variants (Shop Owner)
+      description: Retrieve all product variants owned by authenticated shop owner
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Variants retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductVariant'
+              examples:
+                variants:
+                  value:
+                    - id: "ffaa9015-360f-47a8-b954-14ec48eee6a5"
+                      product: "short_intro"
+                      created_at: "2025-12-09T00:00:00Z"
+                      updated_at: "2025-12-09T00:00:00Z"
+                      title: "Product variant"
+                      value: "abcd"
+                      extra_price: "0.00"
+                      stock_quantity: 0
+                      sku: "ABC124"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      tags:
+        - ProductVariant
+      summary: Create product variant (Shop Owner)
+      description: |
+        Create a new product variant.
+        - **Required fields**: product (product slug), title, value, sku
+        - **Note**: SKU must be unique across all variants
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductVariantCreate'
+            examples:
+              create_variant:
+                value:
+                  product: "short_intro"
+                  title: "Product variant"
+                  value: "abcd"
+                  extra_price: "0.00"
+                  stock_quantity: 0
+                  sku: "ABC124"
+      responses:
+        '201':
+          description: Variant created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductVariant'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+              examples:
+                required_fields:
+                  value:
+                    product: ["This field is required."]
+                    title: ["This field is required."]
+                    value: ["This field is required."]
+                    sku: ["This field is required."]
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/store/variants/{id}/:
+    get:
+      tags:
+        - ProductVariant
+      summary: Get product variant by ID (Shop Owner)
+      description: Retrieve a specific product variant by UUID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: "ffaa9015-360f-47a8-b954-14ec48eee6a5"
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Variant retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductVariant'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Variant not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags:
+        - ProductVariant
+      summary: Update variant - full update (Shop Owner)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductVariantUpdate'
+      responses:
+        '200':
+          description: Variant updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductVariant'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Variant not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    patch:
+      tags:
+        - ProductVariant
+      summary: Update variant - partial update (Shop Owner)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductVariantUpdate'
+      responses:
+        '200':
+          description: Variant updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductVariant'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Variant not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - ProductVariant
+      summary: Delete variant (Shop Owner)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Variant deleted successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Variant not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from login or refresh endpoint
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Error message
+          example: "No active account found with the given credentials"
+
+    ValidationError:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Validation error message
+          example: "This email is already taken."
+
+    # SHOP
+    ShopOwner:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date
+        updated_at:
+          type: string
+          format: date
+        name:
+          type: string
+        slug:
+          type: string
+          description: Auto-generated from name (read-only)
+        description:
+          type: string
+          nullable: true
+        short_intro:
+          type: string
+          nullable: true
+        logo:
+          type: string
+          nullable: true
+          description: URL or null
+        banner:
+          type: string
+          nullable: true
+        cover_photo:
+          type: string
+          nullable: true
+        primary_color:
+          type: string
+          example: "#4343dd"
+        policies:
+          type: string
+          nullable: true
+        currency:
+          type: string
+          example: "BDT"
+        tax_rate:
+          type: number
+          format: float
+          example: 0.15
+        is_active:
+          type: boolean
+        is_verified:
+          type: boolean
+          description: Set by admin (read-only)
+        total_sales:
+          type: integer
+          example: 0
+        owner:
+          type: string
+          format: uuid
+
+    ShopCreate:
+      type: object
+      required:
+        - name
+        - description
+        - short_intro
+        - policies
+        - currency
+        - tax_rate
+      properties:
+        name:
+          type: string
+          description: Shop name (required)
+        description:
+          type: string
+          description: Shop description (required)
+        short_intro:
+          type: string
+          description: Short introduction (required)
+        logo:
+          type: string
+          nullable: true
+        banner:
+          type: string
+          nullable: true
+        cover_photo:
+          type: string
+          nullable: true
+        primary_color:
+          type: string
+          example: "#4343dd"
+        policies:
+          type: string
+          description: Shop policies (required)
+        currency:
+          type: string
+          description: Currency code (required)
+          example: "BDT"
+        tax_rate:
+          type: number
+          format: float
+          description: Tax rate (required)
+          example: 0.15
+
+    ShopUpdate:
+      type: object
+      properties:
+        name:
+          type: string 
+        description:
+          type: string
+        short_intro:
+          type: string
+        logo:
+          type: string
+          nullable: true
+        banner:
+          type: string
+          nullable: true
+        cover_photo:
+          type: string
+          nullable: true
+        primary_color:
+          type: string
+        policies:
+          type: string
+        currency:
+          type: string
+        tax_rate:
+          type: number
+          format: float
+
+    # CATEGORY
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        shop:
+          type: string
+          description: Shop slug
+        parent:
+          type: string
+          nullable: true
+          description: Parent category slug (for nested categories)
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        name:
+          type: string
+        slug:
+          type: string
+          description: Auto-generated from name (read-only)
+        image:
+          type: string
+          nullable: true
+        sort_order:
+          type: integer
+          default: 0
+        is_active:
+          type: boolean
+          default: true
+
+    CategoryCreate:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Category name (required)
+        parent:
+          type: string
+          nullable: true
+          description: Parent category slug for nested categories
+        image:
+          type: string
+          nullable: true
+        sort_order:
+          type: integer
+          default: 0
+        is_active:
+          type: boolean
+          default: true
+
+    CategoryUpdate:
+      type: object
+      properties:
+        name:
+          type: string 
+        parent:
+          type: string
+          nullable: true
+        image:
+          type: string
+          nullable: true
+        sort_order:
+          type: integer
+        is_active:
+          type: boolean
+
+    # PRODUCT
+    ProductListItem:
+      type: object
+      description: Simplified product response for list view
+      properties:
+        id:
+          type: string
+          format: uuid
+        slug:
+          type: string
+        name:
+          type: string
+        price:
+          type: string
+          description: Product price as decimal string
+        primary_image:
+          type: string
+          nullable: true
+          description: URL to primary product image
+
+    ProductOwner:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        shop:
+          type: string
+          description: Shop slug
+        category:
+          type: string
+          description: Category slug
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductImage'
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductVariant'
+        primary_image:
+          type: string
+          nullable: true
+          description: URL to primary image
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        name:
+          type: string
+        slug:
+          type: string
+        short_description:
+          type: string
+          nullable: true
+        full_description:
+          type: string
+          nullable: true
+        sku:
+          type: string
+          nullable: true
+          description: Stock Keeping Unit (must be unique)
+        price:
+          type: string
+          description: Product price as decimal string
+        cost_price:
+          type: string
+          nullable: true
+          description: Cost price as decimal string
+        stock_quantity:
+          type: integer
+        low_stock_threshold:
+          type: integer
+          nullable: true
+        is_available:
+          type: boolean
+        is_featured:
+          type: boolean
+        weight:
+          type: number
+          format: float
+          nullable: true
+        tags:
+          type: string
+          nullable: true
+          description: Comma-separated tags
+
+    ProductCreate:
+      type: object
+      required:
+        - category
+        - name
+        - short_description
+        - full_description
+        - sku
+      properties:
+        name:
+          type: string
+          description: Product name (required)
+        slug:
+          type: string
+          description: URL-friendly slug (optional, auto-generated if not provided)
+        category:
+          type: string
+          description: Category slug (required)
+        short_description:
+          type: string
+          description: Brief product description (required)
+        full_description:
+          type: string
+          description: Detailed product description (required)
+        sku:
+          type: string
+          description: Stock Keeping Unit - must be unique (required)
+        price:
+          type: string
+          description: Product price
+          default: "0.00"
+        cost_price:
+          type: string
+          description: Cost price for shop owner reference
+        stock_quantity:
+          type: integer
+          default: 0
+        low_stock_threshold:
+          type: integer
+        is_available:
+          type: boolean
+          default: true
+        is_featured:
+          type: boolean
+          default: false
+        weight:
+          type: number
+          format: float
+        tags:
+          type: string
+          description: Comma-separated tags (e.g., "one, two, three")
+
+    ProductUpdate:
+      type: object
+      properties:
+        name:
+          type: string 
+        slug:
+          type: string
+        category:
+          type: string
+          description: Category slug
+        short_description:
+          type: string
+        full_description:
+          type: string
+        sku:
+          type: string
+          description: Must be unique
+        price:
+          type: string
+        cost_price:
+          type: string
+        stock_quantity:
+          type: integer
+        low_stock_threshold:
+          type: integer
+        is_available:
+          type: boolean
+        is_featured:
+          type: boolean
+        weight:
+          type: number
+          format: float
+        tags:
+          type: string
+
+    # PRODUCT IMAGE
+    ProductImage:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        product:
+          type: string
+          description: Product slug
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        image:
+          type: string
+          format: uri
+          description: Full URL to the image
+        alt_text:
+          type: string
+          nullable: true
+        sort_order:
+          type: integer
+          default: 0
+        is_primary:
+          type: boolean
+          default: false
+          description: Indicates if this is the primary product image
+
+    ProductImageCreate:
+      type: object
+      required:
+        - product
+        - image
+      properties:
+        product:
+          type: string
+          description: Product slug (required)
+        image:
+          type: string
+          format: binary
+          description: Image file (required)
+        alt_text:
+          type: string
+        sort_order:
+          type: integer
+          default: 0
+        is_primary:
+          type: boolean
+          default: false
+
+    ProductImageUpdate:
+      type: object
+      properties:
+        product:
+          type: string
+          description: Product slug
+        image:
+          type: string
+          format: binary
+          description: Image file
+        alt_text:
+          type: string
+        sort_order:
+          type: integer
+        is_primary:
+          type: boolean
+
+    # PRODUCT VARIANT
+    ProductVariant:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        product:
+          type: string
+          description: Product slug
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        title:
+          type: string
+          description: Variant attribute name (e.g., "Color", "Size")
+        value:
+          type: string
+          description: Variant value (e.g., "Red", "Large")
+        extra_price:
+          type: string
+          description: Additional price for this variant as decimal string
+          default: "0.00"
+        stock_quantity:
+          type: integer
+          default: 0
+        sku:
+          type: string
+          description: Stock Keeping Unit - must be unique
+
+    ProductVariantCreate:
+      type: object
+      required:
+        - product
+        - title
+        - value
+        - sku
+      properties:
+        product:
+          type: string
+          description: Product slug (required)
+        title:
+          type: string
+          description: Variant attribute name (required)
+        value:
+          type: string
+          description: Variant value (required)
+        extra_price:
+          type: string
+          description: Additional price for this variant
+          default: "0.00"
+        stock_quantity:
+          type: integer
+          default: 0
+        sku:
+          type: string
+          description: Stock Keeping Unit - must be unique (required)
+
+    ProductVariantUpdate:
+      type: object
+      properties:
+        product:
+          type: string
+          description: Product slug
+        title:
+          type: string
+        value:
+          type: string
+        extra_price:
+          type: string
+        stock_quantity:
+          type: integer
+        sku:
+          type: string
+          description: Must be unique
+
+
+
+    # -----------------------------
+    # PAGINATED PRODUCT LIST
+    # -----------------------------
+    PaginatedProductList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 3
+        total_pages:
+          type: integer
+          example: 1
+        current_page:
+          type: integer
+          example: 1
+        next:
+          type: string
+          nullable: true
+          example: null
+        previous:
+          type: string
+          nullable: true
+          example: null
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductListItem'

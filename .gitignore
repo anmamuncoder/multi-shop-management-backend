@@ -1,0 +1,63 @@
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django migrations (if you want to keep them out until stable)
+# Uncomment the next line if needed
+# */migrations/
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Environment variables
+.env
+
+
+# SQLite database
+db.sqlite3
+
+# Django specific
+media/
+logs/
+# *.log
+
+# Pytest / Coverage
+.coverage
+htmlcov/
+.tox/
+nosetests.xml
+coverage.xml
+
+# IDE / Editor settings
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Backup and temporary files
+*.bak
+*.swp
+*.tmp
+*.orig
+
+# Node / frontend build (if using Tailwind, React, etc.)
+node_modules/
+build/
+dist/
+
+# Local settings
+local_settings.py
+  
+  
+# Static & Media files
+/staticfiles/        # Collected static files from (python manage.py collectstatic)
+media/               # Uploaded media files (optional, depends on your setup)

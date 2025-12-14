@@ -1,0 +1,255 @@
+openapi: 3.0.3
+info:
+  title: Transaction API
+  description: API for retrieving transaction records
+  version: 1.0.0
+  contact:
+    email: support@example.com
+
+servers:
+  - url: http://127.0.0.1:8020
+    description: Local development server
+
+security:
+  - BearerAuth: []
+
+tags:
+  - name: Transactions
+    description: Operations related to transaction management
+
+
+paths:
+  /api/transaction/transactions/:
+    get:
+      summary: List all transactions
+      description: Retrieve a paginated list of all transactions for the authenticated user
+      operationId: listTransactions
+      tags:
+        - Transactions
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer token for authentication
+          required: true
+          schema:
+            type: string
+          example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2Mjk2OTA2LCJpYXQiOjE3NjU2OTIxMDYsImp0aSI6IjljZjNjZTA4NTk0OTQ3NzViZWI2ZDIzMGE0OTI4ZDQ0IiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.NMZoJGNEm6Ebl5SlUHGc43CNoWEiHX9Swdfi-oM6kKg"
+        - name: page
+          in: query
+          description: Page number for pagination
+          required: false
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          example: 1
+        - name: size
+          in: query
+          description: Number of items per page (maximum 10)
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 10
+          example: 10
+      responses:
+        '200':
+          description: Successful response with list of transactions
+          headers:
+            Allow:
+              schema:
+                type: string
+                example: "GET, HEAD, OPTIONS"
+              description: Allowed HTTP methods
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionList'
+              example:
+                count: 1
+                total_pages: 1
+                current_page: 1
+                next: null
+                previous: null
+                data:
+                  - id: "5ce4b74d-2068-4402-959a-4768500e6291"
+                    created_at: "2025-12-14T06:13:39.797339Z"
+                    updated_at: "2025-12-14T06:13:39.797356Z"
+                    txn_id: "TXN-20251214-000001"
+                    amount: "5667.00"
+                    transaction_type: "order_income"
+                    status: "pending"
+                    reference: ""
+                    user: "241a9105-fc29-4570-9774-3db2062eb6d5"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - BearerAuth: []
+
+  /api/transaction/transactions/{txn_id}/:
+    get:
+      summary: Get transaction details
+      description: Retrieve details of a specific transaction by transaction ID
+      operationId: getTransaction
+      tags:
+        - Transactions
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer token for authentication
+          required: true
+          schema:
+            type: string
+          example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2Mjk2OTA2LCJpYXQiOjE3NjU2OTIxMDYsImp0aSI6IjljZjNjZTA4NTk0OTQ3NzViZWI2ZDIzMGE0OTI4ZDQ0IiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.NMZoJGNEm6Ebl5SlUHGc43CNoWEiHX9Swdfi-oM6kKg"
+        - name: txn_id
+          in: path
+          description: Transaction ID (e.g., TXN-20251214-000001)
+          required: true
+          schema:
+            type: string
+          example: "TXN-20251214-000001"
+      responses:
+        '200':
+          description: Successful response with transaction details
+          headers:
+            Allow:
+              schema:
+                type: string
+                example: "GET, HEAD, OPTIONS"
+              description: Allowed HTTP methods
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+              example:
+                id: "5ce4b74d-2068-4402-959a-4768500e6291"
+                created_at: "2025-12-14T06:13:39.797339Z"
+                updated_at: "2025-12-14T06:13:39.797356Z"
+                txn_id: "TXN-20251214-000001"
+                amount: "5667.00"
+                transaction_type: "order_income"
+                status: "pending"
+                reference: ""
+                user: "241a9105-fc29-4570-9774-3db2062eb6d5"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+      security:
+        - BearerAuth: []
+
+
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token for authentication
+
+  schemas:
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the transaction
+          example: "5ce4b74d-2068-4402-959a-4768500e6291"
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the transaction was created
+          example: "2025-12-14T06:13:39.797339Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the transaction was last updated
+          example: "2025-12-14T06:13:39.797356Z"
+        txn_id:
+          type: string
+          description: Human-readable transaction ID
+          example: "TXN-20251214-000001"
+        amount:
+          type: string
+          description: Transaction amount in decimal format
+          example: "5667.00"
+        transaction_type:
+          type: string
+          description: Type of transaction
+          enum:
+            - order_income
+            - topup
+          example: "order_income"
+        status:
+          type: string
+          description: Current status of the transaction
+          enum:
+            - pending
+            - success
+            - failed
+          example: "pending"
+        reference:
+          type: string
+          description: Additional reference information
+          example: ""
+        user:
+          type: string
+          format: uuid
+          description: User ID associated with the transaction
+          example: "241a9105-fc29-4570-9774-3db2062eb6d5"
+
+    TransactionList:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: Total number of transactions
+          example: 1
+        total_pages:
+          type: integer
+          description: Total number of pages
+          example: 1
+        current_page:
+          type: integer
+          description: Current page number
+          example: 1
+        next:
+          type: string
+          nullable: true
+          description: URL for the next page
+          example: null
+        previous:
+          type: string
+          nullable: true
+          description: URL for the previous page
+          example: null
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Error message
+          example: "Authentication credentials were not provided."
+
+  responses:
+    UnauthorizedError:
+      description: Authentication token is missing or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    
+    NotFoundError:
+      description: The requested resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

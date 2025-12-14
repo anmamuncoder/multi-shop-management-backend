@@ -1,0 +1,659 @@
+openapi: 3.0.3
+info:
+  title: Django Shop Management API
+  description: API documentation for Django Shop Management System with comprehensive authentication flow
+  version: 1.0.0
+  contact:
+    email: support@shopmanagement.com
+
+servers:
+  - url: http://127.0.0.1:8020
+    description: Local development server
+  - url: https://api.shopmanagement.com
+    description: Production server
+
+tags:
+  - name: Authentication
+    description: User authentication and authorization endpoints
+  - name: User
+    description: User Profile Data Access endpoints
+  - name: Store
+    description: Shop and product management endpoints
+
+paths:
+  /api/auth/login/:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      description: |
+        Authenticate user with email and password.
+        - If the email is verified → returns JWT access & refresh tokens.
+        - If the email is NOT verified → login is allowed but an OTP is automatically sent again to the user's email.
+        The response includes a message notifying that an OTP has been sent.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: anmamun2@gmail.com
+                password:
+                  type: string
+                  format: password
+                  example: "123"
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/LoginResponseVerified'
+                  - $ref: '#/components/schemas/LoginResponseUnverified'
+              examples:
+                verified_user:
+                  summary: Email verified user
+                  value:
+                    access: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM0MzU2ODM0fQ.xyz789
+                    refresh: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2NzQxNjYzNH0.abc123
+                unverified_user:
+                  summary: Email not verified user
+                  value:
+                    access: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM0MzU2ODM0fQ.xyz789
+                    refresh: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2NzQxNjYzNH0.abc123
+                    otp: "OTP sent to your email! Please verify your email within 10 minutes."
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ValidationError'
+              examples:
+                email_already_used:
+                  summary: Email already used
+                  value:
+                    detail: "This email is already used by another user"
+        '401':
+          description: Unauthorized - Invalid email or password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                invalid_credentials:
+                  summary: Wrong credentials
+                  value:
+                    detail: "No active account found with the given credentials"
+
+  /api/auth/register/:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user
+      description: |
+        Creates a new user account and sends an OTP to the user's email for verification.
+        - The user must verify their email before accessing protected features. 
+        - If the email is not verified, an OTP is automatically sent after registration.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+                - confirm_password
+                - role
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: anmamun0@gmail.com
+                password:
+                  type: string
+                  format: password
+                  example: "123"
+                confirm_password:
+                  type: string
+                  format: password
+                  example: "123"
+                role:
+                  type: string
+                  enum: [shop_owner, staff, customer]
+                  example: customer
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access:
+                    type: string
+                    description: JWT access token
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIn0.xyz
+                  refresh:
+                    type: string
+                    description: JWT refresh token
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCJ9.abc
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+              examples:
+                duplicate_email:
+                  summary: Email already taken
+                  value:
+                    detail: "This email is already taken."
+                password_mismatch:
+                  summary: Passwords don't match
+                  value:
+                    detail: "Password not match"
+
+  /api/auth/refresh:
+    post:
+      tags:
+        - Authentication
+      summary: Refresh JWT access token
+      description: Generate a new access token using a valid refresh token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - refresh
+              properties:
+                refresh:
+                  type: string
+                  description: JWT refresh token
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2NzQxNjYzNCwiaWF0IjoxNzY0ODI0NjM0LCJqdGkiOiJlZWZjODIwYjQ2MmU0ZWQwYmVmOTMyZGFmZGVjMmZmOCIsInVzZXJuYW1lIjoiYW5tYW11bjIiLCJlbWFpbCI6ImFubWFtdW4yQGdtYWlsLmNvbSIsInJvbGUiOiJzaG9wX293bmVyIiwidXNlcl9pZCI6ImE5ZGE4MTg2LTA0NGQtNDhlNi05NDQ0LWQyYzI5ZTgxNGY0MCIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlfQ.6G06kprymphHyloJLsT4A38ASafUw7sfGhzHJ660ZnY
+      responses:
+        '200':
+          description: Token refreshed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access:
+                    type: string
+                    description: New JWT access token
+                  refresh:
+                    type: string
+                    description: New JWT refresh token (optional)
+        '401':
+          description: Invalid or expired refresh token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                invalid_token:
+                  summary: Invalid refresh token
+                  value:
+                    detail: "Token is invalid or expired"
+
+  /api/auth/email/resend/otp:
+    post:
+      tags:
+        - Authentication
+      summary: Resend email verification OTP
+      description: Request a new OTP to be sent to the user's email. Requires JWT access token in Authorization header.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          description: JWT access token with Bearer prefix
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: anmamun2@gmail.com
+      responses:
+        '200':
+          description: OTP sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "OTP sent to your email! Please verify your email within 10 minutes."
+                  email:
+                    type: string
+                    example: anmamun2@gmail.com
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+              examples:
+                email_mismatch:
+                  summary: Email doesn't match authenticated user
+                  value:
+                    detail: "Email does not match the authenticated user."
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                no_token:
+                  summary: Missing authentication
+                  value:
+                    detail: "Authentication required."
+
+  /api/auth/email/verify/otp:
+    post:
+      tags:
+        - Authentication
+      summary: Verify email with OTP
+      description: Verify user's email address using the OTP sent to their email. Requires authentication.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - otp
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: anmamun2@gmail.com
+                otp:
+                  type: string
+                  example: "123456"
+                  description: 6-digit OTP code
+      responses:
+        '200':
+          description: Email verified successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email verified successfully
+                  email_verified:
+                    type: boolean
+                    example: true
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+              examples:
+                invalid_otp:
+                  summary: Invalid OTP
+                  value:
+                    detail: "Invalid OTP"
+                email_mismatch:
+                  summary: Email doesn't match authenticated user
+                  value:
+                    detail: "Email does not match the authenticated user."
+                otp_not_requested:
+                  summary: OTP not requested
+                  value:
+                    detail: "OTP timestamp missing. Request a new OTP."
+                otp_expired:
+                  summary: OTP expired
+                  value:
+                    detail: "OTP expired. Please request a new one."
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                no_token:
+                  summary: Missing authentication
+                  value:
+                    detail: "Authentication required."
+
+  /api/auth/profile/:
+    get:
+      tags:
+        - User
+      summary: Get user profile
+      description: Retrieve the authenticated user's profile information. Requires JWT access token in Authorization header.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          description: JWT access token with Bearer prefix
+      responses:
+        '200':
+          description: Profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                unauthorized:
+                  summary: Unauthorized access
+                  value:
+                    detail: "Authentication credentials were not provided."
+
+    post:
+      tags:
+        - User
+      summary: Create user profile
+      description: Create additional profile information for the authenticated user. Requires JWT access token in Authorization header.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          description: JWT access token with Bearer prefix
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: anmamun2
+                phone:
+                  type: string
+                  example: "+8801712345678"
+                address:
+                  type: string
+                  example: "123 Main Street, Dhaka"
+                bio:
+                  type: string
+                  example: "Shop owner with 5 years experience"
+      responses:
+        '201':
+          description: Profile created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                unauthorized:
+                  summary: Unauthorized access
+                  value:
+                    detail: "Authentication credentials were not provided."
+
+    put:
+      tags:
+        - User
+      summary: Update user profile (full update)
+      description: Fully update the authenticated user's profile. Email must be verified. Requires JWT access token in Authorization header.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          description: JWT access token with Bearer prefix
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: anmamun2
+                email:
+                  type: string
+                  format: email
+                  example: newemail@gmail.com
+                phone:
+                  type: string
+                  example: "+8801712345678"
+                address:
+                  type: string
+                  example: "456 New Street, Dhaka"
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+              examples:
+                email_not_verified:
+                  summary: Email not verified
+                  value:
+                    detail: "Your email is not verified! Login again and verify it."
+                email_already_used:
+                  summary: Email already in use
+                  value:
+                    detail: "This email is already used by another user"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                unauthorized:
+                  summary: Unauthorized access
+                  value:
+                    detail: "Authentication credentials were not provided."
+
+    patch:
+      tags:
+        - User
+      summary: Update user profile (partial update)
+      description: Partially update the authenticated user's profile. Email must be verified. Requires JWT access token in Authorization header.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          description: JWT access token with Bearer prefix
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: anmamun_updated
+                email:
+                  type: string
+                  format: email
+                  example: updated@gmail.com
+                phone:
+                  type: string
+                  example: "+8801798765432"
+                address:
+                  type: string
+                  example: "789 Updated Street, Dhaka"
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+              examples:
+                email_not_verified:
+                  summary: Email not verified
+                  value:
+                    detail: "Your email is not verified! Login again and verify it."
+                email_already_used:
+                  summary: Email already in use
+                  value:
+                    detail: "This email is already used by another user"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                unauthorized:
+                  summary: Unauthorized access
+                  value:
+                    detail: "Authentication credentials were not provided."
+
+
+ 
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from login or refresh endpoint
+
+  schemas:
+    LoginResponseVerified:
+      type: object
+      description: Response when user's email is already verified
+      properties:
+        access:
+          type: string
+          description: JWT access token
+        refresh:
+          type: string
+          description: JWT refresh token
+
+    LoginResponseUnverified:
+      type: object
+      description: Response when user's email is not verified
+      properties:
+        access:
+          type: string
+          description: JWT access token
+        refresh:
+          type: string
+          description: JWT refresh token
+        otp:
+          type: string
+          description: OTP notification message
+          example: "OTP sent to your email! Please verify your email within 10 minutes."
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: a9da8186-044d-48e6-9444-d2c29e814f40
+        username:
+          type: string
+          example: anmamun2
+        email:
+          type: string
+          format: email
+          example: anmamun2@gmail.com
+        email_verified:
+          type: boolean
+          example: true
+        role:
+          type: string
+          enum: [shop_owner, customer]
+          example: shop_owner
+        created_at:
+          type: string
+          format: date
+          example: "2025-12-03"
+        updated_at:
+          type: string
+          format: date
+          example: "2025-12-06"
+
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Error message
+          example: "No active account found with the given credentials"
+
+    ValidationError:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Validation error message
+          example: "This email is already taken."
+
