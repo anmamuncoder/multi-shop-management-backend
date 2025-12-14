@@ -45,6 +45,7 @@ CUSTOM_APPS = [
     'apps.store',
     'apps.order',
     'apps.chat',
+    'apps.transaction',
     
 ]
 
