@@ -5,7 +5,7 @@ from .models import Shop,Category,Product,ProductImage,ProductVariant
 
 @admin.register(Shop)
 class ShopAdmin(admin.ModelAdmin):
-    list_display = ('owner','name','is_active','is_verified','created_at')
+    list_display = ('owner','name','is_active','is_verified','balance','created_at')
     # prepopulated_fields = {"slug": ("name",)}
 
 @admin.register(Category)

@@ -5,6 +5,5 @@ class TransactionConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "apps.transaction"
 
-    def ready(self):
-        import transaction.signals  
-        
+    # def ready(self):
+        # import transaction.signals  
