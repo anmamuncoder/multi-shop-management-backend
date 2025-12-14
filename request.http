@@ -268,3 +268,17 @@ Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoi
 GET  http://127.0.0.1:8020/api/chat/channel/
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1OTk5MjMxLCJpYXQiOjE3NjUzOTQ0MzEsImp0aSI6IjFiOWVkODhiYThhYjRiYzY5NmZiZWNmZWJmOTgyNjk4IiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.CwWF-0EWBS54ASibJNM3oyrBoxCI9QP-bl39YB0mULQ
 
+
+# -----------------------------------
+# Transaction
+# -----------------------------------
+ 
+### 
+GET  http://127.0.0.1:8020/api/transaction/transactions/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2Mjk2OTA2LCJpYXQiOjE3NjU2OTIxMDYsImp0aSI6IjljZjNjZTA4NTk0OTQ3NzViZWI2ZDIzMGE0OTI4ZDQ0IiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.NMZoJGNEm6Ebl5SlUHGc43CNoWEiHX9Swdfi-oM6kKg
+
+
+### 
+GET  http://127.0.0.1:8020/api/transaction/transactions/TXN-20251214-000001/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2Mjk2OTA2LCJpYXQiOjE3NjU2OTIxMDYsImp0aSI6IjljZjNjZTA4NTk0OTQ3NzViZWI2ZDIzMGE0OTI4ZDQ0IiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.NMZoJGNEm6Ebl5SlUHGc43CNoWEiHX9Swdfi-oM6kKg
+
