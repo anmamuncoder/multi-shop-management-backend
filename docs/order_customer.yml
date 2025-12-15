@@ -471,14 +471,12 @@ components:
             - shipped
             - delivered
             - cancelled
-          default: pending
-        customer:
-          type: string
-          format: uuid
-          readOnly: true
+          default: pending 
 
     OrderUpdate:
       type: object
+      required:
+        - status 
       properties:
         status:
           type: string
@@ -495,11 +493,12 @@ components:
       properties:
         id:
           type: string
-          format: uuid
+          format: slug
           readOnly: true
         product:
           type: string
-          description: Product identifier
+          description: Product identifier (slug)
+          example: asus-laptop
         created_at:
           type: string
           format: date-time
@@ -554,7 +553,8 @@ components:
       properties:
         product:
           type: string
-          description: Product identifier
+          description: Product identifier (slug)
+          example: asus-laptop
         quantity:
           type: integer
           minimum: 1

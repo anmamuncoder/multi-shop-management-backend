@@ -53,6 +53,6 @@ class OrderSerializer(ModelSerializer):
 
     class Meta:
         model = Order
-        fields = "__all__"
-        read_only_fields = ('total_amount','customer')
+        exclude = ('customer',) 
+        read_only_fields = ('total_amount', )
 

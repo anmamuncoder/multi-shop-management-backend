@@ -186,7 +186,7 @@ Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoi
 
 
 ###
-POST  http://127.0.0.1:8020/api/order/orders/
+GET  http://127.0.0.1:8020/api/order/orders/
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1ODAwODQyLCJpYXQiOjE3NjUxOTYwNDIsImp0aSI6IjUxNDMxMjY5OGQ3ZTRkNmRiOTU1ZDczZTcwNmJlY2U1IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.UOJAYMlP6xPGnX-fYKSlU3wS_lCEPHPfBOutF9nUiuc
  
 
@@ -205,19 +205,21 @@ GET  http://127.0.0.1:8020/api/order/orders/0223611c-33cf-4803-b6da-c037c5f0cb0d
 # ----------------------------------------------------------
 ###
 GET  http://127.0.0.1:8020/api/order/items/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NjQwNjI5LCJpYXQiOjE3NjUwMzU4MjksImp0aSI6IjA4MGU1MTM3MTMwMTQyNjQ5OTk1YmE0MzQ1ZjA3YmNmIiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.pFghqthHgZznhzhAU8xfiDO4U6S7fwHCIoHySfk2mbg
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1ODAwODQyLCJpYXQiOjE3NjUxOTYwNDIsImp0aSI6IjUxNDMxMjY5OGQ3ZTRkNmRiOTU1ZDczZTcwNmJlY2U1IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.UOJAYMlP6xPGnX-fYKSlU3wS_lCEPHPfBOutF9nUiuc
  
+
  
 ### Customer Admin1
 POST http://127.0.0.1:8020/api/order/items/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NzkyMzQwLCJpYXQiOjE3NjUxODc1NDAsImp0aSI6ImM5ZDFiMjEzYjY4MDQ2NzBhMjkzNDA5ZTJiY2U1OGI4IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.a-jl6FQWwb-75TR0nS82muEIakSmobvxpGp6fiailKY
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1ODAwODQyLCJpYXQiOjE3NjUxOTYwNDIsImp0aSI6IjUxNDMxMjY5OGQ3ZTRkNmRiOTU1ZDczZTcwNmJlY2U1IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.UOJAYMlP6xPGnX-fYKSlU3wS_lCEPHPfBOutF9nUiuc
 Content-Type: application/json 
 
 { 
-  "order":"0223611c-33cf-4803-b6da-c037c5f0cb0d",
+  "order":"00395ad7-5b30-4ec4-b063-312b8077e61b",
   "product":"asus-leptop",
   "quantity": 3
 }
+
 
 ### Customer Admin1
 PATCH  http://127.0.0.1:8020/api/order/items/c9223e94-5f6c-4bff-9376-8156fea248f4/
@@ -277,6 +279,11 @@ Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoi
 GET  http://127.0.0.1:8020/api/transaction/transactions/
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2Mjk2OTA2LCJpYXQiOjE3NjU2OTIxMDYsImp0aSI6IjljZjNjZTA4NTk0OTQ3NzViZWI2ZDIzMGE0OTI4ZDQ0IiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.NMZoJGNEm6Ebl5SlUHGc43CNoWEiHX9Swdfi-oM6kKg
 
+ 
+### 
+GET  http://127.0.0.1:8020/api/transaction/transactions/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1ODAwODQyLCJpYXQiOjE3NjUxOTYwNDIsImp0aSI6IjUxNDMxMjY5OGQ3ZTRkNmRiOTU1ZDczZTcwNmJlY2U1IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.UOJAYMlP6xPGnX-fYKSlU3wS_lCEPHPfBOutF9nUiuc
+ 
 
 ### 
 GET  http://127.0.0.1:8020/api/transaction/transactions/TXN-20251214-000001/

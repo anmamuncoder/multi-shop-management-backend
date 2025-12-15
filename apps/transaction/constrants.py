@@ -1,5 +1,5 @@
 TRANSACTION_TYPE = [
-    ('order_income', 'Order Income'),
+    ('order', 'Order'),
     ('topup', 'Top Up') 
 ]
 

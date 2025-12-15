@@ -7,30 +7,31 @@ from apps.accounts.models import User
 from apps.order.models import Order
 # Internal
 from .constrants import TRANSACTION_TYPE,TRANSACTION_STATUS,ACCOUNT_TYPE,CURRENCY_CHOICES
+from django.core.exceptions import ValidationError
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q
+import random
 
 def generate_txn_id():
-    today = timezone.now().strftime("%Y%m%d")
-    last_txn = Transaction.objects.filter(txn_id__startswith=f"TXN-{today}").order_by("id").last()
-    if last_txn:
-        last_number = int(last_txn.transaction_id.split("-")[-1])
-        new_number = last_number + 1
-    else:
-        new_number = 1
-    return f"TXN-{today}-{new_number:06d}"
-
+    today = timezone.now().strftime("%Y%m%d%H%M%S%f")
+    rand = random.randint(100, 999)
+    return f"TXN-{today}-{rand}"
 
 # Create your models here.
 class Transaction(BaseModel):
     txn_id = models.CharField(max_length=30, unique=True, editable=False )
-    
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='transactions')
-    order = models.ForeignKey(Order,on_delete=models.CASCADE,blank=True,null=True,related_name='transaction')
+    transaction_type = models.CharField(max_length=20,choices=TRANSACTION_TYPE,default='order')
+
+    # Multiple reference
+    content_type = models.ForeignKey(ContentType,on_delete=models.CASCADE,null=True,limit_choices_to=Q(model__in=['order', 'topup']))
+    object_id = models.UUIDField(null=True)
+    reference = GenericForeignKey('content_type', 'object_id')
 
     amount = models.DecimalField(max_digits=12,decimal_places=2)
-
-    transaction_type = models.CharField(max_length=20,choices=TRANSACTION_TYPE)
     status = models.CharField(max_length=10,choices=TRANSACTION_STATUS,default='pending')
-    reference = models.CharField(max_length=255,blank=True)
+    note = models.CharField(max_length=255,blank=True)
 
     class Meta:
         ordering = ['-created_at']
@@ -40,6 +41,11 @@ class Transaction(BaseModel):
             self.txn_id = generate_txn_id()
         super().save(*args, **kwargs)
 
+    def clean(self):
+        allowed_models = ('order', 'topup')
+        if self.content.model not in allowed_models:
+            raise ValidationError(f"Transaction can only reference {allowed_models}")
+        
     def __str__(self):
         return f"{self.txn_id} | {self.user.email} | {self.amount}"
 
