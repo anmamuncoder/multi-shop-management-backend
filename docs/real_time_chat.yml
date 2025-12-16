@@ -192,9 +192,7 @@ paths:
                       type: object
                       nullable: true
                       description: |
-                        Order summary information. This field is role-dependent:
-                        - For **customers**: Always `null` (order details are hidden)
-                        - For **shop_owners**: Contains complete order information
+                        Order summary information. This field is role-dependent: 
                       properties:
                         total_item_count:
                           type: integer
@@ -235,32 +233,9 @@ paths:
                                 nullable: true
                                 description: URL to the product's primary image
               examples:
-                customer_response:
-                  summary: Customer view (order_summary is null)
-                  value:
-                    - id: "a30ea17e-b62b-4055-a16e-ed1ce9fd9717"
-                      order: "0223611c-33cf-4803-b6da-c037c5f0cb0d"
-                      shop:
-                        slug: "admin-3-shop"
-                        name: "ADMIN 3 SHOP"
-                        owner: "admin3@gmail.com"
-                        short_intro: "A"
-                        logo: null
-                      customer:
-                        username: "admin1"
-                        email: "admin1@gmail.com"
-                        role: "customer"
-                      last_message:
-                        id: "788b080a-cdf8-44e2-bca4-7242528e9811"
-                        sender: "admin1@gmail.com"
-                        sender_role: "customer"
-                        message: "Finaly i'm not able to try"
-                        created_at: "2025-12-11T14:46:14.617953Z"
-                      is_active: true
-                      order_summary: null
-                
+             
                 shop_owner_response:
-                  summary: Shop owner view (order_summary with full details)
+                  summary: Shop owner/Customer view (order_summary with full details)
                   value:
                     - id: "a30ea17e-b62b-4055-a16e-ed1ce9fd9717"
                       order: "0223611c-33cf-4803-b6da-c037c5f0cb0d"

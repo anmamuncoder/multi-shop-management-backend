@@ -53,9 +53,7 @@ class ChannelSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         order = obj.order
         shop = obj.shop
-
-        if user.role != 'shop_owner':
-            return None
+ 
         
         if not order or not shop:
             return None

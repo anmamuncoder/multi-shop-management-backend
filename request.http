@@ -127,7 +127,7 @@ GET  http://127.0.0.1:8020/api/store/products/?category=electronic
 GET  http://127.0.0.1:8020/api/store/products/?price_min=200&price_max=400
 
 ###
-GET  http://127.0.0.1:8020/api/store/products/
+GET  http://127.0.0.1:8020/api/store/products/?shop=electronic
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1ODAxMTAzLCJpYXQiOjE3NjUxOTYzMDMsImp0aSI6IjI3ZDliNzc1MmZhYzRhZWM4NTAxMzQxZmU2MzY5MWVjIiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9.9jgmv67T48ERW3Q4WSNwsv7vjoLyUpIKs5s3SOEovUA
 
 ###
@@ -136,11 +136,11 @@ Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoi
 Content-Type: application/json 
 
 {
-  "name": "Product 11",
+  "name": "Product 20",
   "category":"electronic", 
   "short_description":"short_description",
   "full_description":"full_description",
-  "sku":"SKUU11"
+  "sku":"SKUU20"
 } 
 
 

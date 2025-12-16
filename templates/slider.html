@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Online Sylhet Polytechnic Library Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+ 
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white">
+    
+    <!-- Slide 1: Title Slide -->
+    <div class="slide active min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="text-center space-y-6 max-w-4xl">
+            <h1 class="text-6xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                Digital Online Sylhet Polytechnic Library Management
+            </h1>
+            <p class="text-2xl text-blue-200 italic">Modernizing Library Operations Through Digital Transformation</p>
+            <div class="mt-12">
+                <div class="w-32 h-32 mx-auto bg-white/10 backdrop-blur rounded-full flex items-center justify-center">
+                    <svg class="w-16 h-16 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Project Introduction -->
+    <div class="slide min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="max-w-5xl w-full">
+            <h2 class="text-5xl font-bold mb-8 text-center text-blue-300">Project Introduction</h2>
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
+                <h3 class="text-3xl font-semibold mb-6 text-yellow-300">Digital Online Sylhet Polytechnic Library Management</h3>
+                <ul class="space-y-4 text-lg">
+                    <li class="flex items-start">
+                        <span class="text-blue-400 mr-3 text-2xl">•</span>
+                        <span><strong>Project Purpose:</strong> Transform manual library operations into a streamlined digital system</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-blue-400 mr-3 text-2xl">•</span>
+                        <span><strong>Current Challenges:</strong></span>
+                    </li>
+                    <ul class="ml-10 space-y-2 mt-2">
+                        <li class="flex items-start">
+                            <span class="text-purple-400 mr-2">→</span>
+                            <span>Paper-based record keeping</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-purple-400 mr-2">→</span>
+                            <span>Physical ID card submission for book borrowing</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-purple-400 mr-2">→</span>
+                            <span>Manual tracking of borrowed/returned books</span>
+                        </li>
+                    </ul>
+                    <li class="flex items-start mt-4">
+                        <span class="text-blue-400 mr-3 text-2xl">•</span>
+                        <span><strong class="text-green-300">Project Goal:</strong> Modernize and streamline all library operations</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Project Overview & Deliverables -->
+    <div class="slide min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="max-w-5xl w-full">
+            <h2 class="text-5xl font-bold mb-8 text-center text-blue-300">Project Overview & Deliverables</h2>
+            <div class="grid grid-cols-2 gap-6">
+                <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-2xl">
+                    <h3 class="text-2xl font-semibold mb-4 text-yellow-300">Key Deliverables</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start"><span class="text-green-400 mr-2">✓</span> Web-based platform</li>
+                        <li class="flex items-start"><span class="text-green-400 mr-2">✓</span> Student registration system</li>
+                        <li class="flex items-start"><span class="text-green-400 mr-2">✓</span> Advanced admin panel</li>
+                        <li class="flex items-start"><span class="text-green-400 mr-2">✓</span> Borrowing/returning system</li>
+                        <li class="flex items-start"><span class="text-green-400 mr-2">✓</span> Real-time tracking</li>
+                        <li class="flex items-start"><span class="text-green-400 mr-2">✓</span> Automated fine calculation</li>
+                        <li class="flex items-start"><span class="text-green-400 mr-2">✓</span> Comprehensive reporting</li>
+                    </ul>
+                </div>
+                <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-2xl">
+                    <h3 class="text-2xl font-semibold mb-4 text-yellow-300">Resources Available</h3>
+                    <ul class="space-y-4">
+                        <li class="bg-gradient-to-r from-blue-600/30 to-purple-600/30 p-4 rounded-lg">
+                            <div class="flex items-center">
+                                <svg class="w-8 h-8 mr-3 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span>Project demo video</span>
+                            </div>
+                        </li>
+                        <li class="bg-gradient-to-r from-purple-600/30 to-pink-600/30 p-4 rounded-lg">
+                            <div class="flex items-center">
+                                <svg class="w-8 h-8 mr-3 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                                </svg>
+                                <span>Complete source code</span>
+                            </div>
+                        </li>
+                        <li class="bg-gradient-to-r from-green-600/30 to-teal-600/30 p-4 rounded-lg">
+                            <div class="flex items-center">
+                                <svg class="w-8 h-8 mr-3 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                                <span>Full documentation</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Current Manual System -->
+    <div class="slide min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="max-w-5xl w-full">
+            <h2 class="text-5xl font-bold mb-8 text-center text-blue-300">Current Manual System</h2>
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
+                <h3 class="text-2xl font-semibold mb-6 text-yellow-300">Existing Library Management Process</h3>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="bg-red-500/20 p-4 rounded-lg border-l-4 border-red-500">
+                            <p>Students submit departmental ID cards</p>
+                        </div>
+                        <div class="bg-red-500/20 p-4 rounded-lg border-l-4 border-red-500">
+                            <p>Manual entry in registers</p>
+                        </div>
+                        <div class="bg-red-500/20 p-4 rounded-lg border-l-4 border-red-500">
+                            <p>Physical verification for returns</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-red-500/20 p-4 rounded-lg border-l-4 border-red-500">
+                            <p>Paper-based tracking</p>
+                        </div>
+                        <div class="bg-red-500/20 p-4 rounded-lg border-l-4 border-red-500">
+                            <p>Manual fine calculation</p>
+                        </div>
+                        <div class="bg-red-500/20 p-4 rounded-lg border-l-4 border-red-500">
+                            <p>Limited inventory information</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Challenges -->
+    <div class="slide min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="max-w-5xl w-full">
+            <h2 class="text-5xl font-bold mb-8 text-center text-blue-300">Challenges with Manual System</h2>
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
+                <h3 class="text-2xl font-semibold mb-6 text-red-300">Issues Faced by Stakeholders</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-red-900/30 p-4 rounded-lg">
+                        <p class="font-semibold text-red-200">❌ Inefficient tracking</p>
+                    </div>
+                    <div class="bg-red-900/30 p-4 rounded-lg">
+                        <p class="font-semibold text-red-200">❌ Lack of accountability</p>
+                    </div>
+                    <div class="bg-red-900/30 p-4 rounded-lg">
+                        <p class="font-semibold text-red-200">❌ Manual tracking errors</p>
+                    </div>
+                    <div class="bg-red-900/30 p-4 rounded-lg">
+                        <p class="font-semibold text-red-200">❌ Poor user experience</p>
+                    </div>
+                    <div class="bg-red-900/30 p-4 rounded-lg">
+                        <p class="font-semibold text-red-200">❌ Time-consuming processes</p>
+                    </div>
+                    <div class="bg-red-900/30 p-4 rounded-lg">
+                        <p class="font-semibold text-red-200">❌ Limited reporting</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Problem Solution Framework -->
+    <div class="slide min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="max-w-5xl w-full">
+            <h2 class="text-5xl font-bold mb-8 text-center text-blue-300">Need for Digital Solution</h2>
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
+                <h3 class="text-2xl font-semibold mb-6 text-yellow-300">Problem → Solution Framework</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between bg-gradient-to-r from-red-600/20 to-green-600/20 p-4 rounded-lg">
+                        <span class="text-red-300">Manual tracking errors</span>
+                        <span class="text-gray-400">→</span>
+                        <span class="text-green-300">Automated transaction logging</span>
+                    </div>
+                    <div class="flex items-center justify-between bg-gradient-to-r from-red-600/20 to-green-600/20 p-4 rounded-lg">
+                        <span class="text-red-300">Time-consuming processes</span>
+                        <span class="text-gray-400">→</span>
+                        <span class="text-green-300">Quick online operations</span>
+                    </div>
+                    <div class="flex items-center justify-between bg-gradient-to-r from-red-600/20 to-green-600/20 p-4 rounded-lg">
+                        <span class="text-red-300">Lack of accountability</span>
+                        <span class="text-gray-400">→</span>
+                        <span class="text-green-300">Unique transaction IDs</span>
+                    </div>
+                    <div class="flex items-center justify-between bg-gradient-to-r from-red-600/20 to-green-600/20 p-4 rounded-lg">
+                        <span class="text-red-300">Poor user experience</span>
+                        <span class="text-gray-400">→</span>
+                        <span class="text-green-300">User-friendly interface</span>
+                    </div>
+                    <div class="flex items-center justify-between bg-gradient-to-r from-red-600/20 to-green-600/20 p-4 rounded-lg">
+                        <span class="text-red-300">Limited reporting</span>
+                        <span class="text-gray-400">→</span>
+                        <span class="text-green-300">Comprehensive analytics</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Student Registration -->
+    <div class="slide min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="max-w-5xl w-full">
+            <h2 class="text-5xl font-bold mb-8 text-center text-blue-300">Student Registration System</h2>
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
+                <h3 class="text-2xl font-semibold mb-6 text-yellow-300">Comprehensive Registration Process</h3>
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-xl font-semibold mb-4 text-purple-300">Personal Details</h4>
+                        <ul class="space-y-2">
+                            <li class="flex items-center"><span class="text-blue-400 mr-2">•</span> Name & contact info</li>
+                            <li class="flex items-center"><span class="text-blue-400 mr-2">•</span> Email & NID/birth cert</li>
+                            <li class="flex items-center"><span class="text-blue-400 mr-2">•</span> Blood group</li>
+                            <li class="flex items-center"><span class="text-blue-400 mr-2">•</span> Profile image</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-semibold mb-4 text-purple-300">Academic Information</h4>
+                        <ul class="space-y-2">
+                            <li class="flex items-center"><span class="text-blue-400 mr-2">•</span> Department</li>
+                            <li class="flex items-center"><span class="text-blue-400 mr-2">•</span> Roll number</li>
+                            <li class="flex items-center"><span class="text-blue-400 mr-2">•</span> Registration number</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-6 bg-green-600/20 p-4 rounded-lg border-l-4 border-green-500">
+                    <p class="font-semibold">✓ Secure registration with admin verification</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Admin Panel -->
+    <div class="slide min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="max-w-5xl w-full">
+            <h2 class="text-5xl font-bold mb-8 text-center text-blue-300">Admin Panel Capabilities</h2>
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="bg-gradient-to-br from-blue-600/30 to-blue-800/30 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-3 text-blue-300">📚 Book Management</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li>• Add/edit/delete books</li>
+                            <li>• Update availability</li>
+                            <li>• Categorize by subject</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-600/30 to-purple-800/30 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-3 text-purple-300">👥 Student Management</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li>• Verify registrations</li>
+                            <li>• Manage accounts</li>
+                            <li>• View borrowing history</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-600/30 to-green-800/30 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-3 text-green-300">📊 Transaction Tracking</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li>• Real-time updates</li>
+                            <li>• Monitor overdue books</li>
+                            <li>• Generate reports</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Borrowing System -->
+    <div class="slide min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="max-w-5xl w-full">
+            <h2 class="text-5xl font-bold mb-8 text-center text-blue-300">Borrowing System Features</h2>
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
+                <h3 class="text-2xl font-semibold mb-6 text-yellow-300">Flexible Duration Options</h3>
+                <div class="grid grid-cols-5 gap-4 mb-6">
+                    <div class="bg-blue-600/30 p-4 rounded-lg text-center">
+                        <div class="text-3xl font-bold">3</div>
+                        <div class="text-sm">Days</div>
+                    </div>
+                    <div class="bg-purple-600/30 p-4 rounded-lg text-center">
+                        <div class="text-3xl font-bold">7</div>
+                        <div class="text-sm">Days</div>
+                    </div>
+                    <div class="bg-pink-600/30 p-4 rounded-lg text-center">
+                        <div class="text-3xl font-bold">15</div>
+                        <div class="text-sm">Days</div>
+                    </div>
+                    <div class="bg-red-600/30 p-4 rounded-lg text-center">
+                        <div class="text-3xl font-bold">30</div>
+                        <div class="text-sm">Days</div>
+                    </div>
+                    <div class="bg-orange-600/30 p-4 rounded-lg text-center">
+                        <div class="text-3xl font-bold">40</div>
+                        <div class="text-sm">Days</div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-green-600/20 p-4 rounded-lg">
+                        <p class="font-semibold text-green-300">✓ Unique transaction IDs</p>
+                    </div>
+                    <div class="bg-green-600/20 p-4 rounded-lg">
+                        <p class="font-semibold text-green-300">✓ Automated book ID tracking</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Transaction Management -->
+    <div class="slide min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="max-w-5xl w-full">
+            <h2 class="text-5xl font-bold mb-8 text-center text-blue-300">Transaction Management</h2>
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
+                <div class="space-y-6">
+                    <div class="bg-blue-600/20 p-6 rounded-lg border-l-4 border-blue-500">
+                        <h4 class="text-xl font-semibold mb-2 text-blue-300">Physical Book Collection Verification</h4>
+                        <p>Admin verification using transaction ID for authorized lending</p>
+                    </div>
+                    <div class="bg-purple-600/20 p-6 rounded-lg border-l-4 border-purple-500">
+                        <h4 class="text-xl font-semibold mb-2 text-purple-300">Automated Fine Calculation</h4>
+                        <p>Configurable per-day fine rates with automatic overdue notifications</p>
+                    </div>
+                    <div class="bg-green-600/20 p-6 rounded-lg border-l-4 border-green-500">
+                        <h4 class="text-xl font-semibold mb-2 text-green-300">Comprehensive History Tracking</h4>
+                        <p>Complete logs of student borrowing history and book circulation statistics</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Tech Stack -->
+    <div class="slide min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="max-w-5xl w-full">
+            <h2 class="text-5xl font-bold mb-8 text-center text-blue-300">System Architecture</h2>
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="bg-gradient-to-br from-cyan-600/30 to-blue-600/30 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-3 text-cyan-300">Frontend</h4>
+                        <p class="font-bold mb-2">React.js + TailwindCSS</p>
+                        <ul class="text-sm space-y-1">
+                            <li>• Responsive UI</li>
+                            <li>• Component-based architecture</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-600/30 to-emerald-600/30 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-3 text-green-300">Backend</h4>
+                        <p class="font-bold mb-2">Django REST + Django ORM</p>
+                        <ul class="text-sm space-y-1">
+                            <li>• Robust API development</li>
+                            <li>• Efficient database interaction</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gradient-to-br from-yellow-600/30 to-orange-600/30 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-3 text-yellow-300">Authentication</h4>
+                        <p class="font-bold mb-2">JWT Tokens</p>
+                        <ul class="text-sm space-y-1">
+                            <li>• Secure user sessions</li>
+                            <li>• Role-based access control</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-600/30 to-pink-600/30 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-3 text-purple-300">Database</h4>
+                        <p class="font-bold mb-2">Supabase (PostgreSQL)</p>
+                        <ul class="text-sm space-y-1">
+                            <li>• Reliable data storage</li>
+                            <li>• Real-time synchronization</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12: Deployment -->
+    <div class="slide min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="max-w-5xl w-full">
+            <h2 class="text-5xl font-bold mb-8 text-center text-blue-300">Deployment & Real-time Features</h2>
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
+                <div class="grid grid-cols-2 gap-6 mb-6">
+                    <div class="bg-gradient-to-br from-blue-600/30 to-indigo-600/30 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-3 text-blue-300">Frontend Hosting</h4>
+                        <p class="font-bold mb-2">Vercel</p>
+                        <ul class="text-sm space-y-1">
+                            <li>• Scalable hosting</li>
+                            <li>• Continuous deployment</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-600/30 to-violet-600/30 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-3 text-purple-300">Backend Hosting</h4>
+                        <p class="font-bold mb-2">Render</p>
+                        <ul class="text-sm space-y-1">
+                            <li>• Robust infrastructure</li>
+                            <li>• Automated scaling</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-green-600/20 p-6 rounded-lg border-l-4 border-green-500">
+                    <h4 class="text-xl font-semibold mb-3 text-green-300">Real-time Updates</h4>
+                    <ul class="space-y-2">
+                        <li>✓ WebSocket connections for instant notifications</li>
+                        <li>✓ Efficient data synchronization</li>
+                        <li>✓ Live status updates for book availability</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 13: Open Source -->
+    <div class="slide min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="max-w-5xl w-full">
+            <h2 class="text-5xl font-bold mb-8 text-center text-blue-300">Open Source & Resources</h2>
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="bg-gradient-to-br from-gray-700 to-gray-900 p-6 rounded-xl text-center">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        <h4 class="font-semibold mb-2">Source Code</h4>
+                        <p class="text-sm text-gray-300">Well-documented codebase</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-red-700 to-red-900 p-6 rounded-xl text-center">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <h4 class="font-semibold mb-2">Demo Video</h4>
+                        <p class="text-sm text-gray-300">Feature walkthrough</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-700 to-blue-900 p-6 rounded-xl text-center">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <h4 class="font-semibold mb-2">Documentation</h4>
+                        <p class="text-sm text-gray-300">Complete technical docs</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 14: Operational Benefits -->
+    <div class="slide min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="max-w-5xl w-full">
+            <h2 class="text-5xl font-bold mb-8 text-center text-blue-300">Operational Benefits</h2>
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
+                <div class="space-y-6">
+                    <div class="bg-gradient-to-r from-blue-600/20 to-blue-800/20 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-3 text-blue-300">⚡ Increased Efficiency</h4>
+                        <ul class="space-y-2">
+                            <li>• Reduced manual workload for library staff</li>
+                            <li>• Faster processing of borrowing/returning</li>
+                            <li>• Streamlined administrative tasks</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gradient-to-r from-purple-600/20 to-purple-800/20 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-3 text-purple-300">✓ Improved Accountability</h4>
+                        <ul class="space-y-2">
+                            <li>• Unique transaction IDs for all operations</li>
+                            <li>• Admin verification for physical book collection</li>
+                            <li>• Complete audit trail of library activities</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gradient-to-r from-green-600/20 to-green-800/20 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-3 text-green-300">📈 Better Resource Utilization</h4>
+                        <ul class="space-y-2">
+                            <li>• Optimized book allocation</li>
+                            <li>• Data-driven collection development</li>
+                            <li>• Reduced book losses through better tracking</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 15: User Experience -->
+    <div class="slide min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="max-w-5xl w-full">
+            <h2 class="text-5xl font-bold mb-8 text-center text-blue-300">User Experience Improvements</h2>
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
+                <h3 class="text-2xl font-semibold mb-6 text-yellow-300">Enhanced Student Experience</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-green-600/20 p-4 rounded-lg flex items-center">
+                        <span class="text-2xl mr-3">✓</span>
+                        <span>Convenient online registration</span>
+                    </div>
+                    <div class="bg-green-600/20 p-4 rounded-lg flex items-center">
+                        <span class="text-2xl mr-3">✓</span>
+                        <span>Easy browsing of books</span>
+                    </div>
+                    <div class="bg-green-600/20 p-4 rounded-lg flex items-center">
+                        <span class="text-2xl mr-3">✓</span>
+                        <span>Self-service options</span>
+                    </div>
+                    <div class="bg-green-600/20 p-4 rounded-lg flex items-center">
+                        <span class="text-2xl mr-3">✓</span>
+                        <span>Personal borrowing history</span>
+                    </div>
+                    <div class="bg-green-600/20 p-4 rounded-lg flex items-center">
+                        <span class="text-2xl mr-3">✓</span>
+                        <span>Flexible duration options</span>
+                    </div>
+                    <div class="bg-green-600/20 p-4 rounded-lg flex items-center">
+                        <span class="text-2xl mr-3">✓</span>
+                        <span>Timely notifications</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 16: System Advantages -->
+    <div class="slide min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="max-w-5xl w-full">
+            <h2 class="text-5xl font-bold mb-8 text-center text-blue-300">System Advantages</h2>
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="bg-gradient-to-br from-yellow-600/30 to-orange-600/30 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-3 text-yellow-300">💰 Automated Fine System</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li>• Fair penalty calculation</li>
+                            <li>• Configurable fine rates</li>
+                            <li>• Automatic notifications</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-600/30 to-indigo-600/30 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-3 text-blue-300">🎯 Admin Control</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li>• Centralized dashboard</li>
+                            <li>• Advanced reporting</li>
+                            <li>• Data-driven decisions</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-600/30 to-emerald-600/30 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-3 text-green-300">⚡ Real-time Updates</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li>• Operational transparency</li>
+                            <li>• Faster response times</li>
+                            <li>• Immediate status updates</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-600/30 to-pink-600/30 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-3 text-purple-300">🚀 Scalability</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li>• Modular architecture</li>
+                            <li>• Easy feature expansion</li>
+                            <li>• Adaptable to needs</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 17: Project Summary -->
+    <div class="slide min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="max-w-5xl w-full">
+            <h2 class="text-5xl font-bold mb-8 text-center text-blue-300">Project Summary</h2>
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
+                <h3 class="text-3xl font-semibold mb-6 text-center text-yellow-300">Digital Transformation of SPI Library</h3>
+                <div class="space-y-6">
+                    <div class="bg-blue-600/20 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-2 text-blue-300">Project Scope</h4>
+                        <p>Complete digitization of library operations with student registration, admin management, and efficient transaction systems</p>
+                    </div>
+                    <div class="bg-purple-600/20 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-2 text-purple-300">Key Features</h4>
+                        <p>Flexible borrowing durations, automated fine calculation, real-time tracking, and comprehensive reporting</p>
+                    </div>
+                    <div class="bg-green-600/20 p-6 rounded-xl">
+                        <h4 class="text-xl font-semibold mb-2 text-green-300">Impact</h4>
+                        <p>Modernized library experience, improved operational efficiency, and enhanced user satisfaction</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 18: Implementation Roadmap -->
+    <div class="slide min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="max-w-5xl w-full">
+            <h2 class="text-5xl font-bold mb-8 text-center text-blue-300">Implementation Roadmap</h2>
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <div class="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold mr-4 flex-shrink-0">1</div>
+                        <div class="bg-blue-600/20 p-4 rounded-lg flex-grow">
+                            <h4 class="font-semibold text-blue-300 mb-2">Deployment Plans</h4>
+                            <p class="text-sm">Phased rollout, data migration, staff training</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="bg-purple-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold mr-4 flex-shrink-0">2</div>
+                        <div class="bg-purple-600/20 p-4 rounded-lg flex-grow">
+                            <h4 class="font-semibold text-purple-300 mb-2">User Adoption Strategy</h4>
+                            <p class="text-sm">Student orientation, staff training, user guides</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="bg-green-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold mr-4 flex-shrink-0">3</div>
+                        <div class="bg-green-600/20 p-4 rounded-lg flex-grow">
+                            <h4 class="font-semibold text-green-300 mb-2">Feedback Collection</h4>
+                            <p class="text-sm">Satisfaction surveys, performance monitoring, continuous improvement</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="bg-yellow-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold mr-4 flex-shrink-0">4</div>
+                        <div class="bg-yellow-600/20 p-4 rounded-lg flex-grow">
+                            <h4 class="font-semibold text-yellow-300 mb-2">Future Development</h4>
+                            <p class="text-sm">Mobile app, academic system integration, advanced analytics</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 19: Call to Action -->
+    <div class="slide min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="max-w-5xl w-full">
+            <h2 class="text-5xl font-bold mb-8 text-center text-blue-300">Join Us in Modernizing SPI's Library</h2>
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
+                <div class="grid grid-cols-3 gap-6 mb-8">
+                    <div class="bg-gradient-to-br from-blue-600/30 to-blue-800/30 p-6 rounded-xl text-center">
+                        <svg class="w-12 h-12 mx-auto mb-3 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        <h4 class="font-semibold mb-2">Adoption Support</h4>
+                        <p class="text-sm text-gray-300">Technical assistance & training</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-600/30 to-purple-800/30 p-6 rounded-xl text-center">
+                        <svg class="w-12 h-12 mx-auto mb-3 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                        <h4 class="font-semibold mb-2">Collaboration</h4>
+                        <p class="text-sm text-gray-300">Feature suggestions & feedback</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-green-600/30 to-green-800/30 p-6 rounded-xl text-center">
+                        <svg class="w-12 h-12 mx-auto mb-3 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        <h4 class="font-semibold mb-2">Contact Us</h4>
+                        <p class="text-sm text-gray-300">Support channels available</p>
+                    </div>
+                </div>
+                <div class="text-center space-y-3">
+                    <p class="text-xl font-semibold text-yellow-300">Available Resources</p>
+                    <div class="flex justify-center gap-4 text-sm">
+                        <span class="bg-blue-600/30 px-4 py-2 rounded-lg">📂 GitHub Repository</span>
+                        <span class="bg-purple-600/30 px-4 py-2 rounded-lg">🎥 Demo Video</span>
+                        <span class="bg-green-600/30 px-4 py-2 rounded-lg">📖 Documentation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 20: Thank You -->
+    <div class="slide min-h-screen flex flex-col items-center justify-center p-8">
+        <div class="text-center space-y-8">
+            <h1 class="text-7xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Thank You
+            </h1>
+            <p class="text-3xl text-blue-200">Questions & Discussion</p>
+            <div class="mt-12">
+                <div class="w-40 h-40 mx-auto bg-white/10 backdrop-blur rounded-full flex items-center justify-center">
+                    <svg class="w-20 h-20 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                    </svg>
+                </div>
+            </div>
+            <p class="text-xl text-gray-300 mt-8">Sylhet Polytechnic Institute</p>
+        </div>
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="fixed bottom-8 left-1/2 transform -translate-x-1/2 flex items-center gap-4 bg-white/10 backdrop-blur-lg rounded-full px-6 py-3 shadow-2xl">
+        <button onclick="prevSlide()" class="bg-blue-600 hover:bg-blue-700 text-white rounded-full w-12 h-12 flex items-center justify-center transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+        </button>
+        <span id="slideNumber" class="text-white font-semibold px-4">1 / 20</span>
+        <button onclick="nextSlide()" class="bg-blue-600 hover:bg-blue-700 text-white rounded-full w-12 h-12 flex items-center justify-center transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="fixed top-0 left-0 w-full h-1 bg-gray-700">
+        <div id="progressBar" class="progress-bar h-full bg-gradient-to-r from-blue-500 to-purple-500" style="width: 5%"></div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('slideNumber').textContent = `${currentSlide + 1} / ${totalSlides}`;
+            document.getElementById('progressBar').style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+
+        // Touch swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchStartX - touchEndX > 50) {
+                nextSlide();
+            } else if (touchEndX - touchStartX > 50) {
+                prevSlide();
+            }
+        });
+    </script>
+</body>
+</html>
