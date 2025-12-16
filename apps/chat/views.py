@@ -9,7 +9,7 @@ from .serializers import ChannelSerializer, MessageSerializer
 from .models import Channel, Message
 from .filters import ChannelFilter
 # Enternal
-from apps.base.paginations import BasePagination 
+from apps.base.paginations import BasePagination,BaseCursorPagination 
 
 # Create your views here.
 class ChannelView(generics.ListAPIView):
@@ -30,8 +30,7 @@ class ChannelView(generics.ListAPIView):
 class MessageView(generics.ListAPIView):
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated] 
-    pagination_class = BasePagination
-    pagination_class.max_page_size = 100
+    pagination_class = BaseCursorPagination 
 
     def get_queryset(self):
         channel_id = self.kwargs.get("channel_id")
@@ -46,7 +45,7 @@ class MessageView(generics.ListAPIView):
            return Message.objects.none()
 
         # Permission check 
-        if (user.role == "customer" and channel.customer != user) or (user.role == "shop_owner" and channel.shop != user):
+        if (user.role == "customer" and channel.customer != user) or (user.role == "shop_owner" and channel.shop != user.shop):
             return Message.objects.none()
 
         return Message.objects.filter(channel=channel) 

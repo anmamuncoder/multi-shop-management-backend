@@ -109,7 +109,7 @@ Content-Type: application/json
 
 
 ###
-GET  http://127.0.0.1:8020/api/store/products/?size=2
+GET  http://127.0.0.1:8020/api/store/products/?page=1
 
 ###
 GET   http://127.0.0.1:8020/api/store/products/?page=1&page_size=2
@@ -132,16 +132,15 @@ Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoi
 
 ###
 POST  http://127.0.0.1:8020/api/store/products/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NjQwNjI5LCJpYXQiOjE3NjUwMzU4MjksImp0aSI6IjA4MGU1MTM3MTMwMTQyNjQ5OTk1YmE0MzQ1ZjA3YmNmIiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.pFghqthHgZznhzhAU8xfiDO4U6S7fwHCIoHySfk2mbg
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NDEwOTQyLCJpYXQiOjE3NjU4MDYxNDIsImp0aSI6Ijg0OTBkZDNmNDZlZDRmOGVhNmI3MDc2YTUwZjc0NTQ0IiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9.gi6rCxzarpa8ZwZ7HtgESXXJ60R3mcil5x3it5wjukQ
 Content-Type: application/json 
 
 {
-  "name": "test_product_create_owner",
-  "category":"electronic",
-  "name":"short_intro",
+  "name": "Product 11",
+  "category":"electronic", 
   "short_description":"short_description",
   "full_description":"full_description",
-  "sku":"SKUU"
+  "sku":"SKUU11"
 } 
 
 
@@ -260,14 +259,25 @@ GET  http://127.0.0.1:8020/api/chat/channel/?order=0223611c-33cf-4803-b6da-c037c
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NzkyMzQwLCJpYXQiOjE3NjUxODc1NDAsImp0aSI6ImM5ZDFiMjEzYjY4MDQ2NzBhMjkzNDA5ZTJiY2U1OGI4IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.a-jl6FQWwb-75TR0nS82muEIakSmobvxpGp6fiailKY
 
 ###
-GET  http://127.0.0.1:8020/api/chat/a30ea17e-b62b-4055-a16e-ed1ce9fd9717/messages/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NzkyMzQwLCJpYXQiOjE3NjUxODc1NDAsImp0aSI6ImM5ZDFiMjEzYjY4MDQ2NzBhMjkzNDA5ZTJiY2U1OGI4IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.a-jl6FQWwb-75TR0nS82muEIakSmobvxpGp6fiailKY
+GET  http://127.0.0.1:8020/api/chat/ac0eb72f-4f5b-4088-a1ad-f2d7276bcf67/messages/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NDEwOTQyLCJpYXQiOjE3NjU4MDYxNDIsImp0aSI6Ijg0OTBkZDNmNDZlZDRmOGVhNmI3MDc2YTUwZjc0NTQ0IiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9.gi6rCxzarpa8ZwZ7HtgESXXJ60R3mcil5x3it5wjukQ
 
+###
+GET http://127.0.0.1:8020/api/chat/ac0eb72f-4f5b-4088-a1ad-f2d7276bcf67/messages/?cursor=cD0yMDI1LTEyLTE1KzE0JTNBMDElM0EzNy45MTUxOTYlMkIwMCUzQTAw
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NDEwOTQyLCJpYXQiOjE3NjU4MDYxNDIsImp0aSI6Ijg0OTBkZDNmNDZlZDRmOGVhNmI3MDc2YTUwZjc0NTQ0IiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9.gi6rCxzarpa8ZwZ7HtgESXXJ60R3mcil5x3it5wjukQ
 
-### Shop Owner
+### Customer - anmamun0
 GET  http://127.0.0.1:8020/api/chat/channel/
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NDA1OTEwLCJpYXQiOjE3NjU4MDExMTEsImp0aSI6ImZiM2Y2MjczY2ZjYTQ3MDhiOTgzMGNjMjZiYTdmNGYzIiwidXNlcm5hbWUiOiJhbm1hbXVuMCIsImVtYWlsIjoiYW5tYW11bjBAZ21haWwuY29tIiwicm9sZSI6ImN1c3RvbWVyIiwidXNlcl9pZCI6IjM1Njg3ZGFhLTU5YzctNDA2NC04MmU5LTNiZWI0N2U4MzNiYSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlfQ.ehIP8cXcS1J5gFkfbJuTKQaPXH13orcS_TbwtYhGbqw
 
+
+### Shop Owner - anmamun2
+GET  http://127.0.0.1:8020/api/chat/channel/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NDEwOTQyLCJpYXQiOjE3NjU4MDYxNDIsImp0aSI6Ijg0OTBkZDNmNDZlZDRmOGVhNmI3MDc2YTUwZjc0NTQ0IiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9.gi6rCxzarpa8ZwZ7HtgESXXJ60R3mcil5x3it5wjukQ
+
+### Shop Owner - anmamun2
+GET  http://127.0.0.1:8020/api/chat/channel/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NDEwOTQyLCJpYXQiOjE3NjU4MDYxNDIsImp0aSI6Ijg0OTBkZDNmNDZlZDRmOGVhNmI3MDc2YTUwZjc0NTQ0IiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9.gi6rCxzarpa8ZwZ7HtgESXXJ60R3mcil5x3it5wjukQ
 
 # -----------------------------------
 # Transaction

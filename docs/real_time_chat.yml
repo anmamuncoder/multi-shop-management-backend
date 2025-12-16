@@ -311,7 +311,7 @@ paths:
         - Chat Messages
       summary: Get all messages in a channel
       description: |
-        Retrieve all messages for a specific channel.
+        Retrieve 100 messages for a specific channel with Cursor Pagination.
         Returns paginated list of messages ordered by creation time.
       
       parameters:
@@ -328,23 +328,7 @@ paths:
           schema:
             type: string
             format: uuid
-          example: "a30ea17e-b62b-4055-a16e-ed1ce9fd9717" 
-
-        - name: page
-          in: query
-          required: false
-          description: Page number
-          schema:
-            type: integer
-            example: 1
-
-        - name: size
-          in: query
-          required: false
-          description: Number of items per page
-          schema:
-            type: integer
-            example: 100
+          example: "a30ea17e-b62b-4055-a16e-ed1ce9fd9717"  
       security:
         - BearerAuth: []
       
@@ -355,10 +339,7 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  count:
-                    type: integer
-                    description: Total number of messages
+                properties: 
                   next:
                     type: string
                     nullable: true
@@ -386,11 +367,9 @@ paths:
                         created_at:
                           type: string
                           format: date-time
-              example:
-                count: 100
-                total_pages: 1
-                current_page: 1
-                next: null
+              example: 
+                
+                next: "http://127.0.0.1:8020/api/chat/ac0eb72f-4f5b-4088-a1ad-f2d7276bcf67/messages/?cursor=cD0yMDI1LTEyLTE1KzE0JTNBMDElM0EzNy45MTUxOTYlMkIwMCUzQTAw"
                 previous: null
                 data:
                   - id: "8382b649-bd3d-48f6-8208-d6fb2511cc9c"
