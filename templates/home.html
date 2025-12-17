@@ -165,69 +165,15 @@
                             <div class="flex items-center justify-between mb-6">
                                 <h3 class="text-lg font-bold text-gray-800">Sales Analytics</h3>
                                 <div class="flex space-x-2">
-                                    <button
-                                        class="px-3 py-1 bg-orange-600 text-white text-xs rounded-lg font-medium">Week</button>
-                                    <button
-                                        class="px-3 py-1 bg-white text-gray-600 text-xs rounded-lg font-medium">Month</button>
-                                    <button
-                                        class="px-3 py-1 bg-white text-gray-600 text-xs rounded-lg font-medium">Year</button>
+                                     <button id="btnWeek" onclick="updateChart('week')" class="px-3 py-1 bg-orange-600 text-white text-xs rounded-lg font-medium">Week</button>
+                                     <button id="btnMonth" onclick="updateChart('month')" class="px-3 py-1 bg-white text-gray-600 text-xs rounded-lg font-medium">Month</button>
+                                    <button id="btnYear" onclick="updateChart('year')" class="px-3 py-1 bg-white text-gray-600 text-xs rounded-lg font-medium">Year</button>
                                 </div>
                             </div>
 
-                            <!-- Chart Visualization -->
-                            <div class="h-64 flex items-end justify-between space-x-2">
-                                <div class="flex-1 bg-gradient-to-t from-orange-500 to-orange-400 rounded-t-lg relative"
-                                    style="height: 60%;">
-                                    <div
-                                        class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-orange-600 text-white text-xs px-2 py-1 rounded font-bold">
-                                        $3.2k</div>
-                                </div>
-                                <div class="flex-1 bg-gradient-to-t from-orange-500 to-orange-400 rounded-t-lg relative"
-                                    style="height: 75%;">
-                                    <div
-                                        class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-orange-600 text-white text-xs px-2 py-1 rounded font-bold">
-                                        $4.1k</div>
-                                </div>
-                                <div class="flex-1 bg-gradient-to-t from-orange-500 to-orange-400 rounded-t-lg relative"
-                                    style="height: 45%;">
-                                    <div
-                                        class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-orange-600 text-white text-xs px-2 py-1 rounded font-bold">
-                                        $2.5k</div>
-                                </div>
-                                <div class="flex-1 bg-gradient-to-t from-orange-500 to-orange-400 rounded-t-lg relative"
-                                    style="height: 90%;">
-                                    <div
-                                        class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-orange-600 text-white text-xs px-2 py-1 rounded font-bold">
-                                        $5.8k</div>
-                                </div>
-                                <div class="flex-1 bg-gradient-to-t from-green-500 to-green-400 rounded-t-lg relative animate-pulse"
-                                    style="height: 100%;">
-                                    <div
-                                        class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-green-600 text-white text-xs px-2 py-1 rounded font-bold">
-                                        $6.9k</div>
-                                </div>
-                                <div class="flex-1 bg-gradient-to-t from-orange-500 to-orange-400 rounded-t-lg relative"
-                                    style="height: 82%;">
-                                    <div
-                                        class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-orange-600 text-white text-xs px-2 py-1 rounded font-bold">
-                                        $5.2k</div>
-                                </div>
-                                <div class="flex-1 bg-gradient-to-t from-orange-500 to-orange-400 rounded-t-lg relative"
-                                    style="height: 55%;">
-                                    <div
-                                        class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-orange-600 text-white text-xs px-2 py-1 rounded font-bold">
-                                        $3.1k</div>
-                                </div>
-                            </div>
-
-                            <div class="flex justify-between text-xs text-gray-500 mt-4">
-                                <span>Mon</span>
-                                <span>Tue</span>
-                                <span>Wed</span>
-                                <span>Thu</span>
-                                <span class="font-bold text-green-600">Fri</span>
-                                <span>Sat</span>
-                                <span>Sun</span>
+                             <!-- Chart Visualization -->
+                            <div class="h-64">
+                                <canvas id="salesChart"></canvas>
                             </div>
                         </div>
 
@@ -1169,6 +1115,9 @@
     </footer> 
     
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script> 
+    <!-- chart -->
+     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
 
     // Smooth scrolling for anchor links
@@ -1198,7 +1147,77 @@
     }); 
 
 
+  const ctx = document.getElementById("salesChart").getContext("2d");
 
+  const chartData = {
+    week: {
+      labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      data: [3200, 4100, 2500, 5800, 6900, 5200, 3100],
+    },
+    month: {
+      labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+      data: [18500, 21200, 19800, 24500],
+    },
+    year: {
+      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+      data: [72000, 68000, 81000, 79000, 86000, 91000, 97000],
+    },
+  };
+
+  let salesChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: chartData.week.labels,
+      datasets: [
+            {
+                label: "Sales ($)",
+                data: chartData.week.data,
+                backgroundColor: "#f97316",  
+                borderRadius: 8 
+            }
+        ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } , },
+
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: value => "$" + value / 1000 + "k",
+          }
+        }
+      }
+    }
+  });
+
+  function updateChart(period) {
+    salesChart.data.labels = chartData[period].labels;
+    salesChart.data.datasets[0].data = chartData[period].data;
+    salesChart.update();
+    updateButtons(period);
+  }
+
+  function updateButtons(active) {
+    ["Week", "Month", "Year"].forEach(name => {
+      const btn = document.getElementById("btn" + name);
+
+        if (name.toLowerCase() === active) 
+        {
+            btn.classList.remove("bg-white", "text-gray-600");
+            btn.classList.add("bg-orange-600", "text-white");
+        } 
+        else 
+        {
+            btn.classList.add("bg-white", "text-gray-600");
+            btn.classList.remove("bg-orange-600", "text-white");
+        }
+    });
+  } 
+
+  
     </script>
 </body>
 </html>
