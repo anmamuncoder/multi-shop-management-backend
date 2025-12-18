@@ -16,6 +16,11 @@ info:
     - **Customers**: `order_summary` field is always `null` (order details are hidden from customers)
     - **Shop Owners**: `order_summary` field contains complete order information including items, amounts, and product details
     
+    ## Channel Activation
+    - Channels can be activated/deactivated by updating the `is_active` field via PATCH request
+    - WebSocket connections only work when `is_active` is `true`
+    - Inactive channels (`is_active=false`) will reject WebSocket connection attempts
+    
     ## WebSocket Message Examples
     
     ### Connection Success Message (Server → Client)
@@ -90,7 +95,7 @@ servers:
     description: Production server
 
 paths:
-  /api/chat/channel/:
+  /api/chat/channels/:
     get:
       tags:
         - Chat Channels
@@ -132,108 +137,8 @@ paths:
               schema:
                 type: array
                 items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      format: uuid
-                      description: Channel ID
-                    order:
-                      type: string
-                      format: uuid
-                      description: Associated order ID
-                    shop:
-                      type: object
-                      properties:
-                        slug:
-                          type: string
-                        name:
-                          type: string
-                        owner:
-                          type: string
-                          format: email
-                        short_intro:
-                          type: string
-                        logo:
-                          type: string
-                          nullable: true
-                    customer:
-                      type: object
-                      properties:
-                        username:
-                          type: string
-                        email:
-                          type: string
-                          format: email
-                        role:
-                          type: string
-                          enum: [customer]
-                    last_message:
-                      type: object
-                      nullable: true
-                      properties:
-                        id:
-                          type: string
-                          format: uuid
-                        sender:
-                          type: string
-                          format: email
-                        sender_role:
-                          type: string
-                          enum: [customer, shop_owner]
-                        message:
-                          type: string
-                        created_at:
-                          type: string
-                          format: date-time
-                    is_active:
-                      type: boolean
-                    order_summary:
-                      type: object
-                      nullable: true
-                      description: |
-                        Order summary information. This field is role-dependent: 
-                      properties:
-                        total_item_count:
-                          type: integer
-                          description: Total number of items in the entire order
-                        total_order_amount:
-                          type: number
-                          format: float
-                          description: Total amount for the entire order
-                        overall_status:
-                          type: string
-                          description: Overall status of the order
-                          enum: [pending, processing, shipped, delivered, cancelled]
-                        sub_item_count:
-                          type: integer
-                          description: Number of items in this shop's sub-order
-                        sub_order_amount:
-                          type: number
-                          format: float
-                          description: Total amount for this shop's sub-order
-                        products:
-                          type: array
-                          description: List of products in this shop's sub-order
-                          items:
-                            type: object
-                            properties:
-                              id:
-                                type: string
-                                format: uuid
-                              slug:
-                                type: string
-                              name:
-                                type: string
-                              price:
-                                type: string
-                                description: Product price as a decimal string
-                              primary_image:
-                                type: string
-                                nullable: true
-                                description: URL to the product's primary image
+                  $ref: '#/components/schemas/Channel'
               examples:
-             
                 shop_owner_response:
                   summary: Shop owner/Customer view (order_summary with full details)
                   value:
@@ -280,6 +185,149 @@ paths:
         '403':
           description: Forbidden - User does not have access
 
+  /api/chat/channels/{channel_id}/:
+    get:
+      tags:
+        - Chat Channels
+      summary: Get a specific chat channel
+      description: |
+        Retrieve details of a specific chat channel by its UUID.
+        
+        **Access Control:**
+        - Customers can only retrieve channels where they are the customer
+        - Shop owners can only retrieve channels for their shops
+      
+      parameters:
+        - name: channel_id
+          in: path
+          required: true
+          description: UUID of the chat channel
+          schema:
+            type: string
+            format: uuid
+          example: "a30ea17e-b62b-4055-a16e-ed1ce9fd9717"
+      
+      security:
+        - BearerAuth: []
+      
+      responses:
+        '200':
+          description: Channel details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        
+        '401':
+          description: Unauthorized - Invalid or missing token
+        
+        '403':
+          description: Forbidden - User does not have access to this channel
+        
+        '404':
+          description: Channel not found
+
+    patch:
+      tags:
+        - Chat Channels
+      summary: Update channel activation status
+      description: |
+        Update the `is_active` field of a chat channel. This endpoint allows users to activate or deactivate channels.
+        
+        **Important:** 
+        - Only the `is_active` field can be updated via this endpoint
+        - WebSocket connections require `is_active` to be `true`
+        - When `is_active` is set to `false`, existing WebSocket connections will be closed
+        
+        **Access Control:**
+        - Customers can update channels where they are the customer
+        - Shop owners can update channels for their shops
+      
+      parameters:
+        - name: channel_id
+          in: path
+          required: true
+          description: UUID of the chat channel
+          schema:
+            type: string
+            format: uuid
+          example: "a30ea17e-b62b-4055-a16e-ed1ce9fd9717"
+      
+      security:
+        - BearerAuth: []
+      
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_active:
+                  type: boolean
+                  description: Channel activation status
+              required:
+                - is_active
+            examples:
+              activate_channel:
+                summary: Activate a channel
+                value:
+                  is_active: true
+              deactivate_channel:
+                summary: Deactivate a channel
+                value:
+                  is_active: false
+      
+      responses:
+        '200':
+          description: Channel updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+              example:
+                id: "a30ea17e-b62b-4055-a16e-ed1ce9fd9717"
+                order: "0223611c-33cf-4803-b6da-c037c5f0cb0d"
+                shop:
+                  slug: "admin-3-shop"
+                  name: "ADMIN 3 SHOP"
+                  owner: "admin3@gmail.com"
+                  short_intro: "A"
+                  logo: null
+                customer:
+                  username: "admin1"
+                  email: "admin1@gmail.com"
+                  role: "customer"
+                last_message:
+                  id: "788b080a-cdf8-44e2-bca4-7242528e9811"
+                  sender: "admin1@gmail.com"
+                  sender_role: "customer"
+                  message: "Finaly i'm not able to try"
+                  created_at: "2025-12-11T14:46:14.617953Z"
+                is_active: false
+                order_summary: null
+        
+        '400':
+          description: Bad Request - Invalid request body
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "is_active field is required"
+        
+        '401':
+          description: Unauthorized - Invalid or missing token
+        
+        '403':
+          description: Forbidden - User does not have access to this channel
+        
+        '404':
+          description: Channel not found
+
   /api/chat/{channel_id}/messages/:
     get:
       tags:
@@ -304,6 +352,7 @@ paths:
             type: string
             format: uuid
           example: "a30ea17e-b62b-4055-a16e-ed1ce9fd9717"  
+      
       security:
         - BearerAuth: []
       
@@ -326,24 +375,8 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          format: uuid
-                        sender:
-                          type: string
-                          format: email
-                        sender_role:
-                          type: string
-                          enum: [customer, shop_owner]
-                        message:
-                          type: string
-                        created_at:
-                          type: string
-                          format: date-time
+                      $ref: '#/components/schemas/Message'
               example: 
-                
                 next: "http://127.0.0.1:8020/api/chat/ac0eb72f-4f5b-4088-a1ad-f2d7276bcf67/messages/?cursor=cD0yMDI1LTEyLTE1KzE0JTNBMDElM0EzNy45MTUxOTYlMkIwMCUzQTAw"
                 previous: null
                 data:
@@ -383,12 +416,15 @@ paths:
         **Connection Requirements:**
         - Valid JWT access token
         - User must have access to the specified channel
-        - Channel must be active (is_active=True)
+        - Channel must be active (`is_active=true`) - **WebSocket connections will be rejected if channel is inactive**
         
         **Access Control:**
         - Customers can only access channels where they are the customer
         - Shop owners can only access channels for their shops
         
+        **Note:** If the channel's `is_active` status is changed to `false` while users are connected, 
+        all active WebSocket connections for that channel will be closed immediately.
+      
       parameters:
         - name: channel_id
           in: path
@@ -413,23 +449,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    enum: [connected]
-                    description: Connection status
-                  message:
-                    type: object
-                    properties:
-                      sender:
-                        type: string
-                        format: email
-                        description: Email of the connected user
-                      user_role:
-                        type: string
-                        enum: [customer, shop_owner]
-                        description: Role of the connected user
+                $ref: '#/components/schemas/ConnectionSuccessMessage'
               example:
                 status: "connected"
                 message:
@@ -437,7 +457,7 @@ paths:
                   user_role: "customer"
         
         '403':
-          description: Connection closed - Authentication failed or unauthorized access
+          description: Connection closed - Authentication failed, unauthorized access, or channel is inactive
 
 components:
   securitySchemes:
@@ -503,6 +523,7 @@ components:
               format: date-time
         is_active:
           type: boolean
+          description: Channel activation status. WebSocket connections only work when this is true.
         order_summary:
           type: object
           nullable: true
@@ -682,4 +703,3 @@ tags:
     description: HTTP endpoints for retrieving messages
   - name: WebSocket
     description: Real-time WebSocket communication endpoints
-  
