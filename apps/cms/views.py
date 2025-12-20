@@ -7,14 +7,12 @@ def home(request):
     wireframe = Wireframe.objects.first()
     testimonials = Testimonial.objects.all()
     faqs = FAQ.objects.all()
-    features = Feature.objects.all()
+    features = Feature.objects.all().order_by('price')[:3]
     context = {
         'wireframe': wireframe,
         'testimonials': testimonials,
         'faqs': faqs,
-        'features_1': features[0],
-        'features_2': features[1],
-        'features_3': features[2],
+        'features': features,
     }
-    
+
     return render(request,template_name='home.html',context=context)
