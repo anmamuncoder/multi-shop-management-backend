@@ -46,6 +46,7 @@ CUSTOM_APPS = [
     'apps.order',
     'apps.chat',
     'apps.transaction',
+    'apps.cms',
     
 ]
 
