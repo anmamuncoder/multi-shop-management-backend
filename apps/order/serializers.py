@@ -37,6 +37,8 @@ class OrderItemSerializer(ModelSerializer):
         # snapshot data
         validated_data["product_name"] = product.name
         validated_data["product_price"] = product.price
+        validated_data["product_image"] = product.images.filter(is_primary=True).first().image.url if product.images.exists() else None
+
         return super().create(validated_data)
  
     def update(self, instance, validated_data):
