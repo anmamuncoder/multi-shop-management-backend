@@ -14,7 +14,7 @@ POST  http://127.0.0.1:8020/api/auth/login/
 Content-Type: application/json 
 
 {
-    "email":"admin3@gmail.com",
+    "email":"admin1@gmail.com",
     "password": "123" 
 }
 
@@ -109,7 +109,7 @@ Content-Type: application/json
 
 
 ###
-GET  http://127.0.0.1:8020/api/store/products/?size=2
+GET  http://127.0.0.1:8020/api/store/products/ 
 
 ###
 GET   http://127.0.0.1:8020/api/store/products/?page=1&page_size=2
@@ -127,21 +127,20 @@ GET  http://127.0.0.1:8020/api/store/products/?category=electronic
 GET  http://127.0.0.1:8020/api/store/products/?price_min=200&price_max=400
 
 ###
-GET  http://127.0.0.1:8020/api/store/products/
+GET  http://127.0.0.1:8020/api/store/products/?shop=electronic
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1ODAxMTAzLCJpYXQiOjE3NjUxOTYzMDMsImp0aSI6IjI3ZDliNzc1MmZhYzRhZWM4NTAxMzQxZmU2MzY5MWVjIiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9.9jgmv67T48ERW3Q4WSNwsv7vjoLyUpIKs5s3SOEovUA
 
 ###
 POST  http://127.0.0.1:8020/api/store/products/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NjQwNjI5LCJpYXQiOjE3NjUwMzU4MjksImp0aSI6IjA4MGU1MTM3MTMwMTQyNjQ5OTk1YmE0MzQ1ZjA3YmNmIiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.pFghqthHgZznhzhAU8xfiDO4U6S7fwHCIoHySfk2mbg
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NDEwOTQyLCJpYXQiOjE3NjU4MDYxNDIsImp0aSI6Ijg0OTBkZDNmNDZlZDRmOGVhNmI3MDc2YTUwZjc0NTQ0IiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9.gi6rCxzarpa8ZwZ7HtgESXXJ60R3mcil5x3it5wjukQ
 Content-Type: application/json 
 
 {
-  "name": "test_product_create_owner",
-  "category":"electronic",
-  "name":"short_intro",
+  "name": "Product 20",
+  "category":"electronic", 
   "short_description":"short_description",
   "full_description":"full_description",
-  "sku":"SKUU"
+  "sku":"SKUU20"
 } 
 
 
@@ -175,10 +174,30 @@ Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoi
 # Order Item
 # ----------------------------------------------------------
 
-###
-GET  http://127.0.0.1:8020/api/order/orders/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1OTk5MjMxLCJpYXQiOjE3NjUzOTQ0MzEsImp0aSI6IjFiOWVkODhiYThhYjRiYzY5NmZiZWNmZWJmOTgyNjk4IiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.CwWF-0EWBS54ASibJNM3oyrBoxCI9QP-bl39YB0mULQ
+### anmamun0-customer
+GET   http://127.0.0.1:8020/api/order/orders/00395ad7-5b30-4ec4-b063-312b8077e61b/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NjY0MDE4LCJpYXQiOjE3NjYwNTkyMTgsImp0aSI6ImUyYmRiM2QwYzdmMjQ0MjRiNjg0ZjBiYjEyYzE0MWE3IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.m2ahiDpuoB_o_ywbDzcyUzAXDLGAvSGsk240dpglFa0
+ 
+### anmamun0-customer
+PATCH   http://127.0.0.1:8020/api/order/orders/00395ad7-5b30-4ec4-b063-312b8077e61b/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NjY0MDE4LCJpYXQiOjE3NjYwNTkyMTgsImp0aSI6ImUyYmRiM2QwYzdmMjQ0MjRiNjg0ZjBiYjEyYzE0MWE3IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.m2ahiDpuoB_o_ywbDzcyUzAXDLGAvSGsk240dpglFa0
+Content-Type: application/json 
 
+{ 
+  "shipping_street_address":"ShoyShoura Munsir Bazer",
+  "shipping_city":"sylhet",
+  "shipping_state": "lalabazer",
+  "shipping_postal_code": "3100",
+  "shipping_country": "USA" 
+}
+
+### anmamun0-customer
+GET  http://127.0.0.1:8020/api/order/orders/00395ad7-5b30-4ec4-b063-312b8077e61b/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NjY0MDE4LCJpYXQiOjE3NjYwNTkyMTgsImp0aSI6ImUyYmRiM2QwYzdmMjQ0MjRiNjg0ZjBiYjEyYzE0MWE3IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.m2ahiDpuoB_o_ywbDzcyUzAXDLGAvSGsk240dpglFa0
+
+### shop owner admin3
+GET   http://127.0.0.1:8020/api/order/orders/ 
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NjcxNjEwLCJpYXQiOjE3NjYwNjY4MTAsImp0aSI6ImE2ODI2MzZmMjdkMjRlYjk5M2NiZmUyMmEwY2QzYzRlIiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.SEjnKDnx1QxoPHG-bDanFj3EeA_iriuWoO8AZuPZliw
 
 ### Admin
 GET  http://127.0.0.1:8020/api/order/orders/
@@ -186,14 +205,13 @@ Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoi
 
 
 ###
-POST  http://127.0.0.1:8020/api/order/orders/
+GET  http://127.0.0.1:8020/api/order/orders/
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1ODAwODQyLCJpYXQiOjE3NjUxOTYwNDIsImp0aSI6IjUxNDMxMjY5OGQ3ZTRkNmRiOTU1ZDczZTcwNmJlY2U1IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.UOJAYMlP6xPGnX-fYKSlU3wS_lCEPHPfBOutF9nUiuc
  
 
 ### shop owner
 POST  http://127.0.0.1:8020/api/order/orders/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1ODAxMTAzLCJpYXQiOjE3NjUxOTYzMDMsImp0aSI6IjI3ZDliNzc1MmZhYzRhZWM4NTAxMzQxZmU2MzY5MWVjIiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9.9jgmv67T48ERW3Q4WSNwsv7vjoLyUpIKs5s3SOEovUA
-
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NDA1OTEwLCJpYXQiOjE3NjU4MDExMTEsImp0aSI6ImZiM2Y2MjczY2ZjYTQ3MDhiOTgzMGNjMjZiYTdmNGYzIiwidXNlcm5hbWUiOiJhbm1hbXVuMCIsImVtYWlsIjoiYW5tYW11bjBAZ21haWwuY29tIiwicm9sZSI6ImN1c3RvbWVyIiwidXNlcl9pZCI6IjM1Njg3ZGFhLTU5YzctNDA2NC04MmU5LTNiZWI0N2U4MzNiYSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlfQ.ehIP8cXcS1J5gFkfbJuTKQaPXH13orcS_TbwtYhGbqw
 
 ###
 GET  http://127.0.0.1:8020/api/order/orders/0223611c-33cf-4803-b6da-c037c5f0cb0d/
@@ -204,20 +222,25 @@ GET  http://127.0.0.1:8020/api/order/orders/0223611c-33cf-4803-b6da-c037c5f0cb0d
 # Order Item APis
 # ----------------------------------------------------------
 ###
-GET  http://127.0.0.1:8020/api/order/items/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NjQwNjI5LCJpYXQiOjE3NjUwMzU4MjksImp0aSI6IjA4MGU1MTM3MTMwMTQyNjQ5OTk1YmE0MzQ1ZjA3YmNmIiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.pFghqthHgZznhzhAU8xfiDO4U6S7fwHCIoHySfk2mbg
- 
- 
-### Customer Admin1
-POST http://127.0.0.1:8020/api/order/items/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NzkyMzQwLCJpYXQiOjE3NjUxODc1NDAsImp0aSI6ImM5ZDFiMjEzYjY4MDQ2NzBhMjkzNDA5ZTJiY2U1OGI4IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.a-jl6FQWwb-75TR0nS82muEIakSmobvxpGp6fiailKY
+PATCH  http://127.0.0.1:8020/api/order/items/5683d3f4-3d61-4ed6-8a4b-032a70929b7b/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NjY0MDE4LCJpYXQiOjE3NjYwNTkyMTgsImp0aSI6ImUyYmRiM2QwYzdmMjQ0MjRiNjg0ZjBiYjEyYzE0MWE3IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.m2ahiDpuoB_o_ywbDzcyUzAXDLGAvSGsk240dpglFa0
 Content-Type: application/json 
 
 { 
-  "order":"0223611c-33cf-4803-b6da-c037c5f0cb0d",
-  "product":"asus-leptop",
-  "quantity": 3
+  "status":"pending" 
 }
+ 
+### Customer Admin1
+POST http://127.0.0.1:8020/api/order/items/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NjY0MDE4LCJpYXQiOjE3NjYwNTkyMTgsImp0aSI6ImUyYmRiM2QwYzdmMjQ0MjRiNjg0ZjBiYjEyYzE0MWE3IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.m2ahiDpuoB_o_ywbDzcyUzAXDLGAvSGsk240dpglFa0
+Content-Type: application/json 
+
+{ 
+  "order":"00395ad7-5b30-4ec4-b063-312b8077e61b",
+  "product":"product-20",
+  "quantity": 2
+}
+
 
 ### Customer Admin1
 PATCH  http://127.0.0.1:8020/api/order/items/c9223e94-5f6c-4bff-9376-8156fea248f4/
@@ -247,7 +270,7 @@ Content-Type: application/json
 
 ### Customer Admin1
 GET  http://127.0.0.1:8020/api/chat/channel/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NzkyMzQwLCJpYXQiOjE3NjUxODc1NDAsImp0aSI6ImM5ZDFiMjEzYjY4MDQ2NzBhMjkzNDA5ZTJiY2U1OGI4IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.a-jl6FQWwb-75TR0nS82muEIakSmobvxpGp6fiailKY
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NDA1OTEwLCJpYXQiOjE3NjU4MDExMTEsImp0aSI6ImZiM2Y2MjczY2ZjYTQ3MDhiOTgzMGNjMjZiYTdmNGYzIiwidXNlcm5hbWUiOiJhbm1hbXVuMCIsImVtYWlsIjoiYW5tYW11bjBAZ21haWwuY29tIiwicm9sZSI6ImN1c3RvbWVyIiwidXNlcl9pZCI6IjM1Njg3ZGFhLTU5YzctNDA2NC04MmU5LTNiZWI0N2U4MzNiYSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlfQ.ehIP8cXcS1J5gFkfbJuTKQaPXH13orcS_TbwtYhGbqw
 
 ### Customer Admin1
 GET  http://127.0.0.1:8020/ws/chat/channel/<channel_id>/connected/?token=${}
@@ -260,14 +283,29 @@ GET  http://127.0.0.1:8020/api/chat/channel/?order=0223611c-33cf-4803-b6da-c037c
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NzkyMzQwLCJpYXQiOjE3NjUxODc1NDAsImp0aSI6ImM5ZDFiMjEzYjY4MDQ2NzBhMjkzNDA5ZTJiY2U1OGI4IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.a-jl6FQWwb-75TR0nS82muEIakSmobvxpGp6fiailKY
 
 ###
-GET  http://127.0.0.1:8020/api/chat/a30ea17e-b62b-4055-a16e-ed1ce9fd9717/messages/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NzkyMzQwLCJpYXQiOjE3NjUxODc1NDAsImp0aSI6ImM5ZDFiMjEzYjY4MDQ2NzBhMjkzNDA5ZTJiY2U1OGI4IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.a-jl6FQWwb-75TR0nS82muEIakSmobvxpGp6fiailKY
+GET  http://127.0.0.1:8020/api/chat/ac0eb72f-4f5b-4088-a1ad-f2d7276bcf67/messages/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NDEwOTQyLCJpYXQiOjE3NjU4MDYxNDIsImp0aSI6Ijg0OTBkZDNmNDZlZDRmOGVhNmI3MDc2YTUwZjc0NTQ0IiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9.gi6rCxzarpa8ZwZ7HtgESXXJ60R3mcil5x3it5wjukQ
 
+###
+GET http://127.0.0.1:8020/api/chat/ac0eb72f-4f5b-4088-a1ad-f2d7276bcf67/messages/?cursor=cD0yMDI1LTEyLTE1KzE0JTNBMDElM0EzNy45MTUxOTYlMkIwMCUzQTAw
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NDEwOTQyLCJpYXQiOjE3NjU4MDYxNDIsImp0aSI6Ijg0OTBkZDNmNDZlZDRmOGVhNmI3MDc2YTUwZjc0NTQ0IiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9.gi6rCxzarpa8ZwZ7HtgESXXJ60R3mcil5x3it5wjukQ
 
-### Shop Owner
+### Customer - anmamun0
+PATCH   http://127.0.0.1:8020/api/chat/channels/67bb98ce-2175-441a-a8d7-9feddc7b4d6e/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NjY0MDE4LCJpYXQiOjE3NjYwNTkyMTgsImp0aSI6ImUyYmRiM2QwYzdmMjQ0MjRiNjg0ZjBiYjEyYzE0MWE3IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.m2ahiDpuoB_o_ywbDzcyUzAXDLGAvSGsk240dpglFa0
+Content-Type: application/json 
+
+{ 
+"is_active": true 
+}
+
+### Shop Owner - anmamun2
 GET  http://127.0.0.1:8020/api/chat/channel/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1OTk5MjMxLCJpYXQiOjE3NjUzOTQ0MzEsImp0aSI6IjFiOWVkODhiYThhYjRiYzY5NmZiZWNmZWJmOTgyNjk4IiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.CwWF-0EWBS54ASibJNM3oyrBoxCI9QP-bl39YB0mULQ
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NDEwOTQyLCJpYXQiOjE3NjU4MDYxNDIsImp0aSI6Ijg0OTBkZDNmNDZlZDRmOGVhNmI3MDc2YTUwZjc0NTQ0IiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9.gi6rCxzarpa8ZwZ7HtgESXXJ60R3mcil5x3it5wjukQ
 
+### Shop Owner - anmamun2
+GET  http://127.0.0.1:8020/api/chat/channel/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NDEwOTQyLCJpYXQiOjE3NjU4MDYxNDIsImp0aSI6Ijg0OTBkZDNmNDZlZDRmOGVhNmI3MDc2YTUwZjc0NTQ0IiwidXNlcm5hbWUiOiJhbm1hbXVuMiIsImVtYWlsIjoiYW5tYW11bjJAZ21haWwuY29tIiwicm9sZSI6InNob3Bfb3duZXIiLCJ1c2VyX2lkIjoiYTlkYTgxODYtMDQ0ZC00OGU2LTk0NDQtZDJjMjllODE0ZjQwIiwiZW1haWxfdmVyaWZpZWQiOnRydWV9.gi6rCxzarpa8ZwZ7HtgESXXJ60R3mcil5x3it5wjukQ
 
 # -----------------------------------
 # Transaction
@@ -277,8 +315,55 @@ Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoi
 GET  http://127.0.0.1:8020/api/transaction/transactions/
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2Mjk2OTA2LCJpYXQiOjE3NjU2OTIxMDYsImp0aSI6IjljZjNjZTA4NTk0OTQ3NzViZWI2ZDIzMGE0OTI4ZDQ0IiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.NMZoJGNEm6Ebl5SlUHGc43CNoWEiHX9Swdfi-oM6kKg
 
+ 
+### 
+GET  http://127.0.0.1:8020/api/transaction/transactions/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1ODAwODQyLCJpYXQiOjE3NjUxOTYwNDIsImp0aSI6IjUxNDMxMjY5OGQ3ZTRkNmRiOTU1ZDczZTcwNmJlY2U1IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.UOJAYMlP6xPGnX-fYKSlU3wS_lCEPHPfBOutF9nUiuc
+ 
 
 ### 
 GET  http://127.0.0.1:8020/api/transaction/transactions/TXN-20251214-000001/
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2Mjk2OTA2LCJpYXQiOjE3NjU2OTIxMDYsImp0aSI6IjljZjNjZTA4NTk0OTQ3NzViZWI2ZDIzMGE0OTI4ZDQ0IiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.NMZoJGNEm6Ebl5SlUHGc43CNoWEiHX9Swdfi-oM6kKg
 
+
+# -------------------------
+# Admin Bank Account
+# -------------------------
+
+### Customer Admin1
+GET  http://127.0.0.1:8020/api/transaction/meta/bank/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NzkyMzQwLCJpYXQiOjE3NjUxODc1NDAsImp0aSI6ImM5ZDFiMjEzYjY4MDQ2NzBhMjkzNDA5ZTJiY2U1OGI4IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.a-jl6FQWwb-75TR0nS82muEIakSmobvxpGp6fiailKY
+
+### admin admin3
+GET  http://127.0.0.1:8020/api/transaction/meta/bank/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2Mjk2OTA2LCJpYXQiOjE3NjU2OTIxMDYsImp0aSI6IjljZjNjZTA4NTk0OTQ3NzViZWI2ZDIzMGE0OTI4ZDQ0IiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.NMZoJGNEm6Ebl5SlUHGc43CNoWEiHX9Swdfi-oM6kKg
+
+# -------------------------
+# Top Up
+# -------------------------
+
+### Customer Admin1
+GET  http://127.0.0.1:8020/api/transaction/topups/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1NzkyMzQwLCJpYXQiOjE3NjUxODc1NDAsImp0aSI6ImM5ZDFiMjEzYjY4MDQ2NzBhMjkzNDA5ZTJiY2U1OGI4IiwidXNlcm5hbWUiOiJhZG1pbjEiLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.a-jl6FQWwb-75TR0nS82muEIakSmobvxpGp6fiailKY
+
+### admin admin3
+GET  http://127.0.0.1:8020/api/transaction/topups/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2Mjk2OTA2LCJpYXQiOjE3NjU2OTIxMDYsImp0aSI6IjljZjNjZTA4NTk0OTQ3NzViZWI2ZDIzMGE0OTI4ZDQ0IiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.NMZoJGNEm6Ebl5SlUHGc43CNoWEiHX9Swdfi-oM6kKg
+
+### admin admin3
+POST  http://127.0.0.1:8020/api/transaction/topups/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2Mjk2OTA2LCJpYXQiOjE3NjU2OTIxMDYsImp0aSI6IjljZjNjZTA4NTk0OTQ3NzViZWI2ZDIzMGE0OTI4ZDQ0IiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.NMZoJGNEm6Ebl5SlUHGc43CNoWEiHX9Swdfi-oM6kKg
+Content-Type: application/json 
+{ 
+    "bank_name": "Datch Bangla Bank",
+    "amount": "20000.00",
+    "account_holder_name": "An Mamun",
+    "account_number": "7017070312341234",
+    "routing_number": "701707",
+    "country": "Bangladesh",
+    "account_type": "current",
+    "currency": "USD",
+    "description": "As part of Metrocem’s broad array of responsibilities to the society, ",
+    "receipt": "/media/topups/sdasdfawe_asdfa_afsd.JPG",
+}
+ 

@@ -1,12 +1,19 @@
+{% load text_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
+
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>anShopPro - Connect with Customers Instantly</title>
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+
+    <!-- Splide CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" />
 
 </head>
 
@@ -17,25 +24,24 @@
     <header class="bg-white/80 shadow-sm md:sticky top-0 z-50  backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-4">
-                <div
-                    class="rounded-t-lg hover:pb-1 transition pb-2 w-32 h-10 bg-gradient-to-r from-blue-600 to-blue-700 rounded flex items-center justify-center text-white font-bold">
-                    <a href="/" class="text-3xl font-extrabold text-gray-100 transition">
-                        An<span
-                            class="text-green-400 hover:bg-gray-100 hover:ml-1 inline-block transform transition-all duration-300 ease-out ">Shop</span>
-                    </a>
 
-                </div>
+            {% if wireframe and wireframe.logo %}   
+            <img src="{{ wireframe.logo.url }}" alt="Logo" class="h-16 rounded-full w-auto object-contain">  {% else %}
+            <!-- fallback text/logo -->
+            <a href="/" class="text-3xl font-extrabold text-orange-500">   An<span class="text-green-500">Shop</span>  </a>
+            {% endif %}
+
                 <nav class="hidden md:flex space-x-8">
-                    <a href="#features" class="text-gray-700 hover:text-blue-600 font-medium transition">Features</a>
-                    <a href="#chat" class="text-gray-700 hover:text-blue-600 font-medium transition">Chat Feature</a>
-                    <a href="#pricing" class="text-gray-700 hover:text-blue-600 font-medium transition">Pricing</a>
+                    <a href="#features" class="text-gray-700 hover:text-orange-600 font-medium transition">Features</a>
+                    <a href="#chat" class="text-gray-700 hover:text-orange-600 font-medium transition">Chat Feature</a>
+                    <a href="#pricing" class="text-gray-700 hover:text-orange-600 font-medium transition">Pricing</a>
                 </nav>
                 <div class="flex items-center space-x-4">
-                    <button class="hidden sm:block text-blue-600 hover:text-blue-700 font-semibold transition">
+                    <button class="hidden sm:block text-orange-700 hover:text-orange-800 font-semibold transition">
                         Sign In
                     </button>
                     <button
-                        class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 font-semibold transition shadow-md">
+                        class="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700 font-semibold transition shadow-md">
                         Get Started Free
                     </button>
                 </div>
@@ -44,13 +50,14 @@
     </header>
 
     <!-- Hero Section with Chat Preview -->
-    <section class="relative bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-20 lg:py-32 overflow-hidden">
-        <div class="absolute top-0 right-0 w-96 h-96 bg-blue-300 rounded-full opacity-10 blur-3xl"></div>
+    <section
+        class="relative bg-gradient-to-br from-orange-50 via-indigo-50 to-purple-50 py-20 lg:py-32 overflow-hidden">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-orange-300 rounded-full opacity-10 blur-3xl"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center mb-16">
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
                     Connect With Your Customers<br />
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Instantly
+                    <span class="text-transparent bg-clip-text bg-orange-600">Instantly
                         After Every Order</span>
                 </h1>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-10">
@@ -59,12 +66,13 @@
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center gap-4 mb-4">
                     <button
-                        class="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 font-semibold text-lg transition shadow-lg transform hover:-translate-y-1">
+                        class="bg-orange-600 text-white px-8 py-4 rounded-lg hover:bg-orange-700 font-semibold text-lg transition shadow-lg transform hover:-translate-y-1">
                         Start Free Trial
                     </button>
                     <button
-                        class="bg-white text-blue-600 px-8 py-4 rounded-lg hover:bg-gray-50 font-semibold text-lg transition shadow-md border-2 border-blue-600">
-                        Watch Demo →
+                        class=" flex justify-center items-center  bg-white text-orange-700 px-8 py-4 rounded-lg hover:bg-gray-50 font-semibold text-lg transition shadow-md border-2 border-orange-600">
+                        Watch Demo
+                        <i class="fa-solid fa-arrow-right-long px-1 mt-2"></i>
                     </button>
                 </div>
                 <p class="text-sm text-gray-500">✓ No credit card required ✓ Chat included ✓ Setup in 5 minutes</p>
@@ -75,7 +83,7 @@
 
         <div class="max-w-6xl mx-auto cursor-pointer opacity-90">
             <!-- Main Dashboard Container -->
-            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200">
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200 m-4">
                 <!-- Browser Header -->
                 <div class="bg-gray-100 px-6 py-4 flex items-center border-b border-gray-300">
                     <div class="flex space-x-2">
@@ -99,7 +107,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                         <!-- Total Revenue Card -->
                         <div
-                            class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg transform  transition">
+                            class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-6 text-white shadow-lg transform  transition">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-sm opacity-90">Total Revenue</span>
                                 <span class="text-2xl">💰</span>
@@ -155,73 +163,22 @@
                     <div class="grid md:grid-cols-3 gap-6">
                         <!-- Sales Chart -->
                         <div
-                            class="md:col-span-2 bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-6 border border-gray-200">
+                            class="md:col-span-2 bg-gradient-to-br from-gray-50 to-orange-50 rounded-xl p-6 border border-gray-200">
                             <div class="flex items-center justify-between mb-6">
                                 <h3 class="text-lg font-bold text-gray-800">Sales Analytics</h3>
                                 <div class="flex space-x-2">
-                                    <button
-                                        class="px-3 py-1 bg-blue-600 text-white text-xs rounded-lg font-medium">Week</button>
-                                    <button
+                                    <button id="btnWeek" onclick="updateChart('week')"
+                                        class="px-3 py-1 bg-orange-600 text-white text-xs rounded-lg font-medium">Week</button>
+                                    <button id="btnMonth" onclick="updateChart('month')"
                                         class="px-3 py-1 bg-white text-gray-600 text-xs rounded-lg font-medium">Month</button>
-                                    <button
+                                    <button id="btnYear" onclick="updateChart('year')"
                                         class="px-3 py-1 bg-white text-gray-600 text-xs rounded-lg font-medium">Year</button>
                                 </div>
                             </div>
 
                             <!-- Chart Visualization -->
-                            <div class="h-64 flex items-end justify-between space-x-2">
-                                <div class="flex-1 bg-gradient-to-t from-blue-500 to-blue-400 rounded-t-lg relative"
-                                    style="height: 60%;">
-                                    <div
-                                        class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs px-2 py-1 rounded font-bold">
-                                        $3.2k</div>
-                                </div>
-                                <div class="flex-1 bg-gradient-to-t from-blue-500 to-blue-400 rounded-t-lg relative"
-                                    style="height: 75%;">
-                                    <div
-                                        class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs px-2 py-1 rounded font-bold">
-                                        $4.1k</div>
-                                </div>
-                                <div class="flex-1 bg-gradient-to-t from-blue-500 to-blue-400 rounded-t-lg relative"
-                                    style="height: 45%;">
-                                    <div
-                                        class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs px-2 py-1 rounded font-bold">
-                                        $2.5k</div>
-                                </div>
-                                <div class="flex-1 bg-gradient-to-t from-blue-500 to-blue-400 rounded-t-lg relative"
-                                    style="height: 90%;">
-                                    <div
-                                        class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs px-2 py-1 rounded font-bold">
-                                        $5.8k</div>
-                                </div>
-                                <div class="flex-1 bg-gradient-to-t from-green-500 to-green-400 rounded-t-lg relative animate-pulse"
-                                    style="height: 100%;">
-                                    <div
-                                        class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-green-600 text-white text-xs px-2 py-1 rounded font-bold">
-                                        $6.9k</div>
-                                </div>
-                                <div class="flex-1 bg-gradient-to-t from-blue-500 to-blue-400 rounded-t-lg relative"
-                                    style="height: 82%;">
-                                    <div
-                                        class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs px-2 py-1 rounded font-bold">
-                                        $5.2k</div>
-                                </div>
-                                <div class="flex-1 bg-gradient-to-t from-blue-500 to-blue-400 rounded-t-lg relative"
-                                    style="height: 55%;">
-                                    <div
-                                        class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs px-2 py-1 rounded font-bold">
-                                        $3.1k</div>
-                                </div>
-                            </div>
-
-                            <div class="flex justify-between text-xs text-gray-500 mt-4">
-                                <span>Mon</span>
-                                <span>Tue</span>
-                                <span>Wed</span>
-                                <span>Thu</span>
-                                <span class="font-bold text-green-600">Fri</span>
-                                <span>Sat</span>
-                                <span>Sun</span>
+                            <div class="h-64">
+                                <canvas id="salesChart"></canvas>
                             </div>
                         </div>
 
@@ -244,7 +201,7 @@
 
                                 <div class="flex items-start space-x-3 pb-3 border-b border-gray-200">
                                     <div
-                                        class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm flex-shrink-0">
+                                        class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm flex-shrink-0">
                                         <i class="fa-solid fa-box"></i>
                                     </div>
                                     <div class="flex-1 min-w-0">
@@ -295,19 +252,19 @@
                     <!-- Quick Actions -->
                     <div class="mt-6 flex flex-wrap gap-3">
                         <button
-                            class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition flex items-center space-x-2">
+                            class="w-full md:w-auto bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition flex items-center space-x-2">
                             <i class="fa-solid fa-plus"></i>
                             <span>Add Product</span>
                         </button>
 
                         <button
-                            class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition flex items-center space-x-2">
+                            class="w-full  md:w-auto bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition flex items-center space-x-2">
                             <i class="fa-solid fa-chart-bar"></i>
                             <span>View Reports</span>
                         </button>
 
                         <button
-                            class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold transition flex items-center space-x-2">
+                            class="w-full  md:w-auto bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold transition flex items-center space-x-2">
                             <i class="fa-solid fa-users"></i>
                             <span>Manage Customers</span>
                         </button>
@@ -346,7 +303,7 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
 
                 <div>
-                    <i class="fa-solid fa-box text-4xl text-blue-600 mb-2"></i>
+                    <i class="fa-solid fa-box text-4xl text-orange-600 mb-2"></i>
                     <div class="text-3xl font-bold">50K+</div>
                     <p class="text-gray-600">Orders Processed</p>
                 </div>
@@ -374,11 +331,12 @@
     </section>
 
     <!-- Chat Feature Showcase -->
-    <section id="chat" class="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
+    <section id="chat" class="py-20 bg-gradient-to-br from-gray-50 to-orange-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <!-- Badge -->
-                <div class="inline-block bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                <div
+                    class="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">
                     <i class="fa-solid fa-bullseye mr-2"></i>
                     MOST LOVED FEATURE
                 </div>
@@ -391,7 +349,7 @@
             </div>
 
             <!-- Chat Demo Section -->
-            <div class="grid lg:grid-cols-2 gap-12 items-start mb-16">
+            <div class="md:grid lg:grid-cols-2 gap-10 items-start mb-16">
                 <!-- Customer View -->
                 <div class="bg-white rounded-2xl shadow-2xl p-8 border-2 border-gray-200">
                     <div class="flex items-center mb-6 pb-4 border-b">
@@ -412,20 +370,20 @@
                         </div>
                     </div>
 
-                    <div class="bg-blue-50 border-2 border-blue-300 rounded-lg p-4 mb-4">
+                    <div class="bg-orange-50 border-2 border-orange-300 rounded-lg p-4 mb-4">
                         <div class="flex items-center mb-3">
                             <span class="text-2xl mr-2">
                                 💬
                                 <!-- <i class="fa-solid fa-comment-dots"></i> -->
                             </span>
                             <span class="font-bold text-gray-900">Chat with Shop Owner</span>
-                            <span class="ml-auto bg-blue-600 text-white text-xs px-2 py-1 rounded-full">New
+                            <span class="ml-auto bg-orange-600 text-white text-xs px-2 py-1 rounded-full">New
                                 Feature!</span>
                         </div>
 
                         <div class="space-y-3">
                             <div class="flex justify-end">
-                                <div class="bg-blue-600 text-white rounded-lg rounded-tr-none px-4 py-2 max-w-xs">
+                                <div class="bg-orange-600 text-white rounded-lg rounded-tr-none px-4 py-2 max-w-xs">
                                     <p class="text-sm">Hello! When will my order ship?</p>
                                     <p class="text-xs opacity-75 mt-1">Just now</p>
                                 </div>
@@ -441,7 +399,7 @@
                             </div>
 
                             <div class="flex justify-end">
-                                <div class="bg-blue-600 text-white rounded-lg rounded-tr-none px-4 py-2 max-w-xs">
+                                <div class="bg-orange-600 text-white rounded-lg rounded-tr-none px-4 py-2 max-w-xs">
                                     <p class="text-sm">Perfect! Thank you! 😊</p>
                                     <p class="text-xs opacity-75 mt-1">1 min ago</p>
                                 </div>
@@ -450,8 +408,9 @@
 
                         <div class="mt-4 flex gap-2">
                             <input type="text" placeholder="Type your message..."
-                                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
-                            <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 font-semibold">
+                                class="w-40 md:w-full flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500">
+                            <button
+                                class="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700 font-semibold">
                                 Send
                             </button>
                         </div>
@@ -459,7 +418,7 @@
                 </div>
 
                 <!-- Shop Owner View -->
-                <div class="bg-white rounded-2xl shadow-2xl p-8 border-2 border-gray-200">
+                <div class="mt-10 md:mt-0 bg-white rounded-2xl shadow-2xl p-8 border-2 border-gray-200">
                     <div class="flex items-center mb-6 pb-4 border-b">
                         <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
                         <div class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
@@ -494,7 +453,7 @@
                         <div class="bg-white rounded-lg p-4 border border-gray-200 mb-4">
                             <div class="flex items-center mb-3">
                                 <div
-                                    class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                                    class="w-10 h-10 bg-orange-600 rounded-full flex items-center justify-center text-white font-bold">
                                     JD
                                 </div>
                                 <div class="ml-3 mb-5">
@@ -511,9 +470,9 @@
                             <div class="flex gap-2">
                                 <input type="text" placeholder="Type reply..."
                                     value="Hi! We'll ship your order within 24 hours..."
-                                    class="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                                    class="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500">
                                 <button
-                                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-semibold text-sm">
+                                    class="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 font-semibold text-sm">
                                     Send
                                 </button>
                             </div>
@@ -526,7 +485,7 @@
                             View Order
                         </button>
                         <button
-                            class="border-2 border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 font-medium text-sm">
+                            class="border-2 border-orange-600 text-orange-600 px-4 py-2 rounded-lg hover:bg-orange-50 font-medium text-sm">
                             Mark as Shipped
                         </button>
                     </div>
@@ -545,9 +504,9 @@
                     </p>
                 </div>
 
-                <div class="bg-white rounded-xl p-6 shadow-lg border-t-4 border-blue-500">
+                <div class="bg-white rounded-xl p-6 shadow-lg border-t-4 border-orange-500">
                     <div class="text-4xl mb-4">
-                        <i class="fa-solid fa-chart-bar text-blue-500"></i>
+                        <i class="fa-solid fa-chart-bar text-orange-500"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-2">Order Context</h3>
                     <p class="text-gray-600">
@@ -581,44 +540,56 @@
 
             <div class="relative">
                 <div
-                    class="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-blue-200 via-green-200 to-purple-200 transform -translate-y-1/2">
+                    class="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-orange-200 via-green-200 to-purple-200 transform -translate-y-1/2">
                 </div>
 
                 <div class="grid md:grid-cols-4 gap-8 relative">
-                    <div class="text-center">
+                    <div
+                        class="flex items-center text-center md:flex-col md:items-center md:text-center sm:flex-row sm:items-start sm:text-left p-6">
                         <div
-                            class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4 shadow-xl relative z-10">
+                            class="flex-shrink-0 w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4 shadow-xl relative z-10">
                             1
                         </div>
-                        <h3 class="text-xl font-bold mb-2">Customer Orders</h3>
-                        <p class="text-gray-600">Customer browses and places an order on your shop</p>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Customer Orders</h3>
+                            <p class="text-gray-600">Customer browses and places an order on your shop</p>
+                        </div>
                     </div>
 
-                    <div class="text-center">
+                    <div
+                        class="flex items-center text-center md:flex-col md:items-center md:text-center sm:flex-row sm:items-start sm:text-left p-6">
                         <div
-                            class="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4 shadow-xl relative z-10">
+                            class="flex-shrink-0 w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4 shadow-xl relative z-10">
                             2
                         </div>
-                        <h3 class="text-xl font-bold mb-2">Chat Auto-Created</h3>
-                        <p class="text-gray-600">System creates dedicated chat channel automatically</p>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Chat Auto-Created</h3>
+                            <p class="text-gray-600">System creates dedicated chat channel automatically</p>
+                        </div>
                     </div>
 
-                    <div class="text-center">
+                    <div
+                        class="flex items-center text-center md:flex-col md:items-center md:text-center sm:flex-row sm:items-start sm:text-left p-6">
                         <div
-                            class="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4 shadow-xl relative z-10">
+                            class="flex-shrink-0 w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4 shadow-xl relative z-10">
                             3
                         </div>
-                        <h3 class="text-xl font-bold mb-2">Instant Messaging</h3>
-                        <p class="text-gray-600">Both parties can chat in real-time about the order</p>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Instant Messaging</h3>
+                            <p class="text-gray-600">Both parties can chat in real-time about the order</p>
+                        </div>
                     </div>
 
-                    <div class="text-center">
+                    <div
+                        class="flex items-center text-center md:flex-col md:items-center md:text-center sm:flex-row sm:items-start sm:text-left p-6">
                         <div
-                            class="w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4 shadow-xl relative z-10">
+                            class="flex-shrink-0 w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-4 shadow-xl relative z-10">
                             4
                         </div>
-                        <h3 class="text-xl font-bold mb-2">Happy Customer</h3>
-                        <p class="text-gray-600">Fast support leads to satisfaction and repeat purchases</p>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Happy Customer</h3>
+                            <p class="text-gray-600">Fast support leads to satisfaction and repeat purchases</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -640,11 +611,12 @@
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
+                
                 <!-- Inventory -->
                 <div
-                    class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-2">
+                    class="bg-white p-8 rounded-2xl text-center flex flex-col items-center justify-center md:items-start md:text-left shadow-lg hover:shadow-xl transition transform hover:-translate-y-2">
                     <div
-                        class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6">
+                        class="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-6">
                         <i class="fa-solid fa-boxes-stacked text-3xl text-white"></i>
                     </div>
                     <h3 class="text-2xl font-bold mb-3">Inventory Management</h3>
@@ -655,7 +627,7 @@
 
                 <!-- Orders -->
                 <div
-                    class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-2">
+                    class="bg-white p-8 rounded-2xl  text-center flex flex-col items-center justify-center md:items-start md:text-left shadow-lg hover:shadow-xl transition transform hover:-translate-y-2">
                     <div
                         class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-6">
                         <i class="fa-solid fa-cart-shopping text-3xl text-white"></i>
@@ -668,7 +640,7 @@
 
                 <!-- Customers -->
                 <div
-                    class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-2">
+                    class="bg-white p-8 rounded-2xl  text-center flex flex-col items-center justify-center md:items-start md:text-left shadow-lg hover:shadow-xl transition transform hover:-translate-y-2">
                     <div
                         class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-6">
                         <i class="fa-solid fa-users text-3xl text-white"></i>
@@ -681,7 +653,7 @@
 
                 <!-- Analytics -->
                 <div
-                    class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-2">
+                    class="bg-white p-8 rounded-2xl  text-center flex flex-col items-center justify-center md:items-start md:text-left shadow-lg hover:shadow-xl transition transform hover:-translate-y-2">
                     <div
                         class="w-16 h-16 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl flex items-center justify-center mb-6">
                         <i class="fa-solid fa-chart-line text-3xl text-white"></i>
@@ -694,7 +666,7 @@
 
                 <!-- Notifications -->
                 <div
-                    class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-2">
+                    class="bg-white p-8 rounded-2xl  text-center flex flex-col items-center justify-center md:items-start md:text-left shadow-lg hover:shadow-xl transition transform hover:-translate-y-2">
                     <div
                         class="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center mb-6">
                         <i class="fa-solid fa-bell text-3xl text-white"></i>
@@ -707,7 +679,7 @@
 
                 <!-- Mobile -->
                 <div
-                    class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-2">
+                    class="bg-white p-8 rounded-2xl  text-center flex flex-col items-center justify-center md:items-start md:text-left shadow-lg hover:shadow-xl transition transform hover:-translate-y-2">
                     <div
                         class="w-16 h-16 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-xl flex items-center justify-center mb-6">
                         <i class="fa-solid fa-mobile-screen-button text-3xl text-white"></i>
@@ -732,241 +704,158 @@
                 <p class="text-xl text-gray-600">See what our users say about the chat feature</p>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8">
 
-                <!-- Testimonial 1 -->
-                <div
-                    class="bg-gradient-to-br from-blue-50 to-indigo-50 p-8 rounded-2xl shadow-lg flex flex-col justify-between h-full">
-                    <div>
-                        <div class="flex items-center mb-4 text-yellow-400">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star-half-stroke"></i>
-                        </div>
-                        <p class="text-gray-700 leading-relaxed italic">
-                            "The instant chat saved my business! Customers love getting quick answers. My repeat
-                            customer rate increased 60% in 3 months."
-                        </p>
-                    </div>
+            <div id="testimonial" class="splide" aria-label="Testimonials Slider">
+                <div class="splide__track   gap-8">
+                    <ul class="splide__list">
 
-                    <div class="flex items-center mt-6">
-                        <div
-                            class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
-                            SM
-                        </div>
-                        <div class="ml-4">
-                            <p class="font-bold">Sarah Mitchell</p>
-                            <p class="text-gray-600 text-sm">Bookstore Owner</p>
-                        </div>
-                    </div>
+                        {% for testimonial in testimonials %}
+                        <li class="splide__slide">
+                            <div
+                                class="bg-gradient-to-br from-purple-50 to-pink-50 p-8 rounded-2xl shadow-lg flex flex-col justify-between h-full">
+
+                                <!-- Rating Stars -->
+                                <div class="flex items-center mb-4 text-yellow-400">
+                                    {% for i in "12345"|slice:":testimonial.ratting" %}
+                                    <i class="fa-solid fa-star"></i>
+                                    {% endfor %}
+                                    <!-- <i class="fa-solid fa-star-half-stroke"></i> --> 
+                                </div>
+
+                                <!-- Feedback -->
+                                <p class="text-gray-700 leading-relaxed italic">
+                                    {{ testimonial.feedback }}
+                                </p>
+
+                                <!-- User Info -->
+                                <div class="flex items-center mt-6">
+                                    {% if testimonial.photo %}
+                                    <img src="{{ testimonial.photo.url }}" alt="{{ testimonial.name }}"
+                                        class="w-12 h-12 rounded-full object-cover">
+                                    {% else %}
+                                    <div
+                                        class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                                        {{ testimonial.name|first }}
+                                    </div>
+                                    {% endif %}
+
+                                    <div class="ml-4">
+                                        <p class="font-bold">{{ testimonial.name }}</p>
+                                        <p class="text-gray-600 text-sm">{{ testimonial.designation }}</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </li>
+                        {% endfor %}
+
+
+                    </ul>
                 </div>
-
-                <!-- Testimonial 2 -->
-                <div
-                    class="bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-2xl shadow-lg flex flex-col justify-between h-full">
-                    <div>
-                        <div class="flex items-center mb-4 text-yellow-400">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star-half-stroke"></i>
-                        </div>
-                        <p class="text-gray-700 leading-relaxed italic">
-                            "I can answer customer questions in seconds instead of hours. Sales increased 40% because
-                            customers feel confident buying from me."
-                        </p>
-                    </div>
-
-                    <div class="flex items-center mt-6">
-                        <div
-                            class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white font-bold">
-                            MR
-                        </div>
-                        <div class="ml-4">
-                            <p class="font-bold">Mike Rodriguez</p>
-                            <p class="text-gray-600 text-sm">Tech Store</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonial 3 -->
-                <div
-                    class="bg-gradient-to-br from-purple-50 to-pink-50 p-8 rounded-2xl shadow-lg flex flex-col justify-between h-full">
-                    <div>
-                        <div class="flex items-center mb-4 text-yellow-400">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star-half-stroke"></i>
-                        </div>
-                        <p class="text-gray-700 leading-relaxed italic">
-                            "My customers love being able to message me directly. It builds trust and they come back
-                            again and again. Best feature ever!"
-                        </p>
-                    </div>
-
-                    <div class="flex items-center mt-6">
-                        <div
-                            class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold">
-                            LK
-                        </div>
-                        <div class="ml-4">
-                            <p class="font-bold">Lisa Kim</p>
-                            <p class="text-gray-600 text-sm">Fashion Boutique</p>
-                        </div>
-                    </div>
-                </div>
-
             </div>
+
+
         </div>
     </section>
 
-    <!-- Pricing -->
-    <section id="pricing" class="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-                    Simple Pricing, Powerful Features
-                </h2>
-                <p class="text-xl text-gray-600">All plans include real-time chat with customers</p>
-            </div>
+    <!-- Pricing --> 
+    <section id="features" class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <div class="bg-white p-8 rounded-2xl shadow-lg">
-                    <h3 class="text-2xl font-bold mb-2">Starter</h3>
-                    <div class="mb-6">
-                        <span class="text-5xl font-bold">FREE</span>
-                    </div>
-                    <ul class="space-y-4 mb-8">
-                        <li class="flex items-start">
-                            <span class="text-green-500 mr-2">✓</span>
-                            <span>Up to 100 products</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-green-500 mr-2">✓</span>
-                            <span><strong>Unlimited chat</strong></span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-green-500 mr-2">✓</span>
-                            <span>Basic reporting</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-green-500 mr-2">✓</span>
-                            <span>Email support</span>
-                        </li>
-                    </ul>
-                    <button
-                        class="w-full bg-gray-200 text-gray-800 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">
-                        Get Started
-                    </button>
-                </div>
+        <div class="text-center mb-16">
+            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                Complete Shop Management Platform
+            </h2>
+            <p class="text-xl text-gray-600">
+                Everything you need to run your online shop
+            </p>
+        </div>
 
-                <div
-                    class="bg-gradient-to-br from-blue-600 to-blue-700 p-8 rounded-2xl shadow-2xl transform md:scale-105 relative">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            {% for feature in features %}
+                {% comment %} Check if this is the middle feature {% endcomment %}
+                {% if forloop.counter == 2 and features|length == 3 %}
+                <!-- Middle feature highlighted -->
+                <div  class="bg-gradient-to-br from-orange-600 to-orange-700 text-white p-8 rounded-2xl shadow-2xl transform md:scale-105 relative">
                     <div
-                        class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-gray-900 px-4 py-1 rounded-full text-sm font-bold">
+                        class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-gray-900  px-4 py-1 rounded-full text-sm font-bold">
                         MOST POPULAR
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-2">Business</h3>
+                     <h3 class="text-2xl font-bold mb-2">{{ feature.title }}</h3>
                     <div class="mb-6">
-                        <span class="text-5xl font-bold text-white">$29</span>
-                        <span class="text-white">/month</span>
-                    </div>
-                    <ul class="space-y-4 mb-8">
+                        <span class="text-5xl font-bold">৳ {% if feature.price == 0 %}FREE{% else %}{{ feature.price }}{% endif %}</span>
+                    </div> 
+                    <ul class="space-y-2 mb-6">
+                        {% for line in feature.description|split:"," %}
                         <li class="flex items-start">
                             <span class="text-yellow-300 mr-2">✓</span>
-                            <span class="text-white">Unlimited products</span>
+                            <span class="text-white">{{ line|striptags|safe }}</span>
                         </li>
-                        <li class="flex items-start">
-                            <span class="text-yellow-300 mr-2">✓</span>
-                            <span class="text-white"><strong>Unlimited chat with priority support</strong></span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-yellow-300 mr-2">✓</span>
-                            <span class="text-white">Advanced analytics</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-yellow-300 mr-2">✓</span>
-                            <span class="text-white">API access</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-yellow-300 mr-2">✓</span>
-                            <span class="text-white">Custom branding</span>
-                        </li>
+                        {% endfor %}
                     </ul>
-                    <button
-                        class="w-full bg-white text-blue-600 py-3 rounded-lg font-semibold hover:bg-gray-100 transition shadow-lg">
-                        Start Free Trial
+                    <button class="w-full bg-white text-orange-600 py-3 rounded-lg font-semibold hover:bg-gray-100 transition shadow-lg">
+                        Learn More
                     </button>
                 </div>
-
-                <div class="bg-white p-8 rounded-2xl shadow-lg">
-                    <h3 class="text-2xl font-bold mb-2">Enterprise</h3>
+                {% else %}
+                <!-- Regular feature -->
+                <div
+                    class="bg-white p-8 rounded-2xl text-center flex flex-col items-center
+                           md:items-start md:text-left shadow-lg hover:shadow-xl
+                           transition transform hover:-translate-y-2">
+                    <h3 class="text-2xl font-bold mb-2">{{ feature.title }}</h3>
                     <div class="mb-6">
-                        <span class="text-5xl font-bold">Custom</span>
-                    </div>
-                    <ul class="space-y-4 mb-8">
+                        <span class="text-5xl font-bold">৳ {% if feature.price == 0 %}FREE{% else %}{{ feature.price }}{% endif %}</span>
+                    </div> 
+
+                    <ul class="space-y-2 mb-6">
+                        {% for line in feature.description|split:"," %}
                         <li class="flex items-start">
                             <span class="text-green-500 mr-2">✓</span>
-                            <span>Everything in Business</span>
+                            <span>{{ line|striptags|safe }}</span>
                         </li>
-                        <li class="flex items-start">
-                            <span class="text-green-500 mr-2">✓</span>
-                            <span><strong>Dedicated chat support team</strong></span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-green-500 mr-2">✓</span>
-                            <span>Custom integrations</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-green-500 mr-2">✓</span>
-                            <span>SLA guarantee</span>
-                        </li>
+                        {% endfor %}
                     </ul>
-                    <button
-                        class="w-full bg-gray-200 text-gray-800 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">
-                        Contact Sales
+                    <button class="w-full bg-gray-200 text-gray-800 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">
+                        Learn More
                     </button>
                 </div>
-            </div>
-
-            <div class="text-center mt-12">
-                <p class="text-gray-600 mb-4 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-lightbulb text-yellow-400"></i>
-                    All plans include unlimited customer chats and real-time notifications
+                {% endif %}
+            {% empty %}
+                <p class="col-span-3 text-center text-gray-500">
+                    No features available
                 </p>
-            </div>
+            {% endfor %}
 
         </div>
-    </section>
+    </div>
+</section>
+
 
     <!-- Stats Section -->
-    <section class="py-20 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
+    <section class="py-20 bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl sm:text-4xl font-bold mb-4">Real Results from Real Shop Owners</h2>
-                <p class="text-blue-100 text-xl">The chat feature drives measurable growth</p>
+                <p class="text-orange-100 text-xl">The chat feature drives measurable growth</p>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 <div>
                     <div class="text-5xl font-bold mb-2">60%</div>
-                    <p class="text-blue-100 text-lg">Faster Response Time</p>
+                    <p class="text-orange-100 text-lg">Faster Response Time</p>
                 </div>
                 <div>
                     <div class="text-5xl font-bold mb-2">45%</div>
-                    <p class="text-blue-100 text-lg">Higher Satisfaction</p>
+                    <p class="text-orange-100 text-lg">Higher Satisfaction</p>
                 </div>
                 <div>
                     <div class="text-5xl font-bold mb-2">35%</div>
-                    <p class="text-blue-100 text-lg">More Repeat Customers</p>
+                    <p class="text-orange-100 text-lg">More Repeat Customers</p>
                 </div>
                 <div>
                     <div class="text-5xl font-bold mb-2">50%</div>
-                    <p class="text-blue-100 text-lg">Fewer Cancellations</p>
+                    <p class="text-orange-100 text-lg">Fewer Cancellations</p>
                 </div>
             </div>
         </div>
@@ -983,86 +872,39 @@
             </div>
 
             <div class="space-y-4">
+                <!-- FAQ Item 1 -->
+                {%  for faq in faqs %} 
                 <div
-                    class="bg-gray-50 p-6 rounded-lg hover:bg-gray-100 transition cursor-pointer border border-gray-200">
+                    class="faq-item bg-gray-50 p-6 rounded-lg cursor-pointer border border-gray-200 transition hover:bg-gray-100">
                     <div class="flex justify-between items-center">
-                        <h3 class="text-lg font-semibold text-gray-900">How does the chat feature work after an order?
-                        </h3>
-                        <span class="text-blue-600 text-xl">▼</span>
+                        <h3 class="text-lg font-semibold text-gray-900">{{ faq.question }}</h3>
+                        <span class="faq-arrow text-orange-600 text-xl transition-transform">▼</span>
                     </div>
-                    <p class="mt-3 text-gray-600">Once a customer places an order, a dedicated chat channel is
-                        automatically created. Both you and the customer receive notifications and can communicate in
-                        real-time about the specific order.</p>
+                    <p class="faq-content mt-3 text-gray-600 max-h-0 overflow-hidden transition-all duration-300"
+                        style="max-height: 120px;"> {{ faq.answer }}
+                    </p>
                 </div>
 
-                <div
-                    class="bg-gray-50 p-6 rounded-lg hover:bg-gray-100 transition cursor-pointer border border-gray-200">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-lg font-semibold text-gray-900">Can customers chat before placing an order?</h3>
-                        <span class="text-blue-600 text-xl">▼</span>
-                    </div>
-                    <p class="mt-3 text-gray-600">Currently, chat is available after order placement to ensure context
-                        and reduce spam. This helps maintain quality conversations tied to actual purchases.</p>
-                </div>
-
-                <div
-                    class="bg-gray-50 p-6 rounded-lg hover:bg-gray-100 transition cursor-pointer border border-gray-200">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-lg font-semibold text-gray-900">Is the chat feature available on mobile?</h3>
-                        <span class="text-blue-600 text-xl">▼</span>
-                    </div>
-                    <p class="mt-3 text-gray-600">Yes! The chat feature is fully responsive and works seamlessly on all
-                        devices - desktop, tablet, and mobile.</p>
-                </div>
-
-                <div
-                    class="bg-gray-50 p-6 rounded-lg hover:bg-gray-100 transition cursor-pointer border border-gray-200">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-lg font-semibold text-gray-900">How do I get notified of new messages?</h3>
-                        <span class="text-blue-600 text-xl">▼</span>
-                    </div>
-                    <p class="mt-3 text-gray-600">You'll receive real-time browser notifications, email alerts, and
-                        mobile push notifications (if using our mobile app). You can customize notification preferences
-                        in settings.</p>
-                </div>
-
-                <div
-                    class="bg-gray-50 p-6 rounded-lg hover:bg-gray-100 transition cursor-pointer border border-gray-200">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-lg font-semibold text-gray-900">Is chat history saved?</h3>
-                        <span class="text-blue-600 text-xl">▼</span>
-                    </div>
-                    <p class="mt-3 text-gray-600">Yes! All conversations are saved and linked to orders for future
-                        reference. You can access complete chat history at any time.</p>
-                </div>
-
-                <div
-                    class="bg-gray-50 p-6 rounded-lg hover:bg-gray-100 transition cursor-pointer border border-gray-200">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-lg font-semibold text-gray-900">Can I manage multiple shops?</h3>
-                        <span class="text-blue-600 text-xl">▼</span>
-                    </div>
-                    <p class="mt-3 text-gray-600">Yes! Each shop has its own chat channels and order management. You can
-                        switch between shops easily from your dashboard.</p>
-                </div>
+                {% endfor %} 
             </div>
         </div>
     </section>
 
     <!-- Final CTA -->
-    <section class="py-20 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white">
+    <section class="py-20 bg-gradient-to-r from-orange-500 via-orange-400 to-amber-500 text-white">
+
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-4xl sm:text-5xl font-bold mb-6">
                 Ready to Transform Your Shop?
             </h2>
-            <p class="text-xl mb-10 text-blue-100">
+            <p class="text-xl mb-10 text-orange-100">
                 Join thousands of shop owners connecting with customers instantly
             </p>
             <button
-                class="bg-white text-blue-600 px-12 py-4 rounded-lg hover:bg-gray-100 font-bold text-xl transition shadow-2xl transform ">
+                class="bg-white text-orange-600 px-12 py-4 rounded-lg hover:bg-gray-100 font-bold text-xl transition shadow-2xl transform ">
                 Start Free Trial Now →
             </button>
-            <p class="mt-6 text-blue-200">✓ No credit card required ✓ Setup in 5 minutes ✓ Cancel anytime</p>
+            <p class="mt-6 text-orange-200">✓ No credit card required ✓ Setup in 5 minutes ✓ Cancel anytime</p>
         </div>
     </section>
 
@@ -1114,49 +956,58 @@
                     <a href="#" class="hover:text-white">Privacy Policy</a> |
                     <a href="#" class="hover:text-white">Terms of Service</a>
                 </p>
-                <!-- Social / Business Links -->
-                <div class="flex space-x-6">
-                    <!-- Facebook -->
-                    <a href="https://www.facebook.com/anmamun0" target="_blank"
-                        class="text-gray-400 hover:text-blue-600 transition text-2xl">
-                        <i class="fa-brands fa-facebook-f"></i>
-                    </a>
 
-                    <!-- Twitter -->
-                    <a href="https://x.com/anmamun0" target="_blank"
-                        class="text-gray-400 hover:text-sky-400 transition text-2xl">
-                        <i class="fa-brands fa-twitter"></i>
-                    </a>
 
-                    <!-- LinkedIn -->
-                    <a href="https://www.linkedin.com/in/anmamun0/" target="_blank"
-                        class="text-gray-400 hover:text-blue-500 transition text-2xl">
-                        <i class="fa-brands fa-linkedin-in"></i>
-                    </a>
+       <!-- Social / Business Links --> 
+        <div class="flex space-x-6">
+            {% if wireframe %}
+                {% if wireframe.facebook_link %}
+                <a href="{{ wireframe.facebook_link }}" target="_blank"
+                    class="text-gray-400 hover:text-blue-600 transition text-2xl">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+                {% endif %}
 
-                    <!-- GitHub -->
-                    <a href="https://github.com/anmamun0" target="_blank"
-                        class="text-gray-400 hover:text-gray-900 transition text-2xl">
-                        <i class="fa-brands fa-github"></i>
-                    </a>
+                {% if wireframe.twitter_link %}
+                <a href="{{ wireframe.twitter_link }}" target="_blank"
+                    class="text-gray-400 hover:text-sky-400 transition text-2xl">
+                    <i class="fa-brands fa-twitter"></i>
+                </a>
+                {% endif %}
 
-                    <!-- Personal Website -->
-                    <a href="https://anmamuncoder.vercel.app/" target="_blank"
-                        class="text-gray-400 hover:text-green-500 transition text-2xl">
-                        <i class="fa-solid fa-globe"></i>
-                    </a>
+                {% if wireframe.linkedin_link %}
+                <a href="{{ wireframe.linkedin_link }}" target="_blank"
+                    class="text-gray-400 hover:text-blue-700 transition text-2xl">
+                    <i class="fa-brands fa-linkedin-in"></i>
+                </a>
+                {% endif %}
 
-                    <!-- Business Email / Contact -->
-                    <a href="mailto:anmamun0@gmail.com" class="text-gray-400 hover:text-red-500 transition text-2xl">
-                        <i class="fa-solid fa-envelope"></i>
-                    </a>
-                </div>
+                {% if wireframe.website_link %}
+                <a href="{{ wireframe.website_link }}" target="_blank"
+                    class="text-gray-400 hover:text-green-500 transition text-2xl">
+                    <i class="fa-solid fa-globe"></i>
+                </a>
+                {% endif %}
+
+                {% if wireframe.email %}
+                <a href="mailto:{{ wireframe.email }}" class="text-gray-400 hover:text-red-500 transition text-2xl">
+                    <i class="fa-solid fa-envelope"></i>
+                </a>
+                {% endif %}
+            {% endif %}
+        </div>
+
 
             </div>
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <!-- chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
+
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -1167,6 +1018,123 @@
                         behavior: 'smooth',
                         block: 'start'
                     });
+                }
+            });
+        });
+
+        // Tastomonial slider per page 1 slider
+        document.addEventListener("DOMContentLoaded", function () {
+            new Splide("#testimonial", {
+                perPage: 3,
+                gap: "2rem",
+                arrows: false,
+                pagination: true,
+                type: "loop",
+                interval: 4000,
+                breakpoints: {
+                    1024: {            // <= lg
+                        perPage: 2,
+                    },
+                    768: {             // <= md (mobile)
+                        perPage: 1,
+                    },
+                },
+            }).mount();
+        });
+
+
+        const ctx = document.getElementById("salesChart").getContext("2d");
+
+        const chartData = {
+            week: {
+                labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                data: [3200, 4100, 2500, 5800, 6900, 5200, 3100],
+            },
+            month: {
+                labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+                data: [18500, 21200, 19800, 24500],
+            },
+            year: {
+                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+                data: [72000, 68000, 81000, 79000, 86000, 91000, 97000],
+            },
+        };
+
+        let salesChart = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: chartData.week.labels,
+                datasets: [
+                    {
+                        label: "Sales ($)",
+                        data: chartData.week.data,
+                        backgroundColor: "#f97316",
+                        borderRadius: 8
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false }, },
+
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: value => "$" + value / 1000 + "k",
+                        }
+                    }
+                }
+            }
+        });
+
+        function updateChart(period) {
+            salesChart.data.labels = chartData[period].labels;
+            salesChart.data.datasets[0].data = chartData[period].data;
+            salesChart.update();
+            updateButtons(period);
+        }
+
+        function updateButtons(active) {
+            ["Week", "Month", "Year"].forEach(name => {
+                const btn = document.getElementById("btn" + name);
+
+                if (name.toLowerCase() === active) {
+                    btn.classList.remove("bg-white", "text-gray-600");
+                    btn.classList.add("bg-orange-600", "text-white");
+                }
+                else {
+                    btn.classList.add("bg-white", "text-gray-600");
+                    btn.classList.remove("bg-orange-600", "text-white");
+                }
+            });
+        }
+
+
+
+        // FAQ ----------------------------------------
+        const faqs = document.querySelectorAll(".faq-item");
+        faqs.forEach(faq => {
+            faq.addEventListener("click", () => {
+                const content = faq.querySelector(".faq-content");
+                const arrow = faq.querySelector(".faq-arrow");
+
+                // Toggle current FAQ
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    arrow.style.transform = "rotate(0deg)";
+                }
+                else {
+                    // Close all other FAQs
+                    faqs.forEach(f => {
+                        f.querySelector(".faq-content").style.maxHeight = null;
+                        f.querySelector(".faq-arrow").style.transform = "rotate(0deg)";
+                    });
+
+                    // Open current
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    arrow.style.transform = "rotate(180deg)";
                 }
             });
         });

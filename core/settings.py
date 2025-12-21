@@ -16,7 +16,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG',default=False,cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=Csv())
 
 # Allow all domains (development purposes)
 CORS_ALLOW_ALL_ORIGINS = True
@@ -46,6 +46,7 @@ CUSTOM_APPS = [
     'apps.order',
     'apps.chat',
     'apps.transaction',
+    'apps.cms',
     
 ]
 
@@ -169,7 +170,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # for collectstatic in prod
 
 # Media files (user-uploaded files)
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = BASE_DIR / 'media'
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

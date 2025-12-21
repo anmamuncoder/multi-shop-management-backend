@@ -279,8 +279,10 @@ paths:
         - Authentication
       summary: Verify email with OTP
       description: Verify user's email address using the OTP sent to their email. Requires authentication.
+     
       security:
         - bearerAuth: []
+          
       requestBody:
         required: true
         content:
@@ -656,4 +658,7 @@ components:
           type: string
           description: Validation error message
           example: "This email is already taken."
+ 
 
+security:
+  - BearerAuth: []

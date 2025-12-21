@@ -1,5 +1,5 @@
 TRANSACTION_TYPE = [
-    ('order_income', 'Order Income'),
+    ('order', 'Order'),
     ('topup', 'Top Up') 
 ]
 
@@ -9,4 +9,14 @@ TRANSACTION_STATUS = [
     ('failed', 'Failed'),
 ]
 
- 
+ACCOUNT_TYPE = [
+    ("savings", "Savings"),
+    ("current", "Current"),
+    ("merchant", "Merchant"),
+]
+CURRENCY_CHOICES = [
+    ('BDT', 'Bangladeshi Taka'),
+    ('USD', 'US Dollar'),
+    ('EUR', 'Euro'),
+    ('INR', 'Indian Rupee'),
+]

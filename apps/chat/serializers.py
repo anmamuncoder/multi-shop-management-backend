@@ -41,6 +41,7 @@ class ChannelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Channel
         fields = ['id', 'order', 'shop', 'customer', 'last_message','is_active','order_summary']
+        read_only_fields = ('id','order','shop','customer','last_message','order_summary')
 
     def get_last_message(self, obj):
         last_msg = obj.messages.order_by('-created_at').first()
@@ -53,9 +54,7 @@ class ChannelSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         order = obj.order
         shop = obj.shop
-
-        if user.role != 'shop_owner':
-            return None
+ 
         
         if not order or not shop:
             return None

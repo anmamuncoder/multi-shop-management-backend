@@ -10,7 +10,7 @@ class Channel(BaseModel):
     order = models.ForeignKey(Order,on_delete=models.CASCADE,related_name='channels')
     shop = models.ForeignKey(Shop,on_delete=models.CASCADE,related_name='channels')
     customer = models.ForeignKey(User,limit_choices_to={'role':'customer'},on_delete=models.CASCADE,related_name='channels')
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Order {self.order.id} Shop {self.shop.slug}"

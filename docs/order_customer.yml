@@ -28,6 +28,8 @@ paths:
       description: Retrieve a list of all orders for the authenticated customer
       security:
         - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
       responses:
         '200':
           description: Successful response
@@ -42,6 +44,7 @@ paths:
                   items:
                     - id: "5d6dd3d4-fcb2-4844-80db-9b26e294398a"
                       product: "short_intro"
+                      product_variant: null
                       created_at: "2025-12-08T00:00:00Z"
                       updated_at: "2025-12-08T00:00:00Z"
                       quantity: 10
@@ -55,6 +58,11 @@ paths:
                   updated_at: "2025-12-08T00:00:00Z"
                   total_amount: "1600.00"
                   status: "pending"
+                  shipping_street_address: "123 Main Street"
+                  shipping_city: "New York"
+                  shipping_state: "NY"
+                  shipping_postal_code: "10001"
+                  shipping_country: "USA"
                   customer: "af8351f7-68be-43ad-bdc9-a563c9d1e553"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
@@ -66,14 +74,31 @@ paths:
       description: Create a new empty order for the authenticated customer
       security:
         - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              properties: {}
-            example: {}
+              properties:
+                shipping_street_address:
+                  type: string
+                shipping_city:
+                  type: string
+                shipping_state:
+                  type: string
+                shipping_postal_code:
+                  type: string
+                shipping_country:
+                  type: string
+            example:
+              shipping_street_address: "123 Main Street"
+              shipping_city: "New York"
+              shipping_state: "NY"
+              shipping_postal_code: "10001"
+              shipping_country: "USA"
       responses:
         '201':
           description: Order created successfully
@@ -95,6 +120,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
         - name: id
           in: path
           required: true
@@ -123,6 +149,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
         - name: id
           in: path
           required: true
@@ -151,10 +178,11 @@ paths:
       tags:
         - Orders
       summary: Partial update of order
-      description: Update only the status field of an order
+      description: Update order fields including status and shipping address
       security:
         - BearerAuth: []
       parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
         - name: id
           in: path
           required: true
@@ -177,11 +205,30 @@ paths:
                     - shipped
                     - delivered
                     - cancelled
+                shipping_street_address:
+                  type: string
+                shipping_city:
+                  type: string
+                  maxLength: 100
+                shipping_state:
+                  type: string
+                  maxLength: 100
+                shipping_postal_code:
+                  type: string
+                  maxLength: 20
+                shipping_country:
+                  type: string
+                  maxLength: 100
             example:
               status: "confirmed"
+              shipping_street_address: "456 Oak Avenue"
+              shipping_city: "Los Angeles"
+              shipping_state: "CA"
+              shipping_postal_code: "90001"
+              shipping_country: "USA"
       responses:
         '200':
-          description: Order status updated successfully
+          description: Order updated successfully
           content:
             application/json:
               schema:
@@ -199,6 +246,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
         - name: id
           in: path
           required: true
@@ -220,6 +268,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
         - name: product
           in: query
           description: Filter by product ID
@@ -247,6 +296,12 @@ paths:
               example:
                 - id: "5d6dd3d4-fcb2-4844-80db-9b26e294398a"
                   product: "short_intro"
+                  product_variant:
+                    id: "ffaa9015-360f-47a8-b954-14ec48eee6a5"
+                    title: "Product variant"
+                    value: "abcd"
+                    extra_price: "100.00"
+                    sku: "ABC124"
                   created_at: "2025-12-08T00:00:00Z"
                   updated_at: "2025-12-08T00:00:00Z"
                   quantity: 10
@@ -266,6 +321,8 @@ paths:
       description: Add a new item to an existing order
       security:
         - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
       requestBody:
         required: true
         content:
@@ -274,6 +331,7 @@ paths:
               $ref: '#/components/schemas/OrderItemCreate'
             example:
               product: "short_intro"
+              product_variant: "ffaa9015-360f-47a8-b954-14ec48eee6a5"
               quantity: 10
               order: "0223611c-33cf-4803-b6da-c037c5f0cb0d"
       responses:
@@ -321,6 +379,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
         - name: id
           in: path
           required: true
@@ -346,6 +405,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
         - name: id
           in: path
           required: true
@@ -358,6 +418,11 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/OrderItemCreate'
+            example:
+              product: "asus-laptop"
+              product_variant: "ffaa9015-360f-47a8-b954-14ec48eee6a5"
+              quantity: 5
+              order: "0223611c-33cf-4803-b6da-c037c5f0cb0d"
       responses:
         '200':
           description: Order item updated successfully
@@ -374,10 +439,11 @@ paths:
       tags:
         - Order Items
       summary: Partial update of order item
-      description: Update only the quantity field of an order item
+      description: Update quantity or product variant of an order item
       security:
         - BearerAuth: []
       parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
         - name: id
           in: path
           required: true
@@ -394,11 +460,16 @@ paths:
                 quantity:
                   type: integer
                   minimum: 1
+                product_variant:
+                  type: string
+                  format: uuid
+                  nullable: true
             example:
               quantity: 15
+              product_variant: "ffaa9015-360f-47a8-b954-14ec48eee6a5"
       responses:
         '200':
-          description: Order item quantity updated successfully
+          description: Order item updated successfully
           content:
             application/json:
               schema:
@@ -416,6 +487,7 @@ paths:
       security:
         - BearerAuth: []
       parameters:
+        - $ref: '#/components/parameters/AuthorizationHeader'
         - name: id
           in: path
           required: true
@@ -435,6 +507,16 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: JWT token authentication
+
+  parameters:
+    AuthorizationHeader:
+      name: Authorization
+      in: header
+      required: true
+      description: JWT Bearer token for authentication
+      schema:
+        type: string
+        example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
 
   schemas:
     Order:
@@ -458,8 +540,7 @@ components:
           format: date-time
           readOnly: true
         total_amount:
-          type: string
-          pattern: '^\d+\.\d{2}$'
+          type: string 
           readOnly: true
           description: Calculated total of all order items
         status:
@@ -472,13 +553,36 @@ components:
             - delivered
             - cancelled
           default: pending
-        customer:
+        shipping_street_address:
           type: string
-          format: uuid
-          readOnly: true
+          nullable: true
+          description: Street address for order delivery
+        shipping_city:
+          type: string
+          maxLength: 100
+          nullable: true
+          description: City for order delivery
+        shipping_state:
+          type: string
+          maxLength: 100
+          nullable: true
+          description: State/Province for order delivery
+        shipping_postal_code:
+          type: string
+          maxLength: 20
+          nullable: true
+          description: Postal/ZIP code for order delivery
+        shipping_country:
+          type: string
+          maxLength: 100
+          nullable: true
+          default: Bangladesh
+          description: Country for order delivery
 
     OrderUpdate:
       type: object
+      required:
+        - status 
       properties:
         status:
           type: string
@@ -489,17 +593,63 @@ components:
             - shipped
             - delivered
             - cancelled
+        shipping_street_address:
+          type: string
+          nullable: true
+        shipping_city:
+          type: string
+          maxLength: 100
+          nullable: true
+        shipping_state:
+          type: string
+          maxLength: 100
+          nullable: true
+        shipping_postal_code:
+          type: string
+          maxLength: 20
+          nullable: true
+        shipping_country:
+          type: string
+          maxLength: 100
+          nullable: true
 
-    OrderItem:
+    ProductVariant:
       type: object
       properties:
         id:
           type: string
           format: uuid
           readOnly: true
+        title:
+          type: string
+          description: Variant title/name
+        value:
+          type: string
+          description: Variant value
+        extra_price:
+          type: string 
+          description: Additional price for this variant
+        sku:
+          type: string
+          description: Stock Keeping Unit identifier
+
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: slug
+          readOnly: true
         product:
           type: string
-          description: Product identifier
+          description: Product identifier (slug)
+          example: asus-laptop
+        product_variant:
+          allOf:
+            - $ref: '#/components/schemas/ProductVariant'
+          nullable: true
+          readOnly: true
+          description: Product variant details (if applicable)
         created_at:
           type: string
           format: date-time
@@ -512,18 +662,16 @@ components:
           type: integer
           minimum: 1
         subtotal_amount:
-          type: string
-          pattern: '^\d+\.\d{2}$'
+          type: string 
           readOnly: true
-          description: Calculated as product_price * quantity
+          description: Calculated as (product_price + variant_extra_price) * quantity
         product_name:
           type: string
           maxLength: 200
           readOnly: true
           description: Snapshot of product name at order time
         product_price:
-          type: string
-          pattern: '^\d+\.\d{2}$'
+          type: string 
           readOnly: true
           description: Snapshot of product price at order time
         product_image:
@@ -554,7 +702,13 @@ components:
       properties:
         product:
           type: string
-          description: Product identifier
+          description: Product identifier (slug)
+          example: asus-laptop
+        product_variant:
+          type: string
+          format: uuid
+          nullable: true
+          description: UUID of the product variant (optional)
         quantity:
           type: integer
           minimum: 1
