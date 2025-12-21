@@ -6,6 +6,10 @@ services:
     command: daphne -b 0.0.0.0 -p ${WEB_PORT:-8000} core.asgi:application
     ports:
       - "${WEB_PORT:-8000}:${WEB_PORT:-8000}"
+    volumes:
+      - .:/app
+      - static_files:/app/static/
+      - media_files:/app/media/
     depends_on:
       db:
         condition: service_healthy
@@ -64,3 +68,5 @@ services:
 
 volumes:
   shop_management_db:
+  static_files:
+  media_files:
