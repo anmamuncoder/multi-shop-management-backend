@@ -43,7 +43,7 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 COPY . .
 
 # Create directories for static and media files
-RUN mkdir -p /app/static /app/media
+RUN mkdir -p /app/staticfiles /app/media
 
 # Create non-root user
 RUN adduser --disabled-password --gecos '' appuser \
