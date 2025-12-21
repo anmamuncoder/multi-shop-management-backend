@@ -42,6 +42,9 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 # Copy project code
 COPY . .
 
+# Create directories for static and media files
+RUN mkdir -p /app/staticfiles /app/media
+
 # Create non-root user
 RUN adduser --disabled-password --gecos '' appuser \
     && chown -R appuser:appuser /app
