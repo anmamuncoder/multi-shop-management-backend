@@ -8,8 +8,7 @@ services:
       - "${WEB_PORT:-8000}:${WEB_PORT:-8000}"
     volumes:
       - .:/app
-      - static_files:/app/staticfiles/
-      - media_files:/app/media/
+      - ./media:/app/media/
     depends_on:
       db:
         condition: service_healthy

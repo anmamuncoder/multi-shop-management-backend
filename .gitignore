@@ -56,8 +56,7 @@ dist/
 
 # Local settings
 local_settings.py
-  
-  
+
 # Static & Media files
-/staticfiles/        # Collected static files from (python manage.py collectstatic)
-media/               # Uploaded media files (optional, depends on your setup)
+staticfiles/
+media/
