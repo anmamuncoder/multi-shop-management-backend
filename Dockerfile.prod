@@ -49,6 +49,3 @@ RUN mkdir -p /app/staticfiles /app/media
 RUN adduser --disabled-password --gecos '' appuser \
     && chown -R appuser:appuser /app
 USER appuser
-
-# Entry point for migrations + server start (override in compose if needed)
-CMD ["bash", "-c", "python manage.py migrate && python manage.py collectstatic --noinput && daphne -b 0.0.0.0 -p ${WEB_PORT:-8000} core.asgi:application --workers 4"]
