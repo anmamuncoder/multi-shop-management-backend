@@ -67,5 +67,4 @@ services:
 
 volumes:
   shop_management_db:
-  static_files:
   media_files:

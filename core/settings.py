@@ -17,6 +17,10 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG',default=False,cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=Csv())
+CSRF_TRUSTED_ORIGINS = [
+    "https://team-setu-naraz-be.vaidroad.com",
+    "http://team-setu-naraz-fe.vaidroad.com",
+]
 
 # Allow all domains (development purposes)
 CORS_ALLOW_ALL_ORIGINS = True
