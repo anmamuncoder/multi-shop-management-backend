@@ -51,6 +51,7 @@ CUSTOM_APPS = [
     'apps.chat',
     'apps.transaction',
     'apps.cms',
+    'apps.messaging',
     
 ]
 

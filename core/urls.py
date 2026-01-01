@@ -9,6 +9,7 @@ apps_urls = [
     path('api/order/',include('apps.order.urls')),
     path('api/chat/',include('apps.chat.urls')),
     path('api/transaction/',include('apps.transaction.urls')),
+    path('api/messaging/',include('apps.messaging.urls')),
     path('',include('apps.cms.urls')),
 
 ]

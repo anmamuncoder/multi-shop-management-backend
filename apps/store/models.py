@@ -71,7 +71,7 @@ class Product(BaseModel):
     short_description = models.CharField(max_length=200)
     full_description = models.TextField()
 
-    sku = models.CharField(max_length=100, unique=True)
+    sku = models.CharField(max_length=100)
     # barcode = models.CharField(max_length=50, blank=True, null=True)
 
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -89,6 +89,11 @@ class Product(BaseModel):
     # dimensions = models.CharField(max_length=100, blank=True, null=True)
 
     tags = models.CharField(max_length=255, blank=True, null=True) 
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['shop','sku'],name="unique_sku_at_each_shop")
+        ]
 
     def save(self, *args, **kwargs):
         # Slug Auto Create
@@ -119,7 +124,12 @@ class ProductVariant(BaseModel):
 
     extra_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     stock_quantity = models.IntegerField(default=0)
-    sku = models.CharField(max_length=100,unique=True)
+    sku = models.CharField(max_length=100)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['product','sku'],name="unique_sku_at_each_product")
+        ]
 
     def __str__(self):
         return f"{self.product.name} - {self.title}: {self.value}"
