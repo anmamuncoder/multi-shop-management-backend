@@ -25,7 +25,7 @@ class Transaction(BaseModel):
     transaction_type = models.CharField(max_length=20,choices=TRANSACTION_TYPE,default='order')
 
     # Multiple reference
-    content_type = models.ForeignKey(ContentType,on_delete=models.CASCADE,null=True,limit_choices_to=Q(model__in=['order', 'topup']))
+    content_type = models.ForeignKey(ContentType,on_delete=models.CASCADE,null=True,limit_choices_to=Q(model__in=['order', 'topup','messagecampaign']))
     object_id = models.UUIDField(null=True)
     reference = GenericForeignKey('content_type', 'object_id')
 
@@ -42,7 +42,7 @@ class Transaction(BaseModel):
         super().save(*args, **kwargs)
 
     def clean(self):
-        allowed_models = ('order', 'topup')
+        allowed_models = ('order', 'topup','messagecampaign')
         if self.content.model not in allowed_models:
             raise ValidationError(f"Transaction can only reference {allowed_models}")
         

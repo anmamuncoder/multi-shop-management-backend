@@ -11,7 +11,7 @@ class BasePagination(PageNumberPagination):
             return super().get_page_size(request)
 
         page = request.query_params.get(self.page_query_param, 1)
-        return 20 if str(page) == "1" else 10
+        return 20 if str(page) == "1" else 20
 
     def get_paginated_response(self, data):
         return Response({

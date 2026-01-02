@@ -1,6 +1,7 @@
 TRANSACTION_TYPE = [
     ('order', 'Order'),
-    ('topup', 'Top Up') 
+    ('topup', 'Top Up') ,
+    ('promotion', 'Promotion') 
 ]
 
 TRANSACTION_STATUS = [

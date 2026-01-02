@@ -11,7 +11,7 @@ from .constants import CURRENCY_CHOICES,PRODUCT_IMAGE_UPLOAD_TO
 class Shop(BaseModel):
     owner = models.OneToOneField(User,on_delete=models.PROTECT,null=True, limit_choices_to={'role': 'shop_owner'},related_name='shop')
     name = models.CharField(max_length=100)
-    balance = models.BigIntegerField(default=0,editable=False)
+    balance = models.DecimalField(max_digits=12, decimal_places=2,default=0,editable=False)
     
     slug = models.SlugField(unique=True,blank=True)
     description = models.TextField()

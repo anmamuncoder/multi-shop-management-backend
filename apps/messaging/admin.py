@@ -4,8 +4,8 @@ from .models import TemplateMessage, MessageCampaign, MessageLog, MessagePlan
 
 @admin.register(TemplateMessage)
 class TemplateMessageAdmin(admin.ModelAdmin):
-    list_display = ("title", "shop", "message_type", "status", "is_active")
-    list_filter = ("message_type", "status", "shop")
+    list_display = ("title", "shop", "channel_to", "status", "is_active")
+    list_filter = ("channel_to", "status", "shop")
     search_fields = ("title",)
 
 

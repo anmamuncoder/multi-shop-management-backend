@@ -14,7 +14,7 @@ POST  http://127.0.0.1:8020/api/auth/login/
 Content-Type: application/json 
 
 {
-    "email":"admin1@gmail.com",
+    "email":"admin3@gmail.com",
     "password": "123" 
 }
 
@@ -366,4 +366,47 @@ Content-Type: application/json
     "description": "As part of Metrocem’s broad array of responsibilities to the society, ",
     "receipt": "/media/topups/sdasdfawe_asdfa_afsd.JPG",
 }
+ 
+
+###
+POST  http://127.0.0.1:8020/api/messaging/logs/
+
+###
+GET  http://127.0.0.1:8020/api/messaging/templates/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY3ODg1ODkwLCJpYXQiOjE3NjcyODEwOTAsImp0aSI6ImUwYWY4YmVmZDBlNjQ1NGM5ZGYzMzQwNTUwZjI4YzYxIiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.1MmVqzkjj7lZ1unCUEABPmMk-iglcXUeibWRrexljgM
+
+###
+POST  http://127.0.0.1:8020/api/messaging/templates/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY3ODg1ODkwLCJpYXQiOjE3NjcyODEwOTAsImp0aSI6ImUwYWY4YmVmZDBlNjQ1NGM5ZGYzMzQwNTUwZjI4YzYxIiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.1MmVqzkjj7lZ1unCUEABPmMk-iglcXUeibWRrexljgM
+Content-Type: application/json 
+
+{
+  "title":"Template one three",
+  "body":"This is Template Body!" 
+}
+
+
+###
+GET  http://127.0.0.1:8020/api/messaging/campaigns/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY3ODg1ODkwLCJpYXQiOjE3NjcyODEwOTAsImp0aSI6ImUwYWY4YmVmZDBlNjQ1NGM5ZGYzMzQwNTUwZjI4YzYxIiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.1MmVqzkjj7lZ1unCUEABPmMk-iglcXUeibWRrexljgM
+ 
+
+###
+POST  http://127.0.0.1:8020/api/messaging/campaigns/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY3ODg1ODkwLCJpYXQiOjE3NjcyODEwOTAsImp0aSI6ImUwYWY4YmVmZDBlNjQ1NGM5ZGYzMzQwNTUwZjI4YzYxIiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.1MmVqzkjj7lZ1unCUEABPmMk-iglcXUeibWRrexljgM
+Content-Type: application/json 
+
+{ 
+  "template":"1c65d092-a04d-4d1f-adfd-757d7e41c4f2",
+  "send_to":"all"
+}
+
+
+###
+POST  http://127.0.0.1:8020/api/messaging/campaigns/12a50a20-faa3-4a44-a5b4-d8272c8f95b9/mark_sent/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY3ODg1ODkwLCJpYXQiOjE3NjcyODEwOTAsImp0aSI6ImUwYWY4YmVmZDBlNjQ1NGM5ZGYzMzQwNTUwZjI4YzYxIiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.1MmVqzkjj7lZ1unCUEABPmMk-iglcXUeibWRrexljgM
+ 
+###
+GET  http://127.0.0.1:8020/api/messaging/customers
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY3ODg1ODkwLCJpYXQiOjE3NjcyODEwOTAsImp0aSI6ImUwYWY4YmVmZDBlNjQ1NGM5ZGYzMzQwNTUwZjI4YzYxIiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.1MmVqzkjj7lZ1unCUEABPmMk-iglcXUeibWRrexljgM
  

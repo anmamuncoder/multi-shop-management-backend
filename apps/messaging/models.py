@@ -18,7 +18,7 @@ class TemplateMessage(BaseModel):
     title = models.CharField(max_length=200)
     body = models.TextField(max_length=2000)
 
-    message_type = models.CharField(max_length=20,choices=MESSAGE_TYPE, default='push')
+    channel_to = models.CharField(max_length=20,choices=MESSAGE_TYPE,default='push')
     status = models.CharField(max_length=20,choices= MESSAGE_STATUS,default='active')
     media = models.ImageField(upload_to="template_media/",null=True,blank=True)
     footer = models.CharField(max_length=200,null=True,blank=True)
@@ -40,12 +40,9 @@ class TemplateMessage(BaseModel):
         ordering = ["-created_at"]
         indexes = [
             models.Index(fields=["shop",]),
-            models.Index(fields=["message_type", "status"]),
+            models.Index(fields=["channel_to", "status"]),
         ]
-        constraints = [
-            models.UniqueConstraint(fields=["shop", "title"], name="unique_shop_template_title")
-        ] 
-
+ 
     def clean(self):
         if not isinstance(self.button, dict):
             raise ValidationError({"button": "Button must be an object/dict."})
@@ -77,6 +74,12 @@ class MessageCampaign(BaseModel):
     scheduled_at = models.DateTimeField(null=True, blank=True)
     is_sent = models.BooleanField(default=False)
 
+    # Snapshot fields (IMPORTANT)
+    channel_to = models.CharField(max_length=20,choices=MESSAGE_TYPE,editable=False,null=True) 
+    snapshot_recipient_count = models.PositiveIntegerField(default=0,editable=False)
+    snapshot_cost_per_message = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal("0.00"),editable=False)
+    snapshot_total_cost = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"),editable=False)
+
     class Meta:
         indexes = [
             models.Index(fields=["scheduled_at"]),
@@ -98,6 +101,7 @@ class MessageLog(BaseModel):
     status = models.CharField(max_length=20,choices=MESSAGE_LOG_STATUS,default="pending")
 
     sent_at = models.DateTimeField(null=True, blank=True)
+
     delivered_at = models.DateTimeField(null=True, blank=True)
     viewed_at = models.DateTimeField(null=True, blank=True)
 
@@ -117,6 +121,8 @@ class MessagePlan(BaseModel):
     description = models.TextField(help_text="Feature Description write saparately with comma") 
     
     send_to = models.CharField(max_length=20, choices=SEND_TO_CHOICES)
+    channel_to = models.CharField(max_length=20,choices=MESSAGE_TYPE,default='push',null=True) 
+
     price = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal("1.20"))
     cost_per_message = models.DecimalField(max_digits=6, decimal_places=2, default=Decimal("1.20"))
     
@@ -131,4 +137,4 @@ class MessagePlan(BaseModel):
         ]
 
     def __str__(self):
-        return f"{self.shop.name} - {self.name} (${self.cost_per_message}/msg)"
+        return f"{self.name} (${self.cost_per_message}/msg)"
