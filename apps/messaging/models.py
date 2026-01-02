@@ -16,7 +16,7 @@ class TemplateMessage(BaseModel):
     shop = models.ForeignKey(Shop,on_delete=models.CASCADE,related_name="template_messages")
 
     title = models.CharField(max_length=200)
-    body = models.TextField(max_length=2000)
+    body = models.TextField()
 
     channel_to = models.CharField(max_length=20,choices=MESSAGE_TYPE,default='push')
     status = models.CharField(max_length=20,choices= MESSAGE_STATUS,default='active')
@@ -54,11 +54,11 @@ class TemplateMessage(BaseModel):
         except ValidationError:
             raise ValidationError({"button": "Invalid URL in button."})
         
-        if self.message_type == 'sms' and self.media:
+        if self.channel_to == 'sms' and self.media:
             raise ValidationError("SMS templates cannot contain media.")
 
     def __str__(self):
-        return f"{self.title} ({self.message_type})"
+        return f"{self.title} ({self.channel_to})"
 
  
 # --------------------------------
@@ -88,7 +88,7 @@ class MessageCampaign(BaseModel):
         ordering = ['-scheduled_at']
 
     def __str__(self):
-        return f"{self.template.title} - {self.send_to}"
+        return f"{self.template.title} - {self.send_to} - {self.channel_to}"
 
  
 # --------------------------------
@@ -133,7 +133,7 @@ class MessagePlan(BaseModel):
     class Meta:
         ordering = ["-created_at"]
         constraints = [
-            models.UniqueConstraint(fields=['send_to','is_active'],name="only_one_active_send_method")
+            models.UniqueConstraint(fields=['send_to','is_active','channel_to'],name="only_one_active_send_method")
         ]
 
     def __str__(self):

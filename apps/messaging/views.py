@@ -11,7 +11,9 @@ from apps.base.paginations import BasePagination
 from apps.accounts.models import User
 
 from .models import TemplateMessage, MessageCampaign, MessageLog
-from .serializers import TemplateMessageSerializer, MessageCampaignSerializer, MessageLogSerializer,CustomerSerializer 
+from .serializers import TemplateMessageSerializer, MessageCampaignSerializer, MessageLogSerializer,CustomerSerializer
+from .services.campaign_service import MessageCampaignService
+
 # --------------------------------
 # GET - shop_owner
 # --------------------------------
@@ -105,11 +107,15 @@ class MessageCampaignView(ModelViewSet):
         # Validate access and that campaign is not already sent
         self._validate_user_shop_access(campaign, check_sent=True)
 
-        # Mark as sent
-        campaign.is_sent = True
-        campaign.save(update_fields=["is_sent","updated_at"])
-  
-        return Response({"status": "marked_sent"}, status=status.HTTP_200_OK)
+        # Trigger charging service
+        success, result = MessageCampaignService.process_campaign(campaign)
+
+        if success:
+            # Mark as sent
+            campaign.is_sent = True
+            campaign.save(update_fields=["is_sent","updated_at"])
+
+        return Response({"status": "marked_sent",**result}, status=status.HTTP_200_OK)
     
 # --------------------------------
 # GET - shop_owner,customer

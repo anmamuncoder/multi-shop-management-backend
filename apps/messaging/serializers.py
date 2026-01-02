@@ -9,8 +9,17 @@ from apps.accounts.models import User
 from apps.accounts.serializers import UserSerializer
 from apps.store.serializers import ShopCustomerSerializer
 # Internal
-from .models import TemplateMessage, MessageCampaign, MessageLog 
+from .models import TemplateMessage, MessageCampaign, MessageLog
+from .services.campaign_service import MessageCampaignService
 
+# --------------------------------
+# Customer
+# --------------------------------
+class CustomerSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id','username','email','email_verified')
+        
 # --------------------------------
 # Message Message
 # --------------------------------
@@ -56,12 +65,12 @@ class MessageCampaignSerializer(ModelSerializer):
 
     # Accept list of user IDs for write, but include nested users for read
     customers = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True, required=False)
-    customers_detail = UserSerializer(source="customers", many=True, read_only=True)
+    customers_detail = CustomerSerializer(source="customers", many=True, read_only=True)
 
     class Meta:
         model = MessageCampaign
-        fields = ("id","shop","template", "send_to","customers",'customers_detail',"scheduled_at","is_sent","snapshot_recipient_count","snapshot_cost_per_message","snapshot_total_cost","created_at","updated_at",)
-        read_only_fields = ("id", "snapshot_recipient_count","snapshot_cost_per_message", "snapshot_total_cost", "created_at", "updated_at", )
+        fields = ("id","shop","template", "send_to","customers",'customers_detail',"scheduled_at","is_sent","channel_to","snapshot_recipient_count","snapshot_cost_per_message","snapshot_total_cost","created_at","updated_at",)
+        read_only_fields = ("id","channel_to","snapshot_recipient_count","snapshot_cost_per_message", "snapshot_total_cost", "created_at", "updated_at", )
 
 
     def validate_scheduled_at(self, value):
@@ -93,7 +102,25 @@ class MessageCampaignSerializer(ModelSerializer):
         # Set customers if 'selected'
         if campaign.send_to == "selected" and customers:
             campaign.customers.set(customers)
- 
+        
+        # -------------------------------------------
+        # Populate snapshot fields using the service
+        # -------------------------------------------
+        recipient_ids = MessageCampaignService.get_recipient_ids(campaign)
+        plan = MessageCampaignService.get_active_plan(campaign.send_to, campaign.template.channel_to) 
+        
+        if recipient_ids:
+            total_cost = MessageCampaignService.calculate_cost(plan, len(recipient_ids))
+            campaign.channel_to = campaign.template.channel_to
+            campaign.snapshot_recipient_count = len(recipient_ids)
+            campaign.snapshot_cost_per_message = plan.cost_per_message
+            campaign.snapshot_total_cost = total_cost
+            campaign.save(update_fields=[
+                "channel_to",
+                "snapshot_recipient_count",
+                "snapshot_cost_per_message",
+                "snapshot_total_cost"
+            ])
         return campaign  
   
 # --------------------------------
@@ -108,10 +135,3 @@ class MessageLogSerializer(ModelSerializer):
         model = MessageLog
         fields = ("id","campaign","customer","customer_detail","status","sent_at","delivered_at","viewed_at","provider_message_id","provider_response","created_at","updated_at",)
         read_only_fields = ("id", "created_at", "updated_at")
-
-
-class CustomerSerializer(ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id','username','email','email_verified')
-        
