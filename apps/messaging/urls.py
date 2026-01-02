@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import TemplateMessageView, MessageCampaignView, MessageLogView,CustomerView
+from .views import TemplateMessageView, MessageCampaignView, MessageLogView,CustomerView  
 
 routers = DefaultRouter()
 routers.register('templates', TemplateMessageView, basename='templates')
@@ -13,6 +13,9 @@ urls_owner = [
 ]
 
 urls_customer = [ 
+    # when email body open then track view
+    # path('track_open/<int:log_id>/', track_email_open, name='track_email_open'),
+    
 ]
 
 app_name = "messaging"

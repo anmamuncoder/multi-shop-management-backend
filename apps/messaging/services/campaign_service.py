@@ -69,13 +69,9 @@ class MessageCampaignService:
         # Fetch User objects
         users = list(User.objects.filter(id__in=new_recipient_ids))
 
-        # Create MessageLogs
-        logs_to_create = [MessageLog(campaign=campaign, customer=user) for user in users]
-        MessageLog.objects.bulk_create(logs_to_create)
-
         # Send messages based on channel
         if campaign.channel_to == "email":
-            send_bulk_email(campaign.template, users)
+            send_bulk_email(campaign, users)
         elif campaign.channel_to == "push":
             send_push_notifications(campaign.template, users)
         elif campaign.channel_to == "whatsapp":
@@ -84,6 +80,10 @@ class MessageCampaignService:
             send_sms_messages(campaign.template, users)
         else:
             raise ValidationError(f"Unsupported channel: {campaign.channel_to}")
+        
+        # Create MessageLogs
+        logs_to_create = [MessageLog(campaign=campaign, customer=user) for user in users]
+        MessageLog.objects.bulk_create(logs_to_create)
 
         return True, {
             "charged_count": len(users),

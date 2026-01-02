@@ -1,13 +1,15 @@
 from typing import List
 from django.core.mail import EmailMultiAlternatives
-from apps.messaging.models import TemplateMessage
+from apps.messaging.models import TemplateMessage, MessageCampaign, MessageLog
 from apps.accounts.models import User
-import re
+from django.utils.html import escape 
+import re 
+
 
 # -----------------------------
 # EMAIL
 # -----------------------------
-def send_bulk_email(template: TemplateMessage, users: List[User]):
+def send_bulk_email(campaign: MessageCampaign, users: List[User]):
     """
     Send bulk emails using TemplateMessage.body as raw HTML + CSS.
     - template: TemplateMessage instance (template.body contains full HTML & CSS)
@@ -15,16 +17,22 @@ def send_bulk_email(template: TemplateMessage, users: List[User]):
     """
     if not users:
         return
-
+    
+    template = campaign.template
     from_email = "no-reply@yourdomain.com"
 
     # Fallback plain text (strip HTML tags)
     text_body = re.sub(r'<[^>]+>', '', template.body)
-
     messages = []
+
     for user in users:
         if not user.email:
             continue
+        
+        log = MessageLog.objects.filter(campaign=campaign, customer=user).first()
+        # pixel_url = f"https://yourdomain.com/messaging/track_open/{log.id}/" 
+        # html_body = template.body + f'<img src="{escape(pixel_url)}" width="1" height="1" style="display:none;" alt=""/>' 
+
         msg = EmailMultiAlternatives(
             subject=template.title,
             body=text_body,  
@@ -32,15 +40,14 @@ def send_bulk_email(template: TemplateMessage, users: List[User]):
             to=[user.email]
         ) 
         msg.attach_alternative(template.body, "text/html")
+        # msg.attach_alternative(html_body, "text/html")
         messages.append(msg)
 
     # Send all emails
     for msg in messages:
-        msg.send(fail_silently=False)
+        msg.send(fail_silently=False)  
 
-    print(f"Sent HTML EMAIL to {len(messages)} users.")
-
-
+    return True
 # -----------------------------
 # PUSH
 # -----------------------------

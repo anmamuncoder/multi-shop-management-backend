@@ -1,3 +1,7 @@
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
+from django.utils import timezone 
+
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
@@ -13,6 +17,7 @@ from apps.accounts.models import User
 from .models import TemplateMessage, MessageCampaign, MessageLog
 from .serializers import TemplateMessageSerializer, MessageCampaignSerializer, MessageLogSerializer,CustomerSerializer
 from .services.campaign_service import MessageCampaignService
+ 
 
 # --------------------------------
 # GET - shop_owner
@@ -117,6 +122,7 @@ class MessageCampaignView(ModelViewSet):
 
         return Response({"status": "marked_sent",**result}, status=status.HTTP_200_OK)
     
+
 # --------------------------------
 # GET - shop_owner,customer
 # --------------------------------
@@ -138,6 +144,9 @@ class MessageLogView(ReadOnlyModelViewSet):
         return MessageLog.objects.none()
 
 
+# --------------------------------
+# Customer View 
+# --------------------------------
 class CustomerView(ReadOnlyModelViewSet):
     serializer_class = CustomerSerializer 
     permission_classes = [IsShopOwner]
@@ -149,3 +158,28 @@ class CustomerView(ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return User.objects.filter(role='customer')
+
+
+# --------------------------------
+# Track_email_open
+# --------------------------------
+# def track_email_open(request, log_id):
+#     """
+#     When the email is opened and the pixel is requested,
+#     update MessageLog as viewed.
+#     """
+#     log = get_object_or_404(MessageLog, id=log_id)
+
+#     # Update only if not already viewed
+#     if not log.viewed_at:
+#         log.viewed_at = timezone.now()
+#         log.status = 'viewed'
+#         log.save(update_fields=['viewed_at', 'status','updated_at'])
+
+#     # Return a 1x1 transparent GIF
+#     pixel_gif = (
+#         b"GIF89a\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00"
+#         b"\xff\xff\xff!\xf9\x04\x01\x00\x00\x00\x00,\x00"
+#         b"\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02D\x01\x00;"
+#     )
+#     return HttpResponse(pixel_gif, content_type="image/gif")
