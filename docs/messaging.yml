@@ -1,0 +1,1200 @@
+openapi: 3.0.3
+info:
+  title: Messaging API
+  description: |
+    API for managing message templates, campaigns, logs, and customers.
+    
+    **Authentication:** All endpoints require JWT Bearer token authentication.
+    
+    **Roles:**
+    - `shop_owner`: Can manage templates, campaigns, and view all logs for their shop
+    - `customer`: Can only view their own message logs
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+ 
+
+tags:
+  - name: Templates
+    description: Message template management (shop_owner only)
+  - name: Campaigns
+    description: Message campaign management (shop_owner only)
+  - name: Logs
+    description: Message delivery logs (authenticated users)
+  - name: Customers
+    description: Customer management for messaging (shop_owner only)
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from authentication endpoint
+
+  schemas:
+    TemplateMessage:
+      type: object
+      required:
+        - title
+        - body
+        - channel_to
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        shop:
+          type: string
+          readOnly: true
+          description: Shop slug
+          example: "my-shop"
+        title:
+          type: string
+          maxLength: 200
+          example: "Welcome Message"
+        body:
+          type: string
+          example: "Welcome to our store! Thank you for shopping with us."
+        channel_to:
+          type: string
+          enum: [push, email, sms, whatsapp]
+          default: push
+          description: Channel type for message delivery
+        status:
+          type: string
+          enum: [draft, active, archived]
+          default: active
+        media:
+          type: string
+          format: uri
+          nullable: true
+          readOnly: true
+          description: URL of uploaded image (not allowed for SMS)
+          example: "https://example.com/media/template_media/image.jpg"
+        footer:
+          type: string
+          maxLength: 200
+          nullable: true
+          example: "© 2024 Your Store"
+        button:
+          type: object
+          nullable: true
+          properties:
+            name:
+              type: string
+              example: "View Order"
+            url:
+              type: string
+              format: uri
+              example: "https://example.com/order/123"
+          description: Button with name and URL
+        is_active:
+          type: boolean
+          default: false
+          description: Whether template is active for campaigns
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          example: "2024-01-15T10:30:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          example: "2024-01-15T10:30:00Z"
+
+    TemplateMessageCreate:
+      type: object
+      required:
+        - title
+        - body
+        - channel_to
+      properties:
+        title:
+          type: string
+          maxLength: 200
+          example: "Welcome Message"
+        body:
+          type: string
+          example: "Welcome to our store! Thank you for shopping with us."
+        channel_to:
+          type: string
+          enum: [push, email, sms, whatsapp]
+          default: push
+        status:
+          type: string
+          enum: [draft, active, archived]
+          default: active
+        media:
+          type: string
+          format: binary
+          description: Image file (not allowed for SMS)
+        footer:
+          type: string
+          maxLength: 200
+          example: "© 2024 Your Store"
+        button:
+          type: string
+          example: '{"name": "View Order", "url": "https://example.com/order/123"}'
+          description: JSON string with name and url fields
+        is_active:
+          type: boolean
+          default: false
+ 
+security:
+  - BearerAuth: []
+
+paths:
+  /api/messaging/templates/:
+    get:
+      tags:
+        - Templates
+      summary: List all templates
+      description: |
+        Get paginated list of message templates for authenticated shop owner.
+        
+        **Permission:** shop_owner only
+
+        **Pagination:** 20 items per page
+
+        **is_active :** Automatically set to true if the template is associated with any active campaign; otherwise set to false. 
+
+      parameters:
+        - name: channel_to
+          in: query
+          schema:
+            type: string
+            enum: [push, email, sms, whatsapp]
+          description: Filter by channel type
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [draft, active, archived]
+          description: Filter by status
+        - name: is_active
+          in: query
+          schema:
+            type: boolean
+          description: Filter by active state
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          description: Page number (20 items per page)
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/TemplateMessage'
+              example:
+                count: 2
+                total_pages: 1
+                current_page: 1
+                next: null
+                previous: null
+                data:
+                  - id: "123e4567-e89b-12d3-a456-426614174000"
+                    shop: "my-shop"
+                    title: "Welcome Message"
+                    body: "Welcome to our store!"
+                    channel_to: "email"
+                    status: "active"
+                    media: null
+                    footer: "© 2024 Store"
+                    button: {"name": "Shop Now", "url": "https://example.com"}
+                    is_active: true
+                    created_at: "2024-01-15T10:30:00Z"
+                    updated_at: "2024-01-15T10:30:00Z"
+        '401':
+          description: Unauthorized - JWT token missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: "Authentication credentials were not provided."
+        '403':
+          description: Forbidden - Not a shop owner
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: "You do not have permission to perform this action."
+
+    post:
+      tags:
+        - Templates
+      summary: Create new template
+      description: |
+        Create a new message template for the authenticated shop.
+        
+        **Permission:** shop_owner only
+        
+        **Note:** SMS templates cannot contain media.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - body
+                - channel_to
+              properties:
+                title:
+                  type: string
+                  description: Template title
+                body:
+                  type: string
+                  description: Message body (HTML for email, text for others)
+                channel_to:
+                  type: string
+                  enum: [push, email, sms, whatsapp]
+                status:
+                  type: string
+                  enum: [draft, active, archived]
+                button:
+                  type: object
+                  nullable: true
+                  properties:
+                    name:
+                      type: string
+                    url:
+                      type: string
+                media:
+                  type: string
+                  format: uri
+                  nullable: true
+                footer:
+                  type: string
+                  nullable: true 
+            examples:
+              push_template:
+                summary: Push notification template
+                value:
+                  title: "New Offer"
+                  body: "Big sale is live now!"
+                  channel_to: "push"
+                  media: "https://example.com/images/delivery.png"
+                  button:
+                    name: "Shop Now"
+                    url: "https://example.com/offers" 
+
+              email_template:
+                summary: Email template (HTML body, no button)
+                value:
+                  title: "Order Confirmation"
+                  body: "<h1>Thank you!</h1><p>Your order has been confirmed.</p>"
+                  channel_to: "email"
+                  footer: "© 2024 Your Store" 
+
+              sms_template:
+                summary: SMS template (text only, no media)
+                value:
+                  title: "OTP Message"
+                  body: "Your OTP is 493821. Do not share it."
+                  channel_to: "sms" 
+
+              whatsapp_template:
+                summary: WhatsApp template (text + media + button)
+                value:
+                  title: "Delivery Update"
+                  body: "Your order is out for delivery."
+                  channel_to: "whatsapp"
+                  media: "https://example.com/images/delivery.png"
+                  button:
+                    name: "Track Order"
+                    url: "https://example.com/track/123" 
+
+
+      responses:
+        '201':
+          description: Template created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateMessage'
+              example:
+                id: "123e4567-e89b-12d3-a456-426614174000"
+                shop: "my-shop"
+                title: "Order Confirmation"
+                body: "Thank you for your order!"
+                channel_to: "email"
+                status: "active"
+                media: "https://example.com/media/template_media/image.jpg"
+                footer: "© 2024 Your Store"
+                button: {"name": "View Order", "url": "https://example.com/orders/123"}
+                is_active: false
+                created_at: "2024-01-15T10:30:00Z"
+                updated_at: "2024-01-15T10:30:00Z"
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                sms_with_media:
+                  value:
+                    media: ["SMS templates cannot contain media."]
+                invalid_button:
+                  value:
+                    button: ["Button must contain both 'name' and 'url'."]
+        '401':
+          description: Unauthorized - JWT token missing or invalid
+        '403':
+          description: Forbidden - Not a shop owner
+
+  /api/messaging/templates/{id}/:
+    get:
+      tags:
+        - Templates
+      summary: Retrieve template
+      description: |
+        Get details of a specific template.
+        
+        **Permission:** shop_owner only (must own the template)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateMessage'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Not template owner
+        '404':
+          description: Template not found
+
+    put:
+      tags:
+        - Templates
+      summary: Update template
+      description: |
+        Update an existing template (full update).
+        
+        **Permission:** shop_owner only (must own the template)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TemplateMessageCreate'
+      responses:
+        '200':
+          description: Template updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateMessage'
+        '400':
+          description: Validation error
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Not template owner
+        '404':
+          description: Template not found
+
+    patch:
+      tags:
+        - Templates
+      summary: Partial update template
+      description: |
+        Partially update an existing template.
+        
+        **Permission:** shop_owner only (must own the template)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                body:
+                  type: string
+                channel_to:
+                  type: string
+                  enum: [push, email, sms, whatsapp]
+                status:
+                  type: string
+                  enum: [draft, active, archived]
+                media:
+                  type: string
+                  format: binary
+                footer:
+                  type: string
+                button:
+                  type: string
+                is_active:
+                  type: boolean
+      responses:
+        '200':
+          description: Template updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateMessage'
+        '400':
+          description: Validation error
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Not template owner
+        '404':
+          description: Template not found
+
+    delete:
+      tags:
+        - Templates
+      summary: Delete template
+      description: |
+        Delete a template.
+        
+        **Permission:** shop_owner only (must own the template)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Template deleted successfully
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Not template owner
+        '404':
+          description: Template not found
+
+  /api/messaging/campaigns/:
+    get:
+      tags:
+        - Campaigns
+      summary: List all campaigns
+      description: |
+        Get paginated list of message campaigns for authenticated shop owner.
+        
+        **Permission:** shop_owner only
+        
+        **Pagination:** 20 items per page
+      parameters:
+        - name: send_to
+          in: query
+          schema:
+            type: string
+            enum: [all, selected, segment]
+          description: Filter by recipient type
+        - name: scheduled_at
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Filter by scheduled time
+        - name: is_sent
+          in: query
+          schema:
+            type: boolean
+          description: Filter by sent status
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          description: Page number (20 items per page)
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/MessageCampaign'
+              example:
+                count: 2
+                total_pages: 1
+                current_page: 1
+                next: null
+                previous: null
+                data:
+                  - id: "223e4567-e89b-12d3-a456-426614174001"
+                    shop: "my-shop"
+                    template: "123e4567-e89b-12d3-a456-426614174000"
+                    send_to: "selected"
+                    customers: ["32fe1748-aac6-444e-b104-29152a6ca9ca"]
+                    scheduled_at: "2024-12-31T10:00:00Z"
+                    is_sent: false
+                    channel_to: "email"
+                    snapshot_recipient_count: 1
+                    snapshot_cost_per_message: "1.20"
+                    snapshot_total_cost: "1.20"
+                    created_at: "2024-01-15T10:30:00Z"
+                    updated_at: "2024-01-15T10:30:00Z"
+        '401':
+          description: Unauthorized - JWT token missing or invalid
+        '403':
+          description: Forbidden - Not a shop owner
+
+    post:
+      tags:
+        - Campaigns
+      summary: Create new campaign
+      description: |
+        Create a new message campaign. Snapshot fields are automatically populated.
+        
+        **Permission:** shop_owner only
+        
+        **Note:** Campaigns cannot be updated after creation. They can only be marked as sent or deleted (if not sent).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - template
+                - send_to
+              properties:
+                template:
+                  type: string
+                  format: uuid
+                  description: Template UUID
+                send_to:
+                  type: string
+                  enum: [all, selected, segment]
+                customers:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                  description: Required when send_to=selected
+                scheduled_at:
+                  type: string
+                  format: date-time
+                  description: Must be in future
+            examples:
+              all_customers:
+                summary: Send to all customers
+                value:
+                  template: "123e4567-e89b-12d3-a456-426614174000"
+                  send_to: "all"
+                  scheduled_at: "2024-12-31T10:00:00Z"
+              selected_customers:
+                summary: Send to selected customers
+                value:
+                  template: "123e4567-e89b-12d3-a456-426614174000"
+                  send_to: "selected"
+                  customers: ["32fe1748-aac6-444e-b104-29152a6ca9ca", "af8351f7-68be-43ad-bdc9-a563c9d1e553"]
+                  scheduled_at: "2024-12-31T10:00:00Z"
+      responses:
+        '201':
+          description: Campaign created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageCampaign'
+              example:
+                id: "223e4567-e89b-12d3-a456-426614174001"
+                shop: "my-shop"
+                template: "123e4567-e89b-12d3-a456-426614174000"
+                send_to: "selected"
+                customers: ["32fe1748-aac6-444e-b104-29152a6ca9ca", "af8351f7-68be-43ad-bdc9-a563c9d1e553"]
+                scheduled_at: "2024-12-31T10:00:00Z"
+                is_sent: false
+                channel_to: "email"
+                snapshot_recipient_count: 2
+                snapshot_cost_per_message: "1.20"
+                snapshot_total_cost: "2.40"
+                created_at: "2024-01-15T10:30:00Z"
+                updated_at: "2024-01-15T10:30:00Z"
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missing_customers:
+                  value:
+                    customers: ["Select at least one recipient for 'selected' send_to."]
+                invalid_template:
+                  value:
+                    template: ["Template must belong to the selected shop."]
+                past_schedule:
+                  value:
+                    scheduled_at: ["Scheduled time must be in the future."]
+        '401':
+          description: Unauthorized - JWT token missing or invalid
+        '403':
+          description: Forbidden - Not a shop owner
+
+  /api/messaging/campaigns/{id}/:
+    get:
+      tags:
+        - Campaigns
+      summary: Retrieve campaign
+      description: |
+        Get details of a specific campaign.
+        
+        **Permission:** shop_owner only (must own the campaign)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageCampaign'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Not campaign owner
+        '404':
+          description: Campaign not found
+
+    put:
+      tags:
+        - Campaigns
+      summary: Update campaign (disabled)
+      description: |
+        **Campaigns cannot be updated once created.**
+        
+        This endpoint will always return 403 Forbidden.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '403':
+          description: Forbidden - Campaigns cannot be updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: "Campaigns cannot be updated once created."
+
+    patch:
+      tags:
+        - Campaigns
+      summary: Partial update campaign (disabled)
+      description: |
+        **Campaigns cannot be updated once created.**
+        
+        This endpoint will always return 403 Forbidden.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '403':
+          description: Forbidden - Campaigns cannot be updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: "Campaigns cannot be updated once created."
+
+    delete:
+      tags:
+        - Campaigns
+      summary: Delete campaign
+      description: |
+        Delete a campaign (only if not yet sent).
+        
+        **Permission:** shop_owner only (must own the campaign)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Campaign deleted successfully
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Campaign already sent or not campaign owner
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                already_sent:
+                  value:
+                    detail: "Cannot delete a campaign that is already sent."
+                not_owner:
+                  value:
+                    detail: "You do not have permission for this campaign."
+        '404':
+          description: Campaign not found
+
+  /api/messaging/campaigns/{id}/mark_sent/:
+    post:
+      tags:
+        - Campaigns
+      summary: Mark campaign as sent
+      description: |
+        Mark campaign as sent and trigger charging logic. This processes the campaign and creates message logs.
+        
+        **Permission:** shop_owner only (must own the campaign)
+        
+        **Note:** Campaign must not be already sent. This action is irreversible.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Campaign marked as sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "marked_sent"
+                  message:
+                    type: string
+                  logs_created:
+                    type: integer
+                  total_cost:
+                    type: string
+              examples:
+                success:
+                  value:
+                    status: "marked_sent"
+                    message: "Campaign processed successfully"
+                    logs_created: 150
+                    total_cost: "180.00"
+        '400':
+          description: Campaign processing failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                insufficient_balance:
+                  value:
+                    status: "marked_sent"
+                    error: "Insufficient balance"
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Campaign already sent or not campaign owner
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                already_sent:
+                  value:
+                    detail: "Cannot modify a campaign that is already sent."
+                not_owner:
+                  value:
+                    detail: "You do not have permission for this campaign."
+        '404':
+          description: Campaign not found
+
+  /api/messaging/logs/:
+    get:
+      tags:
+        - Logs
+      summary: List message logs
+      description: |
+        Get paginated list of message logs.
+        
+        **Permission:** Authenticated users
+        - Shop owners see logs for their campaigns
+        - Customers see only their own logs
+        
+        **Pagination:** 20 items per page
+        **Response varies by role:**
+          - **shop_owner**: Returns campaign, customer, customer_detail fields
+          - **customer**: Returns template_detail field (excludes campaign/customer info)
+            
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, sent, delivered, failed, viewed]
+          description: Filter by delivery status
+        - name: campaign
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Filter by campaign UUID
+        - name: customer
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Filter by customer UUID
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          description: Page number (20 items per page)
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/MessageLog'
+              example:
+                count: 2
+                total_pages: 1
+                current_page: 1
+                next: null
+                previous: null
+                data:
+                  - id: "323e4567-e89b-12d3-a456-426614174002"
+                    campaign: "223e4567-e89b-12d3-a456-426614174001"
+                    customer: "32fe1748-aac6-444e-b104-29152a6ca9ca"
+                    customer_detail:
+                      id: "32fe1748-aac6-444e-b104-29152a6ca9ca"
+                      username: "customer"
+                      email: "customer@gmail.com"
+                      email_verified: true
+                    template_detail:
+                      id: "123e4567-e89b-12d3-a456-426614174000"
+                      shop: "my-shop"
+                      title: "Welcome Message"
+                      body: "Welcome to our store! Thank you for shopping with us."
+                      channel_to: "push"
+                      status: "active"
+                      media: "https://example.com/media/template_media/image.jpg"
+                      footer: "© 2024 Your Store"
+                      button:
+                        name: "View Order"
+                        url: "https://example.com/order/123"
+                      is_active: true
+                      created_at: "2024-01-15T10:30:00Z"
+                      updated_at: "2024-01-15T10:30:00Z"
+                    status: "delivered"
+                    sent_at: "2024-01-15T10:35:00Z"
+                    delivered_at: "2024-01-15T10:36:00Z"
+                    viewed_at: null
+                    provider_message_id: "msg_abc123xyz"
+                    provider_response: {"status": "sent", "message_id": "msg_abc123xyz"}
+                    created_at: "2024-01-15T10:35:00Z"
+                    updated_at: "2024-01-15T10:36:00Z"
+        '401':
+          description: Unauthorized - JWT token missing or invalid
+        '403':
+          description: Forbidden - Insufficient permissions
+
+  /api/messaging/logs/{id}/:
+    get:
+      tags:
+        - Logs
+      summary: Retrieve message log
+      description: |
+        Get details of a specific message log.
+        
+        **Permission:** Authenticated users
+        - Shop owners can view logs for their campaigns
+        - Customers can only view their own logs
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: "323e4567-e89b-12d3-a456-426614174002"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageLog'
+              example:
+                id: "323e4567-e89b-12d3-a456-426614174002"
+                campaign: "223e4567-e89b-12d3-a456-426614174001"
+                customer: "32fe1748-aac6-444e-b104-29152a6ca9ca"
+                customer_detail:
+                  id: "32fe1748-aac6-444e-b104-29152a6ca9ca"
+                  username: "customer"
+                  email: "customer@gmail.com"
+                  email_verified: true 
+                template_detail:
+                  id: "123e4567-e89b-12d3-a456-426614174000"
+                  shop: "my-shop"
+                  title: "Welcome Message"
+                  body: "Welcome to our store! Thank you for shopping with us."
+                  channel_to: "push"
+                  status: "active"
+                  media: "https://example.com/media/template_media/image.jpg"
+                  footer: "© 2024 Your Store"
+                  button:
+                    name: "View Order"
+                    url: "https://example.com/order/123"
+                  is_active: true
+                  created_at: "2024-01-15T10:30:00Z"
+                  updated_at: "2024-01-15T10:30:00Z"
+                status: "delivered"
+                sent_at: "2024-01-15T10:35:00Z"
+                delivered_at: "2024-01-15T10:36:00Z"
+                viewed_at: null
+                provider_message_id: "msg_abc123xyz"
+                provider_response: {"status": "sent", "message_id": "msg_abc123xyz"}
+                created_at: "2024-01-15T10:35:00Z"
+                updated_at: "2024-01-15T10:36:00Z"
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Not authorized to view this log
+        '404':
+          description: Log not found
+
+  /api/messaging/logs/{id}/viewed/:
+    post:
+      tags:
+        - Logs
+      summary: Mark message log as viewed
+      description: |
+        Mark a message log as viewed. Updates the status to 'viewed' and sets the viewed_at timestamp.
+        
+        **Permission:** Authenticated users
+        - Shop owners can mark logs as viewed for their campaigns
+        - Customers can only mark their own logs as viewed
+        
+        **Note:** This action is idempotent. If the log is already marked as viewed, it returns success without updating.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: "323e4567-e89b-12d3-a456-426614174002"
+      responses:
+        '200':
+          description: Successfully marked as viewed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "viewed"
+              example:
+                status: "viewed"
+        '401':
+          description: Unauthorized - JWT token missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: "Authentication credentials were not provided."
+        '403':
+          description: Forbidden - Not authorized to mark this log as viewed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                customer_not_owner:
+                  value:
+                    detail: "Not allowed."
+                  summary: Customer trying to mark another customer's log
+                shop_owner_not_owner:
+                  value:
+                    detail: "Not allowed."
+                  summary: Shop owner trying to mark log from another shop's campaign
+        '404':
+          description: Log not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                detail: "Not found."
+
+  /api/messaging/customers/:
+    get:
+      tags:
+        - Customers
+      summary: List customers
+      description: |
+        Get paginated list of customers for the authenticated shop.
+        
+        **Permission:** shop_owner only
+        
+        **Pagination:** 20 items per page
+      parameters:
+        - name: email_verified
+          in: query
+          schema:
+            type: boolean
+          description: Filter by email verification status
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Search by username or email
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          description: Page number (20 items per page)
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Customer'
+              example:
+                count: 2
+                total_pages: 1
+                current_page: 1
+                next: null
+                previous: null
+                data:
+                  - id: "32fe1748-aac6-444e-b104-29152a6ca9ca"
+                    username: "customer"
+                    email: "customer@gmail.com"
+                    email_verified: true
+                  - id: "af8351f7-68be-43ad-bdc9-a563c9d1e553"
+                    username: "john_doe"
+                    email: "john@example.com"
+                    email_verified: false
+        '401':
+          description: Unauthorized - JWT token missing or invalid
+        '403':
+          description: Forbidden - Not a shop owner
+
+  /api/messaging/customers/{id}/:
+    get:
+      tags:
+        - Customers
+      summary: Retrieve customer
+      description: |
+        Get details of a specific customer.
+        
+        **Permission:** shop_owner only
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: "32fe1748-aac6-444e-b104-29152a6ca9ca"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+              example:
+                id: "32fe1748-aac6-444e-b104-29152a6ca9ca"
+                username: "customer"
+                email: "customer@gmail.com"
+                email_verified: true
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden - Not a shop owner
+        '404':
+          description: Customer not found

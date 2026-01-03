@@ -48,6 +48,7 @@ def send_bulk_email(campaign: MessageCampaign, users: List[User]):
         msg.send(fail_silently=False)  
 
     return True
+
 # -----------------------------
 # PUSH
 # -----------------------------

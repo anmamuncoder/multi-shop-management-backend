@@ -108,6 +108,7 @@ class MessageCampaignView(ModelViewSet):
     def mark_sent(self, request, pk=None):
         """Mark a campaign as sent and trigger charging logic."""
         campaign = self.get_object()
+        template = campaign.template
 
         # Validate access and that campaign is not already sent
         self._validate_user_shop_access(campaign, check_sent=True)
@@ -118,7 +119,9 @@ class MessageCampaignView(ModelViewSet):
         if success:
             # Mark as sent
             campaign.is_sent = True
+            template.is_active = True
             campaign.save(update_fields=["is_sent","updated_at"])
+            template.save(update_fields=["is_active","updated_at"])
 
         return Response({"status": "marked_sent",**result}, status=status.HTTP_200_OK)
     
@@ -144,6 +147,26 @@ class MessageLogView(ReadOnlyModelViewSet):
         return MessageLog.objects.none()
 
 
+    @action(detail=True, methods=['post'])
+    def viewed(self, request, pk=None):
+        log = self.get_object()
+        user = request.user
+
+        # Security check
+        if user.role == 'customer' and log.customer != user:
+            return Response({"detail": "Not allowed."},status=status.HTTP_403_FORBIDDEN)
+
+        if user.role == 'shop_owner' and log.campaign.shop != user.shop:
+            return Response({"detail": "Not allowed."},status=status.HTTP_403_FORBIDDEN)
+
+        if not log.viewed_at:
+            log.viewed_at = timezone.now()
+            log.status = 'viewed'
+            log.save(update_fields=['viewed_at', 'status', 'updated_at'])
+
+        return Response({"status": "viewed"}, status=status.HTTP_200_OK)
+
+
 # --------------------------------
 # Customer View 
 # --------------------------------
@@ -158,6 +181,7 @@ class CustomerView(ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return User.objects.filter(role='customer')
+
 
 
 # --------------------------------

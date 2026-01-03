@@ -31,7 +31,7 @@ class TemplateMessageSerializer(ModelSerializer):
     class Meta:
         model = TemplateMessage
         fields = "__all__"
-        read_only_fields = ("id",  "created_at", "updated_at")
+        read_only_fields = ("id",  "created_at", "updated_at",'is_active')
 
     def validate_button(self, value):
         """Ensure button is a dict with name and valid url when provided."""
@@ -131,7 +131,29 @@ class MessageLogSerializer(ModelSerializer):
     customer = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     
     customer_detail = UserSerializer(source="customer", read_only=True)
+    template_detail = TemplateMessageSerializer(source='campaign.template',read_only=True)
     class Meta:
         model = MessageLog
-        fields = ("id","campaign","customer","customer_detail","status","sent_at","delivered_at","viewed_at","provider_message_id","provider_response","created_at","updated_at",)
+        fields = ("id","campaign","customer","customer_detail",'template_detail',"status","sent_at","delivered_at","viewed_at","provider_message_id","provider_response","created_at","updated_at",)
         read_only_fields = ("id", "created_at", "updated_at")
+
+    def to_representation(self, instance):
+        """
+        Customize output based on user role.
+        - Customers do NOT see `customer_detail`.
+        - Shop owners see all details.
+        """
+        rep = super().to_representation(instance)
+        user = self.context.get("request").user
+
+        # If user is a customer, remove 'customer_detail'
+        if hasattr(user, "role") and user.role == "customer":
+            rep.pop("campaign", None)
+            rep.pop("customer_detail", None)
+            rep.pop("customer", None)
+
+        # If user is a customer, remove 'customer_detail'
+        if hasattr(user, "role") and user.role == "shop_owner":
+            rep.pop("template_detail", None)
+
+        return rep

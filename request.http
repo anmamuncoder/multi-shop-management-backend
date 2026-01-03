@@ -14,7 +14,7 @@ POST  http://127.0.0.1:8020/api/auth/login/
 Content-Type: application/json 
 
 {
-    "email":"admin3@gmail.com",
+    "email":"anmamuncoder@gmail.com",
     "password": "123" 
 }
 
@@ -419,5 +419,15 @@ Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoi
  
 ###
 GET  http://127.0.0.1:8020/api/messaging/customers
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY3ODg1ODkwLCJpYXQiOjE3NjcyODEwOTAsImp0aSI6ImUwYWY4YmVmZDBlNjQ1NGM5ZGYzMzQwNTUwZjI4YzYxIiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.1MmVqzkjj7lZ1unCUEABPmMk-iglcXUeibWRrexljgM
+ 
+
+### customer
+GET  http://127.0.0.1:8020/api/messaging/logs/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY4MDM1MjkxLCJpYXQiOjE3Njc0MzA0OTEsImp0aSI6IjdjYTRhMDU0MGZmYzQ2ZjFiMDNlNzNhMTU1OWE1ZDg0IiwidXNlcm5hbWUiOiJhbm1hbXVuY29kZXIiLCJlbWFpbCI6ImFubWFtdW5jb2RlckBnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJ1c2VyX2lkIjoiYWY4MzUxZjctNjhiZS00M2FkLWJkYzktYTU2M2M5ZDFlNTUzIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlfQ.hZ-7CTi-BUIFWqgPX2Gbp1_NoauzFabnqy8bJAE9Mns
+
+
+###
+GET  http://127.0.0.1:8020/api/messaging/logs/
 Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY3ODg1ODkwLCJpYXQiOjE3NjcyODEwOTAsImp0aSI6ImUwYWY4YmVmZDBlNjQ1NGM5ZGYzMzQwNTUwZjI4YzYxIiwidXNlcm5hbWUiOiJhZG1pbjMiLCJlbWFpbCI6ImFkbWluM0BnbWFpbC5jb20iLCJyb2xlIjoic2hvcF9vd25lciIsInVzZXJfaWQiOiIyNDFhOTEwNS1mYzI5LTQ1NzAtOTc3NC0zZGIyMDYyZWI2ZDUiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0.1MmVqzkjj7lZ1unCUEABPmMk-iglcXUeibWRrexljgM
  
