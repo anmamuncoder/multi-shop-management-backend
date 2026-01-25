@@ -19,8 +19,7 @@ env/
 # SQLite database
 db.sqlite3
 
-# Django specific
-media/
+# Django specific 
 logs/
 # *.log
 
@@ -58,5 +57,4 @@ dist/
 local_settings.py
 
 # Static & Media files
-staticfiles/
-media/
+staticfiles/ 
